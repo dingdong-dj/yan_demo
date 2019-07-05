@@ -5,6 +5,7 @@ import com.yan.core.controller.BaseController;
 import com.yan.core.model.MsgModel;
 import com.yan.core.model.PageModel;
 import com.yan.performance.dic.mapper.ProjDicMapper;
+import com.yan.performance.dic.model.CustomDic;
 import com.yan.performance.dic.model.ProjDic;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/dic/proj")
@@ -82,6 +85,27 @@ public class ProjDicController extends BaseController {
         return "performance/dic/addOrEdit";
     }
 
+    @RequestMapping("/find/custom")
+    @ResponseBody
+    public Map<String, Object> findCustom(String projNo){
+        ProjDic projDic = new ProjDic();
+        CustomDic customDic = new CustomDic();
+        Map<String, Object> result = new HashMap<>();
+        if(projNo != null && !"".equals(projNo)){
+            projDic = projDicMapper.selectByProjNo(projNo);
+        }
+        if(projDic != null){
+            customDic.setCustomId(projDic.getCustomId());
+            customDic.setCustomName(projDic.getCustomName());
+            result.put("success", true);
+            result.put("custom", customDic);
+            return result;
+        }
+        result.put("success", false);
+        result.put("custom", customDic);
+        return result;
+    }
+
     @RequestMapping("update")
     @ResponseBody
     @Transactional
@@ -92,5 +116,26 @@ public class ProjDicController extends BaseController {
             return this.resultMsg("1","修改失败");
         }
         return this.resultMsg("0","修改成功");
+    }
+
+
+    //注意: 之后可能要加条件
+    @RequestMapping("/find/all")
+    @ResponseBody
+    public Map<String, Object> findAll(){
+        Map<String, Object> result = new HashMap<>();
+        try{
+            List<ProjDic> list = projDicMapper.list();
+            result.put("msg", "项目信息获取成功");
+            result.put("success", true);
+            result.put("projList", list);
+            return result;
+        }catch (Exception e ){
+            e.printStackTrace();
+            result.put("msg", "项目信息获取失败");
+            result.put("success", false);
+            return result;
+        }
+
     }
 }

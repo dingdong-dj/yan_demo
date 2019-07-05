@@ -60,10 +60,25 @@
                     <label style="margin-top: 5px; font-size: 14px; color: grey;">考核时间：</label>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group">
-                        <input type="text" id="fillDt" name="fillDt" class="form-control"
-                               value="${projectAppraise.fillDt}"  placeholder="考核时间" readonly/>
+                    <div class="input-group date form_date col-md-16">
+                        <input id="fillDt" name="fillDt" class="form-control" size="16" type="text" value="${projectAppraise.fillDt}"
+                               placeholder="请选择日期" readonly> <span
+                            class="input-group-addon"><span
+                            class="glyphicon glyphicon-remove"></span></span> <span
+                            class="input-group-addon"><span
+                            class="glyphicon glyphicon-calendar"></span></span>
                     </div>
+                    <script type="text/javascript">
+                        //	日历组件选择
+                        $(".form_date").datetimepicker({
+                            language: 'zh-CN',
+                            minView: "month",//设置只显示到月份
+                            format: "yyyy-mm-dd",
+                            autoclose: true,
+                            todayBtn: true,
+                            minuteStep: 5
+                        });
+                    </script>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
@@ -83,8 +98,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <select class="selectpicker" name="customId" id="customId" >
-                        </select>
+                        <input type="text" id="customName" name="customName" class="form-control"
+                               value="${projectAppraise.customName}"  placeholder="客户" readonly/>
+                        <input type="hidden" value="${projectAppraise.customId}" id = "customId" name = "customId">
                     </div>
                 </div>
             </div>
@@ -105,8 +121,8 @@
                 </div>
                 <div class="col-md-4">
                     <select id="checkDt" name="checkDt" class="selectpicker">
-                        <option value="上半年">上半年</option>
-                        <option value="下半年">下半年</option>
+                        <option value="Q1">上半年</option>
+                        <option value="Q2">下半年</option>
                     </select>
                 </div>
             </div>
@@ -127,35 +143,35 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <input type="text" id="ratio2" name="ratio2"
+                        <input type="text" id="validFee" name="validFee"
                                value="${projectAppraise.validFee}" class="form-control" placeholder="有效考核基准金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
-                <div class="col-md-2 text-left"
-                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">绩效系数：</label>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <input type="text" id="ratio3" name="ratio3"
-                               value="${projectAppraise.kSumn}" class="form-control" placeholder="绩效系数" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
-                    </div>
-                </div>
-                <div class="col-md-2 text-left"
-                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">最终金额：</label>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <input type="text" id="ratio4" name="ratio4"
-                               value="${projectAppraise.lastFee}" class="form-control" placeholder="最终金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
-                    </div>
-                </div>
-            </div>
+<%--            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">--%>
+<%--                <div class="col-md-2 text-left"--%>
+<%--                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">--%>
+<%--                    <label style="margin-top: 5px; font-size: 14px; color: grey;">绩效系数：</label>--%>
+<%--                </div>--%>
+<%--                <div class="col-md-4">--%>
+<%--                    <div class="form-group">--%>
+<%--                        <input type="text" id="kSumn" name="kSumn"--%>
+<%--                               value="${projectAppraise.kSumn}" class="form-control" placeholder="绩效系数" readonly/>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--                <div class="col-md-2 text-left"--%>
+<%--                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">--%>
+<%--                    <label style="margin-top: 5px; font-size: 14px; color: grey;">最终金额：</label>--%>
+<%--                </div>--%>
+<%--                <div class="col-md-4">--%>
+<%--                    <div class="form-group">--%>
+<%--                        <input type="text" id="lastFee" name="lastFee"--%>
+<%--                               value="${projectAppraise.lastFee}" class="form-control" placeholder="最终金额" onchange=" calculateKsum()" onkeyup="value=value.replace(/[^\d.]/g,'')"/>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
             <c:choose>
-                <c:when test="${projDic.projNo == null || projDic.projNo == ''}">
+                <c:when test="${projectAppraise.sysNo == null || projectAppraise.sysNo == ''}">
                     <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                         <div class="form-group  col-md-11" style="text-align: center">
                             <div class="form-group" style="text-align: center">
@@ -175,64 +191,44 @@
                 </c:otherwise>
             </c:choose>
         </form>
-
-
     </div>
 </div>
 </body>
 <script type="text/javascript">
     $(function () {
+        var year = getYear();
+        for (var i = 0; i < year.length; i++) {
+            var yearOption = "";
+            yearOption = "<option value='"+ year[i] + "'>" + year[i] + "</option>";
+            $("#checkYear").append(yearOption);
+        }
+        $("#checkYear").selectpicker('refresh');
+        var data = getNowFormatDate();
+        $("#checkYear").selectpicker('val',data.substr(0, 4));
 
-        <c:if test ="${projDic.projNo != null && projDic.projNo != ''}">
-        $("#projNo").attr("readOnly","true");
-        </c:if>
         //项目状态赋值
-        $("#statusFlag").selectpicker('val','${projDic.statusFlag}');
+        $("#checkDt").selectpicker('val','${projectAppraise.checkDt}');
 
-        //查询员工信息做成选项
+
+        //查询所有项目信息做成选项
+        //注意：后期看看需要添加条件码
         $.ajax({
-            url: "${pageContext.request.contextPath}/dic/emp/find/all",
+            url: "${pageContext.request.contextPath}/dic/proj/find/all",
             async: true,
             data: {},
             success: function (data) {
                 if (data.success) {
-                    $("#empNo").find("option").remove();
-                    var list = data.empList;
+                    $("#projNo").find("option").remove();
+                    var list = data.projList;
                     if (list) {
                         for (var i = 0; i < list.length; i++) {
-                            var optionString = "";
-                            optionString = "<option value='"+ list[i].empNo + "'>" + list[i].empName + "</option>";
-                            $("#empNo").append(optionString);
+                            var projOption = "";
+                            projOption = "<option value='"+ list[i].projNo + "'>" + list[i].projName + "</option>";
+                            $("#projNo").append(projOption);
                         }
-                        $("#empNo").selectpicker('refresh');
-                        //项目经理下拉框赋值
-                        $("#empNo").selectpicker('val', '${projDic.empNo}');
-                    }
-                } else {
-                    $.alert(data.msg);
-                }
-            }
-        });
-
-
-        //查询所有客户信息做成选项
-        $.ajax({
-            url: "${pageContext.request.contextPath}/dic/custom/find/all",
-            async: true,
-            data: {},
-            success: function (data) {
-                if (data.success) {
-                    $("#customId").find("option").remove();
-                    var list = data.customList;
-                    if (list) {
-                        for (var i = 0; i < list.length; i++) {
-                            var optionString = "";
-                            optionString = "<option value='"+ list[i].customId + "'>" + list[i].customName + "</option>";
-                            $("#customId").append(optionString);
-                        }
-                        $("#customId").selectpicker('refresh');
-                        //伤人动物下拉框赋值
-                        $("#customId").selectpicker('val', '${projDic.customId}');
+                        $("#projNo").selectpicker('refresh');
+                        //下拉框赋值
+                        $("#projNo").selectpicker('val','${projectAppraise.projNo}');
                     }
                 } else {
                     $.alert(data.msg);
@@ -243,86 +239,37 @@
 
         //必填项检查
         function formCheck() {
-            if ($("#projNo").val() == null || $("#projNo").val() == ''||$("#projNo").val() == 'undefined') {
-                $.alert("项目编号不能为空");
+            if ($("#sysNo").val() == null || $("#sysNo").val() == ''||$("#sysNo").val() == 'undefined') {
+                $.alert("考核编号不能为空,选择考核周期生成");
                 return false;
             }
 
-            if ($("#projName").val() == "" || $("#projName").val() == null || $("#projName").val() == "undefined") {
-                $.alert("项目名称不能为空");
+            if ($("#fillDt").val() == "" || $("#fillDt").val() == null || $("#fillDt").val() == "undefined") {
+                $.alert("考核时间不能为空");
                 return false;
             }
 
-            if ($("#totalFee").val() == "" || $("#totalFee").val() == null || $("#totalFee").val() == "undefined") {
-                $.alert("项目金额不能为空");
+            if ($("#projNo").val() == "" || $("#projNo").val() == null || $("#projNo").val() == "undefined") {
+                $.alert("请选择项目");
                 return false;
             }
 
-            if ($("#leftFee").val() == null || $("#leftFee").val() == "" || $("#leftFee").val() == "undefined") {
-                $.alert("应收尾款不能为空");
+            if ($("#checkYear").val() == null || $("#checkYear").val() == "" || $("#checkYear").val() == "undefined") {
+                $.alert("请选择考核年度");
                 return false;
             }
 
-            if ($("#statusFlag").val() == null || $("#statusFlag").val() == "" || $("#statusFlag").val() == "undefined") {
-                $.alert("请选择项目状态");
+            if ($("#checkDt").val() == null || $("#checkDt").val() == "" || $("#checkDt").val() == "undefined") {
+                $.alert("请选择考核周期");
+                return false;
+            }
+            if ($("#backFee").val() == null || $("#backFee").val() == "" || $("#backFee").val() == "undefined") {
+                $.alert("本季回款不能为空");
                 return false;
             }
 
-            //时间
-            if ($("#contractDt").val() == null || $("#contractDt").val() == "" || $("#contractDt").val() == "undefined") {
-                $.alert("合同签订日期不能为空");
-                return false;
-            }
-            if ($("#projStart").val() == null || $("#projStart").val() == "" || $("#projStart").val() == "undefined") {
-                $.alert("项目开始时间不能为空");
-                return false;
-            }
-
-            if ($("#empNo").val() == null || $("#empNo").val() == "" || $("#empNo").val() == "undefined") {
-                $.alert("请选择项目经理");
-                return false;
-            }
-
-            if ($("#customId").val() == null || $("#customId").val() == "" || $("#customId").val() == "undefined") {
-                $.alert("请选择客户");
-                return false;
-            }
-            if ($("#ratio1").val() == null || $("#ratio1").val() == "" || $("#ratio1").val() == "undefined") {
-                $.alert("战略意义系数不能为空");
-                return false;
-            }else if(parseFloat($("#ratio1").val())<15 || parseFloat($("#ratio1").val())>30){
-                $.alert("战略意义系数范围为15~30");
-                return false;
-            }
-
-            if ($("#ratio2").val() == null || $("#ratio2").val() == "" || $("#ratio2").val() == "undefined") {
-                $.alert("实施难度系数不能为空");
-                return false;
-            }else if(parseFloat($("#ratio2").val())<30 || parseFloat($("#ratio2").val())>50){
-                $.alert("实施难度系数范围为30~50");
-                return false;
-            }
-
-            if ($("#ratio3").val() == null || $("#ratio3").val() == "" || $("#ratio3").val() == "undefined") {
-                $.alert("实施周期系数不能为空");
-                return false;
-            }else if(parseFloat($("#ratio3").val())<5 || parseFloat($("#ratio3").val())>15){
-                $.alert("实施周期系数范围为5~15");
-                return false;
-            }
-
-            if ($("#ratio4").val() == null || $("#ratio4").val() == "" || $("#ratio4").val() == "undefined") {
-                $.alert("收益程度系数不能为空");
-                return false;
-            }else if(parseFloat($("#ratio4").val())<5 || parseFloat($("#ratio4").val())>15){
-                $.alert("收益程度系数范围为5~15");
-                return false;
-            }
-            if ($("#ratio5").val() == null || $("#ratio5").val() == "" || $("#ratio5").val() == "undefined") {
-                $.alert("维护成本系数不能为空");
-                return false;
-            }else if(parseFloat($("#ratio5").val())<15 || parseFloat($("#ratio5").val())>25){
-                $.alert("维护成本系数范围为15~25");
+            if ($("#validFee").val() == null || $("#validFee").val() == "" || $("#validFee").val() == "undefined") {
+                $.alert("有效金额不能为空");
                 return false;
             }
             return true;
@@ -333,11 +280,9 @@
             if (!formCheck()) {
                 return;
             }
-
             var formData = $("#dataForm").serialize();
-            var empName = $("#empNo option:selected").text();
-            var customName = $("#customId option:selected").text();
-            $.post('${pageContext.request.contextPath}/dic/proj/save',$.param({'empName':empName,'customName':customName})+'&'+formData,function (data) {
+            var projName = $("#projNo option:selected").text();
+            $.post('${pageContext.request.contextPath}/appraise/project/save',$.param({'projName':projName})+'&'+formData,function (data) {
                 if("1" == data.status){
                     $.alert(data.msg);
                     return;
@@ -381,5 +326,67 @@
         width: 'auto'
     });
 
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+
+
+
+    $("#projNo").change(function () {
+        var projNo =  $("#projNo").val();
+        $.ajax({
+            url: "${pageContext.request.contextPath}/dic/proj/find/custom",
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: {"projNo":projNo},
+            success: function (data) {
+                // var projDic = data.projDic;
+                console.log(data);
+                if(data.success){
+                    var custom = data.custom
+                    $("#customName").val(custom.customName);
+                    $("#customId").val(custom.customId);
+                }
+            }
+        })
+    })
+
+    function getYear(){
+        var myDate = new Date();
+        var startYear = myDate.getFullYear()-10;
+        var endYear = myDate.getFullYear();
+        var year = []
+        for(var i = startYear;i<=endYear;i++){
+            year.push(i);
+        }
+        return year;
+    }
+
+    $("#checkYear").change(function () {
+        if($("#checkDt").val() != null && $("#checkDt").val() != ""){
+            var sysNo = $("#checkYear").val()+$("#checkDt").val();
+            $("#sysNo").val(sysNo);
+        }
+    })
+
+    $("#checkDt").change(function () {
+        if($("#checkYear").val() != null && $("#checkYear").val() != ""){
+            var sysNo = $("#checkYear").val()+$("#checkDt").val();
+            $("#sysNo").val(sysNo);
+        }
+    })
 </script>
 </html>

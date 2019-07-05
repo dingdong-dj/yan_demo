@@ -293,26 +293,6 @@
         }
     }
 
-    // 编辑
-    function updateAction() {
-        var rows = $table.bootstrapTable('getSelections');
-        if (rows.length != 1) {
-            $.confirm({
-                title: false,
-                content: '请选择一条记录！',
-                autoClose: 'cancel|3000',
-                backgroundDismiss: true,
-                buttons: {
-                    cancel: {
-                        text: '取消',
-                        btnClass: 'waves-effect waves-button'
-                    }
-                }
-            });
-        }else {
-            index_Tab.addTab(rows[0].projName + " - 修改", "dic/proj/find/one?projNo=" + rows[0].projNo);
-        }
-    }
     function initScrollShow() {
         if (window.parent.document.getElementById('tabs').scrollWidth > window.parent.document.getElementById('tabs').clientWidth) {
             $('.content_tab', window.parent.document).addClass('scroll');
@@ -331,6 +311,27 @@
             $('.tab_right>a', window.parent.document).removeClass('active');
         } else {
             $('.tab_right>a', window.parent.document).addClass('active');
+        }
+    }
+
+    // 编辑
+    function updateAction() {
+        var rows = $table.bootstrapTable('getSelections');
+        if (rows.length != 1) {
+            $.confirm({
+                title: false,
+                content: '请选择一条记录！',
+                autoClose: 'cancel|3000',
+                backgroundDismiss: true,
+                buttons: {
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
+                    }
+                }
+            });
+        }else {
+            index_Tab.addTab(rows[0].projName + " - 修改", "dic/proj/find/one?projNo=" + rows[0].projNo);
         }
     }
 </script>
