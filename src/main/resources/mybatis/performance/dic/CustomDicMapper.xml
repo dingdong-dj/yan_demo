@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan.performance.dic.mapper.CustomDicMapper">
+    <resultMap id="BaseResultMap" type="com.yan.performance.dic.model.CustomDic">
+        <result column="custom_id" jdbcType="VARCHAR" property="customId" />
+        <result column="custom_name" jdbcType="VARCHAR" property="customName" />
+    </resultMap>
+    <select id="list"  resultMap="BaseResultMap">
+        select dic_custom.*
+        from dic_custom
+    </select>
+
+    <select id="findCount"  resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT COUNT(*)
+        FROM dic_custom
+        WHERE custom_id = #{customId}
+    </select>
+
+    <insert id="insert" parameterType="com.yan.performance.dic.model.CustomDic">
+        insert into dic_custom (custom_id, custom_name)
+        values (#{customId,jdbcType=VARCHAR}, #{customName,jdbcType=VARCHAR})
+    </insert>
+
+    <delete id = "deleteCustoms" >
+        delete from dic_custom where custom_id in
+        <foreach collection="array" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="updateName" parameterType="com.yan.performance.dic.model.CustomDic">
+        update dic_custom
+        <set>
+            <if test="customName != null">
+                custom_name = #{customName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where custom_id = #{customId,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>
