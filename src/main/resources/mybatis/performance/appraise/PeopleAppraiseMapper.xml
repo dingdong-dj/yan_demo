@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan.performance.appraise.mapper.PeopleAppraiseMapper">
+    <resultMap id="BaseResultMap" type="com.yan.performance.appraise.model.PeopleAppraise">
+        <result column="sysno" jdbcType="VARCHAR" property="sysNo" />
+        <result column="proj_no" jdbcType="VARCHAR" property="projNo" />
+        <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+        <result column="emp_no" jdbcType="VARCHAR" property="empNo" />
+        <result column="emp_name" jdbcType="VARCHAR" property="empName" />
+        <result column="check_dt" jdbcType="VARCHAR" property="checkDt" />
+        <result column="award" jdbcType="DECIMAL" property="award" />
+        <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+        <result column="dist_dt" jdbcType="VARCHAR" property="distDt" />
+        <result column="dist_emp" jdbcType="VARCHAR" property="distEmp" />
+        <result column="check_flag" jdbcType="VARCHAR" property="checkFlag" />
+    </resultMap>
+</mapper>
