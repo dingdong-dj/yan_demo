@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan.performance.appraise.mapper.PMainMapper">
+    <resultMap id="BaseResultMap" type="com.yan.performance.appraise.model.PMain">
+        <result column="sysno" jdbcType="VARCHAR" property="sysNo" />
+        <result column="proj_no" jdbcType="VARCHAR" property="projNo" />
+        <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+        <result column="custom_id" jdbcType="VARCHAR" property="customId" />
+        <result column="custom_name" jdbcType="VARCHAR" property="customName" />
+        <result column="check_year" jdbcType="VARCHAR" property="checkYear" />
+        <result column="check_dt" jdbcType="VARCHAR" property="checkDt" />
+        <result column="back_fee" jdbcType="DECIMAL" property="backFee" />
+        <result column="valid_fee" jdbcType="DECIMAL" property="validFee" />
+        <result column="k_sumn" jdbcType="DECIMAL" property="kSumn" />
+        <result column="last_fee" jdbcType="DECIMAL" property="lastFee" />
+        <result column="fill_dt" jdbcType="VARCHAR" property="fillDt" />
+    </resultMap>
+
+    <select id="isExsit" parameterType="com.yan.performance.appraise.model.PMain" resultType="com.yan.performance.appraise.model.PMain">
+        select p_main.* from
+        p_main where sysno = #{sysNo} and proj_no = #{projNo}
+    </select>
+
+    <insert id="save" parameterType="com.yan.performance.appraise.model.PMain">
+        insert into p_main (sysno,proj_no,proj_name,custom_id,custom_name,check_year,check_dt,
+        back_fee,valid_fee,k_sumn,last_fee,fill_dt)
+        values (#{sysNo,jdbcType=VARCHAR},#{projNo,jdbcType=VARCHAR},#{projName,jdbcType=VARCHAR},#{customId,jdbcType=VARCHAR},
+        #{customName,jdbcType=VARCHAR},#{checkYear,jdbcType=VARCHAR},#{checkDt,jdbcType=VARCHAR},#{backFee,jdbcType=DECIMAL},
+        #{validFee,jdbcType=DECIMAL},#{kSumn,jdbcType=VARCHAR},#{lastFee,jdbcType=DECIMAL},#{fillDt,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="list"  resultMap="BaseResultMap">
+        select * from p_main
+    </select>
+
+    <select id="allSysno" resultType="java.lang.String">
+        select sysno from p_main group by sysno;
+    </select>
+</mapper>

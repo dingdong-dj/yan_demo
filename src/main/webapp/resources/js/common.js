@@ -20,6 +20,7 @@ $(function() {
     		method: 'post',
     		toolbar: '#toolbar',
     		idField: 'id',
+			showRefresh: true,//是否显示 刷新按钮
     		clickToSelect: true,// 点击行时选中
     		singleSelect: false,// 只能单选
     		detailView: true,// 显示详细页面模式
@@ -40,7 +41,7 @@ $(function() {
         		height: getHeight(),
         		idField: settings.idField,// 指定主键列
         		striped: true,// 隔行变色效果
-        		showRefresh: true,//是否显示 刷新按钮
+        		showRefresh: settings.showRefresh,//是否显示 刷新按钮
         		showColumns: true,//是否显示 内容列下拉框
         		minimumCountColumns: 2,// 最小显示列数
         		clickToSelect: settings.clickToSelect,// 点击行时选中

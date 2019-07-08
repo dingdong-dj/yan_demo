@@ -21,6 +21,10 @@
     <div id="toolbar">
         <a class="waves-effect btn btn-info btn-sm" href="javascript:createAction();" ><i class="zmdi zmdi-plus"></i> 新增考核项目</a>
         <a class="waves-effect btn btn-danger btn-sm" href="javascript:deleteAction();" ><i class="zmdi zmdi-delete"></i> 删除考核项目</a>
+        <spa>考核编号: </spa>
+        <select id="sysno_find" name="sysno_find" class="selectpicker">
+        </select>
+        <a class="waves-effect btn btn-warning btn-sm" ><i class="zmdi zmdi-search"></i> 查询</a>
     </div>
     <div class="table-responsive">
         <table id="table"></table>
@@ -29,11 +33,37 @@
 
 <script type="text/javascript">
 
+    //查询所有考核编号并显示当前时间段或上一个考核时间的考核项目
+    $.ajax({
+        url: "${pageContext.request.contextPath}/appraise/project/find/all",
+        async: true,
+        data: {},
+        success: function (data) {
+            if (data.success) {
+                $("#sysno_find").find("option").remove();
+                var list = data.list;
+                if (list) {
+                    for (var i = 0; i < list.length; i++) {
+                        var projOption = "";
+                        projOption = "<option value='"+ list[i] + "'>" + list[i] + "</option>";
+                        $("#sysno_find").append(projOption);
+                    }
+                    $("#sysno_find").selectpicker('refresh');
+                    //下拉框赋值
+                    $("#sysno_find").selectpicker('val',data.sysno);
+                }
+            } else {
+                $.alert(data.msg);
+            }
+        }
+    });
+
 
     var $table = $('#table');
     $(function() {
         $table.bsTable({
             toolbar: '#toolbar',
+            showRefresh:false,
             // search:true,
             detailView: false,
             pageNumber: 1,
@@ -109,7 +139,7 @@
                 type: 'red',
                 animationSpeed: 300,
                 title: false,
-                content: '确认删除该员工吗？',
+                content: '确认删除该考核项目吗？',
                 buttons: {
                     confirm: {
                         text: '确认',
@@ -119,7 +149,7 @@
                             ids.push(row.empNo);
                             console.log(ids);
                             $.ajax({
-                                url: '${pageContext.request.contextPath}/dic/emp/deletes',
+                                url: '${pageContext.request.contextPath}/appraise/project/deletes',
                                 type: "post",
                                 data: {
                                     ids: ids
@@ -180,7 +210,7 @@
                 type: 'red',
                 animationSpeed: 300,
                 title: false,
-                content: '确认删除该员工吗？',
+                content: '确认删除该考核项目吗？',
                 buttons: {
                     confirm: {
                         text: '确认',
@@ -191,7 +221,7 @@
                                 ids.push(item.empNo);
                             })
                             $.ajax({
-                                url: '${pageContext.request.contextPath}/dic/emp/deletes',
+                                url: '${pageContext.request.contextPath}/appraise/project/deletes',
                                 type: "post",
                                 data: {
                                     ids: ids
@@ -206,11 +236,6 @@
                                     }
                                 }
                             });
-                            // for (var i in rows) {
-                            //     console.log(i);
-                            //     ids.push(rows[i].systemId);
-                            // }
-                            // $.alert('删除：id=' + ids.join("-"));
                         }
                     },
                     cancel: {

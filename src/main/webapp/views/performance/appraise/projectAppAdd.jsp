@@ -50,7 +50,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="sysNo" name="sysNo" class="form-control"
-                               value="${projectAppraise.sysNo}"  placeholder="考核编号根据考核时间自动生成" readonly/>
+                               value="${PMain.sysNo}"  placeholder="考核编号根据考核时间自动生成" readonly/>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="input-group date form_date col-md-16">
-                        <input id="fillDt" name="fillDt" class="form-control" size="16" type="text" value="${projectAppraise.fillDt}"
+                        <input id="fillDt" name="fillDt" class="form-control" size="16" type="text" value="${PMain.fillDt}"
                                placeholder="请选择日期" readonly> <span
                             class="input-group-addon"><span
                             class="glyphicon glyphicon-remove"></span></span> <span
@@ -99,8 +99,8 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="customName" name="customName" class="form-control"
-                               value="${projectAppraise.customName}"  placeholder="客户" readonly/>
-                        <input type="hidden" value="${projectAppraise.customId}" id = "customId" name = "customId">
+                               value="${PMain.customName}"  placeholder="客户" readonly/>
+                        <input type="hidden" value="${PMain.customId}" id = "customId" name = "customId">
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="backFee" name="backFee"
-                               value="${projectAppraise.backFee}" class="form-control" placeholder="本季回款金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                               value="${PMain.backFee}" class="form-control" placeholder="本季回款金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
                 <div class="col-md-2 text-left"
@@ -144,34 +144,12 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="validFee" name="validFee"
-                               value="${projectAppraise.validFee}" class="form-control" placeholder="有效考核基准金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                               value="${PMain.validFee}" class="form-control" placeholder="有效考核基准金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
             </div>
-<%--            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">--%>
-<%--                <div class="col-md-2 text-left"--%>
-<%--                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">--%>
-<%--                    <label style="margin-top: 5px; font-size: 14px; color: grey;">绩效系数：</label>--%>
-<%--                </div>--%>
-<%--                <div class="col-md-4">--%>
-<%--                    <div class="form-group">--%>
-<%--                        <input type="text" id="kSumn" name="kSumn"--%>
-<%--                               value="${projectAppraise.kSumn}" class="form-control" placeholder="绩效系数" readonly/>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="col-md-2 text-left"--%>
-<%--                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">--%>
-<%--                    <label style="margin-top: 5px; font-size: 14px; color: grey;">最终金额：</label>--%>
-<%--                </div>--%>
-<%--                <div class="col-md-4">--%>
-<%--                    <div class="form-group">--%>
-<%--                        <input type="text" id="lastFee" name="lastFee"--%>
-<%--                               value="${projectAppraise.lastFee}" class="form-control" placeholder="最终金额" onchange=" calculateKsum()" onkeyup="value=value.replace(/[^\d.]/g,'')"/>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
             <c:choose>
-                <c:when test="${projectAppraise.sysNo == null || projectAppraise.sysNo == ''}">
+                <c:when test="${PMain.sysNo == null || PMain.sysNo == ''}">
                     <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                         <div class="form-group  col-md-11" style="text-align: center">
                             <div class="form-group" style="text-align: center">
@@ -207,7 +185,7 @@
         $("#checkYear").selectpicker('val',data.substr(0, 4));
 
         //项目状态赋值
-        $("#checkDt").selectpicker('val','${projectAppraise.checkDt}');
+        $("#checkDt").selectpicker('val','${PMain.checkDt}');
 
 
         //查询所有项目信息做成选项
@@ -228,7 +206,7 @@
                         }
                         $("#projNo").selectpicker('refresh');
                         //下拉框赋值
-                        $("#projNo").selectpicker('val','${projectAppraise.projNo}');
+                        $("#projNo").selectpicker('val','${PMain.projNo}');
                     }
                 } else {
                     $.alert(data.msg);
