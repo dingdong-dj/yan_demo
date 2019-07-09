@@ -10,11 +10,15 @@ import com.yan.performance.dic.mapper.ProjDicMapper;
 import com.yan.performance.dic.model.ProjDic;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import static java.math.BigDecimal.ROUND_HALF_UP;
 
 @Controller
 @RequestMapping("/appraise/project")
@@ -48,9 +52,11 @@ public class PMainController extends BaseController {
         if(Ksumn == null){
             return this.resultMsg("1","保存失败");
         }
-        pMain.setkSumn(Ksumn);
+        Ksumn = Ksumn.multiply(BigDecimal.valueOf(0.1));
+        pMain.setkSumn(Ksumn.multiply(pMain.getValidFee()));
         try{
             pMainMapper.save(pMain);
+            countLastFee(pMain.getSysNo());
             return this.resultMsg("0","保存成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -58,13 +64,19 @@ public class PMainController extends BaseController {
         }
     }
 
-    @RequestMapping("/list")
+    @RequestMapping(value = "/list",method = RequestMethod.POST)
     @ResponseBody
-    public PageModel<PMain> list(int offset, int limit, String search, String sort, String order){
-        this.setDataSource("extendDataSource");
+    public PageModel<PMain> list(int offset, int limit, String search, String sort, String order,String sysno){
+        if(sysno == null || "".equals(sysno)||"null".equals(sysno)){
+            sysno = findSysno();
+        }
         this.offsetPage(offset, limit);
-        List<PMain> list = pMainMapper.list();
-        this.clearDataSource();
+        List<PMain> list = new ArrayList<PMain>();
+        try{
+            list = pMainMapper.findBySysno(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return this.resultPage(list);
     }
 
@@ -85,13 +97,56 @@ public class PMainController extends BaseController {
            result.put("msg", "考核编号获取成功");
            result.put("success", true);
            result.put("list",list);
-           result.put("sysno",findSysno(list));
+           result.put("sysno",findSysno());
            return result;
        }else {
            result.put("msg", "考核编号获取失败");
            result.put("success", false);
            return result;
        }
+    }
+
+    @RequestMapping("/deletes")
+    @ResponseBody
+    @Transactional
+    public MsgModel delete(String sysno,String projNo){
+        try{
+            pMainMapper.deletePMain(sysno,projNo);
+            countLastFee(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.resultMsg("1","删除失败");
+        }
+        return this.resultMsg("0","删除成功");
+    }
+
+    @RequestMapping("/find/one")
+    public String findByNo( String sysno,String projNo,Model model){
+        List<PMain> list = new ArrayList<>();
+        if(projNo != null && !"".equals(projNo) && sysno != null && !"".equals(sysno)){
+            list = pMainMapper.find(sysno,projNo);
+        }
+        model.addAttribute("PMain",list.get(0));
+        return "performance/appraise/projectAppAdd";
+    }
+
+    @RequestMapping("update")
+    @ResponseBody
+    @Transactional
+    public MsgModel update(PMain pMain){
+        try{
+            BigDecimal Ksumn = findKsumn(pMain.getProjNo());
+            if(Ksumn == null){
+                return this.resultMsg("1","修改失败");
+            }
+            Ksumn = Ksumn.multiply(BigDecimal.valueOf(0.1));
+            pMain.setkSumn(Ksumn.multiply(pMain.getValidFee()));
+            pMainMapper.update(pMain);
+            countLastFee(pMain.getSysNo());
+        }catch (Exception e){
+            return this.resultMsg("1","修改失败");
+        }
+        return this.resultMsg("0","修改成功");
     }
 
 
@@ -105,6 +160,8 @@ public class PMainController extends BaseController {
             Ksumn = Ksumn.add(projDic.getRatio3());
             Ksumn = Ksumn.add(projDic.getRatio4());
             Ksumn = Ksumn.add(projDic.getRatio5());
+            BigDecimal bd8 = new BigDecimal("100");
+            Ksumn = Ksumn.divide(bd8);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -112,7 +169,7 @@ public class PMainController extends BaseController {
         return Ksumn;
     }
 
-    public String findSysno(List<String> list){
+    public String findSysno(){
         String sysNo;
         Calendar now = Calendar.getInstance();
         int year = now.get(Calendar.YEAR);
@@ -123,5 +180,34 @@ public class PMainController extends BaseController {
             sysNo = year+"Q1";
         }
         return sysNo;
+    }
+
+    public BigDecimal count(List<PMain> pMains){
+        BigDecimal feeSum =  BigDecimal.ZERO;
+        BigDecimal kSum =  BigDecimal.ZERO;
+        for(PMain pMain :pMains){
+            feeSum = feeSum.add(pMain.getValidFee());
+            kSum = kSum.add(pMain.getkSumn());
+        }
+        BigDecimal pavg = feeSum.divide(kSum,4,ROUND_HALF_UP);
+        return pavg;
+    }
+
+    public void countLastFee(String sysno){
+        List<PMain> list = new ArrayList<PMain>();
+        try{
+            list = pMainMapper.findBySysno(sysno);
+            if(list != null && list.size() >0){
+                BigDecimal pavg = count(list);
+                pavg = pavg.multiply(BigDecimal.valueOf(0.1));
+                for(PMain pMain :list){
+                    pMain.setLastFee(pavg.multiply(pMain.getkSumn()));
+                    pMainMapper.update(pMain);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

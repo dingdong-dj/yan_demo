@@ -24,7 +24,7 @@
         <spa>考核编号: </spa>
         <select id="sysno_find" name="sysno_find" class="selectpicker">
         </select>
-        <a class="waves-effect btn btn-warning btn-sm" ><i class="zmdi zmdi-search"></i> 查询</a>
+        <a class="waves-effect btn btn-warning btn-sm" href="javascript:findList();"><i class="zmdi zmdi-search"></i> 查询</a>
     </div>
     <div class="table-responsive">
         <table id="table"></table>
@@ -51,6 +51,7 @@
                     $("#sysno_find").selectpicker('refresh');
                     //下拉框赋值
                     $("#sysno_find").selectpicker('val',data.sysno);
+                    sysnofind = data.sysno;
                 }
             } else {
                 $.alert(data.msg);
@@ -63,9 +64,11 @@
     $(function() {
         $table.bsTable({
             toolbar: '#toolbar',
-            showRefresh:false,
-            // search:true,
+            editable: true,
+            singleSelect: true,
+            search: false,
             detailView: false,
+            clickToSelect: true,
             pageNumber: 1,
             //初始化加载第一页，默认第一页
             pageSize: 10,
@@ -73,6 +76,7 @@
             pageList: [10, 15, 20],
             //可供选择的每页的行数（*）
             url: '${pageContext.request.contextPath}/appraise/project/list',	// 请求后台的URL
+            queryParams :queryParams,
             columns: [
                 {field: 'state', checkbox: true},
                 {field: 'sysNo', title: '考核编号', align: 'center'},
@@ -84,7 +88,7 @@
                 {field: 'checkDt', title: '考核周期', align: 'center'},
                 {field: 'backFee', title: '本季回款', align: 'center'},
                 {field: 'validFee', title: '有效金额', align: 'center'},
-                {field: 'kSumn', title: '绩效系数', align: 'center'},
+                {field: 'kSumn', title: '绩效值', align: 'center'},
                 {field: 'lastFee', title: '最终金额', align: 'center'},
                 {field: 'fillDt', title: '考核时间', align: 'center'},
                 {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
@@ -98,42 +102,21 @@
         ].join('');
     }
 
+    //得到查询的参数
+    function queryParams(params) {
+        var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            limit: params.limit,   //页面大小
+            offset: params.offset,  //页码
+            order: params.order,  //排序
+            sysno:$("#sysno_find").val(),
+        };
+        return temp;
+    };
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-            // alert('You click edit icon, row: ' + JSON.stringify(row));
-            // console.log(value, row, index);
-            $("#empNo").val(row.empNo);
-            $("#empName").val(row.empName);
-            $("#empNo").attr("readOnly","true");
-            layer.open({
-                type:1,
-                area:['400px','400px'],
-                title:"员工编辑",
-                content:$('#createDialog'),
-                btn:['确定','取消'],
-                yes:function () {
-                    var empNo = $("#empNo").val();
-                    var empName = $("#empName").val();
-                    if(empName == '' || empName == "undefined" || empName == null){
-                        layer.msg('请输入员工姓名');
-                        return;
-                    }
-                    var empForm = $('#empForm').serializeArray();
-                    $.post('${pageContext.request.contextPath}/dic/emp/update',empForm,function (data) {
-                        if("1" == data.status){
-                            layer.msg(data.msg);
-                            return;
-                        }
-                        $table.bootstrapTable('refresh');
-                        layer.closeAll();
-                        layer.msg(data.msg);
-                    })
-                },
-                btn2:function () {
-                    layer.close(); //关闭当前窗口
-                }
-            })
+            index_Tab.addTab("考核项目修改", "appraise/project/find/one?sysno=" + row.sysNo+"&projNo=" + row.projNo);
         },
+        //删除
         'click .remove': function (e, value, row, index) {
             $.confirm({
                 type: 'red',
@@ -145,16 +128,14 @@
                         text: '确认',
                         btnClass: 'waves-effect waves-button',
                         action: function () {
-                            var ids = [];
-                            ids.push(row.empNo);
-                            console.log(ids);
                             $.ajax({
                                 url: '${pageContext.request.contextPath}/appraise/project/deletes',
                                 type: "post",
                                 data: {
-                                    ids: ids
+                                    sysno: row.sysNo,
+                                    projNo:row.projNo
                                 },
-                                traditional: true,//这里设为true就可以了
+                                traditional: true,//这里设为true就可以了传参
                                 success: function (data) {
                                     if("1" == data.status){
                                         layer.msg(data.msg);
@@ -172,9 +153,6 @@
                     }
                 }
             });
-            // alert('You click remove icon, row: ' + JSON.stringify(row));
-            // console.log(value, row, index);
-
         }
     };
     function detailFormatter(index, row) {
@@ -189,6 +167,9 @@
         index_Tab.addTab("新增考核项目", "appraise/project/addOrEditPage");
     }
 
+    function findList() {
+        $table.bootstrapTable('refresh');
+    }
     // 删除
     function deleteAction() {
         var rows = $table.bootstrapTable('getSelections');
@@ -216,15 +197,14 @@
                         text: '确认',
                         btnClass: 'waves-effect waves-button',
                         action: function () {
-                            var ids = [];
-                            rows.forEach(function (item,i) {
-                                ids.push(item.empNo);
-                            })
+                            var pMain = rows[0];
+
                             $.ajax({
                                 url: '${pageContext.request.contextPath}/appraise/project/deletes',
                                 type: "post",
                                 data: {
-                                    ids: ids
+                                    sysno: pMain.sysNo,
+                                    projNo:pMain.projNo
                                 },
                                 traditional: true,//这里设为true就可以了
                                 success: function (data) {

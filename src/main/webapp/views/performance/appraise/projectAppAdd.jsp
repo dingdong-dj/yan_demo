@@ -214,7 +214,12 @@
             }
         });
 
-
+        <c:if test ="${PMain.sysNo != null && PMain.sysNo != ''}">
+            $("#sysNo").attr("readOnly","true");
+            $("#projNo").attr("disabled",true);
+            $("#checkYear").attr("disabled",true);
+            $("#checkDt").attr("disabled",true);
+        </c:if>
         //必填项检查
         function formCheck() {
             if ($("#sysNo").val() == null || $("#sysNo").val() == ''||$("#sysNo").val() == 'undefined') {
@@ -253,7 +258,7 @@
             return true;
         }
 
-
+        //新增
         function createOrUpdate() {
             if (!formCheck()) {
                 return;
@@ -277,22 +282,29 @@
 
         //防止数据重复创建
         $("#projUpdate").click(function () {
-            projUpdate();
+            $("#projNo").attr("disabled",false);
+            $("#checkYear").attr("disabled",false);
+            $("#checkDt").attr("disabled",false);
+            $("#projNo").val();
+           projUpdate();
         });
 
+        //更新
         function projUpdate() {
             if (!formCheck()) {
                 return;
             }
             var formData = $("#dataForm").serialize();
-            var empName = $("#empNo option:selected").text();
-            var customName = $("#customId option:selected").text();
-            $.post('${pageContext.request.contextPath}/dic/proj/update',$.param({'empName':empName,'customName':customName})+'&'+formData,function (data) {
+            <%--var empName = $("#empNo option:selected").text();--%>
+            console.log(formData);
+            var projName = $("#projNo option:selected").text();
+            console.log(projName)
+            $.post('${pageContext.request.contextPath}/appraise/project/update',$.param({'projName':projName})+'&'+formData,function (data) {
                 if("1" == data.status){
                     $.alert(data.msg);
                     return;
                 }
-                $("#projFormSubmit").hide();
+                $("#projUpdate").hide();
                 $.alert(data.msg);
             })
         }

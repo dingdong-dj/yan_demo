@@ -36,4 +36,36 @@
     <select id="allSysno" resultType="java.lang.String">
         select sysno from p_main group by sysno;
     </select>
+
+    <select id="findBySysno" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from p_main where sysno = #{sysno}
+    </select>
+
+    <update id="update" parameterType="com.yan.performance.appraise.model.PMain">
+        update p_main
+        set last_fee = #{lastFee},
+            back_fee = #{backFee},
+            valid_fee = #{validFee},
+            k_sumn = #{kSumn},
+            fill_dt = #{fillDt}
+        where sysno = #{sysNo} and proj_no = #{projNo}
+    </update>
+
+    <update id="updateAll" parameterType="com.yan.performance.appraise.model.PMain">
+        update p_main
+        set last_fee = #{lastFee},
+            back_fee = #{backFee},
+            valid_fee = #{validFee},
+            k_sumn = #{kSumn},
+            fill_dt = #{fillDt}
+        where sysno = #{sysNo} and proj_no = #{projNo}
+    </update>
+
+    <delete id="deletePMain" parameterType="com.yan.performance.appraise.model.PMain">
+        delete from p_main where sysno = #{sysno} and proj_no = #{projNo}
+    </delete>
+
+    <select id="find" parameterType="com.yan.performance.appraise.model.PMain"  resultMap="BaseResultMap">
+        select * from p_main where sysno = #{sysno} and proj_no = #{projNo}
+    </select>
 </mapper>

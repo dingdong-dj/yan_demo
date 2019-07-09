@@ -31,10 +31,8 @@ public class ProjDicController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     public PageModel<ProjDic> list(int offset, int limit, String search, String sort, String order){
-        this.setDataSource("extendDataSource");
         this.offsetPage(offset, limit);
         List<ProjDic> list = projDicMapper.list();
-        this.clearDataSource();
         return this.resultPage(list);
     }
 
