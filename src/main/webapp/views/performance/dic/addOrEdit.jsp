@@ -454,7 +454,7 @@
                     $.alert(data.msg);
                     return;
                 }
-                $("#projFormSubmit").hide();
+                $("#projUpdate").hide();
                 $.alert(data.msg);
             })
         }

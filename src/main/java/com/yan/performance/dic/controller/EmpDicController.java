@@ -30,10 +30,8 @@ public class EmpDicController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     public PageModel<EmpDic> list(int offset, int limit, String search, String sort, String order){
-        this.setDataSource("extendDataSource");
         this.offsetPage(offset, limit);
         List<EmpDic> list = empMapper.list();
-        this.clearDataSource();
         return this.resultPage(list);
     }
 

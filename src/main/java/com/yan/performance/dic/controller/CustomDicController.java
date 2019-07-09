@@ -29,10 +29,8 @@ public class CustomDicController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     public PageModel<CustomDic> list(int offset, int limit, String search, String sort, String order){
-        this.setDataSource("extendDataSource");
         this.offsetPage(offset, limit);
         List<CustomDic> list = customDicMapper.list();
-        this.clearDataSource();
         return this.resultPage(list);
     }
 
