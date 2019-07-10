@@ -68,4 +68,5 @@
     <select id="find" parameterType="com.yan.performance.appraise.model.PMain"  resultMap="BaseResultMap">
         select * from p_main where sysno = #{sysno} and proj_no = #{projNo}
     </select>
+
 </mapper>

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * 人员考核表
  */
-public class PeopleAppraise {
+public class PAward {
 
     private String sysNo;//考核编号
 
@@ -119,7 +119,7 @@ public class PeopleAppraise {
 
     @Override
     public String toString() {
-        return "PeopleAppraise{" +
+        return "PAward{" +
                 "sysNo='" + sysNo + '\'' +
                 ", projNo='" + projNo + '\'' +
                 ", projName='" + projName + '\'' +

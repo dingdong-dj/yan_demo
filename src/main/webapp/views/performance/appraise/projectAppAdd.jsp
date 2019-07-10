@@ -16,7 +16,7 @@
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>项目字典管理</title>
+    <title>项目绩效管理</title>
 </head>
 <style>
 
@@ -96,7 +96,7 @@
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
                     <label style="margin-top: 5px; font-size: 14px; color: grey;">客户:</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <input type="text" id="customName" name="customName" class="form-control"
                                value="${PMain.customName}"  placeholder="客户" readonly/>
@@ -141,7 +141,7 @@
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
                     <label style="margin-top: 5px; font-size: 14px; color: grey;">有效金额：</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <input type="text" id="validFee" name="validFee"
                                value="${PMain.validFee}" class="form-control" placeholder="有效考核基准金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>

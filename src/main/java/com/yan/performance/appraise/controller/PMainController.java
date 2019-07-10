@@ -106,6 +106,31 @@ public class PMainController extends BaseController {
        }
     }
 
+    @RequestMapping("/find/projects")
+    @ResponseBody
+    public Map<String, Object> allProjects(String sysno){
+        Map<String, Object> result = new HashMap<>();
+        List<PMain> list = new ArrayList<PMain>();
+        try{
+            list= pMainMapper.findBySysno(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("msg", "考核项目获取失败");
+            result.put("success", false);
+            return result;
+        }
+        if(list != null && list.size()!=0){
+            result.put("msg", "考核项目获取成功");
+            result.put("success", true);
+            result.put("list",list);
+            return result;
+        }else {
+            result.put("msg", "考核项目获取失败");
+            result.put("success", false);
+            return result;
+        }
+    }
+
     @RequestMapping("/deletes")
     @ResponseBody
     @Transactional
