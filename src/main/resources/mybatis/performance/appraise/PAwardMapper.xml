@@ -58,4 +58,8 @@
             remarks = #{remarks}
         where sysno = #{sysNo} and proj_no = #{projNo} and emp_no = #{empNo}
     </update>
+
+    <select id="bysysnoAndProjno" parameterType="com.yan.performance.appraise.model.PAward"  resultMap="BaseResultMap">
+          select * from p_award where sysno = #{sysNo} and proj_no = #{projNo}
+    </select>
 </mapper>

@@ -106,6 +106,14 @@ public class PeopleAppController extends BaseController {
 
     @RequestMapping("/{id}/list")
     public String list(@PathVariable String id,Model model){
+        String[] strs=id.split(",");
+        if(strs.length  == 3){
+            model.addAttribute("sysno",strs[0]);
+            model.addAttribute("projNo",strs[1]);
+        }else{
+            model.addAttribute("sysno",id);
+        }
+
         return "performance/appraise/peopleAppManage";
     }
 

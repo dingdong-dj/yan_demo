@@ -51,14 +51,18 @@ public class PAwardController extends BaseController {
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     @ResponseBody
-    public PageModel<PAward> list(int offset, int limit, String search, String sort, String order, String sysno){
+    public PageModel<PAward> list(int offset, int limit, String search, String sort, String order, String sysno,String projNo){
         if(sysno == null || "".equals(sysno)||"null".equals(sysno)){
             sysno = findSysno();
         }
         this.offsetPage(offset, limit);
         List<PAward> list = new ArrayList<PAward>();
         try{
-            list = pAwardMapper.findBySysno(sysno);
+            if(projNo == null || "".equals(projNo)){
+                list = pAwardMapper.findBySysno(sysno);
+            }else {
+                list = pAwardMapper.bysysnoAndProjno(sysno,projNo);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

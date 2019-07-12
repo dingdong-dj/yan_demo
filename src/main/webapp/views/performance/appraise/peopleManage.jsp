@@ -13,7 +13,7 @@
     <!-- /* 左右布局 */
     .layout-left {
         position: fixed;
-        width: 220px;
+        width: 200px;
         background: #fff;
         height: 100%;
         transition: all;
@@ -26,13 +26,13 @@
 
     .layout-right {
         position: fixed;
-        width: calc(100% -220px);
+        width: calc(100% -200px);
         background: #fff;
-        left: 220px;
+        left: 200px;
         height: 100%;
     }
     .proj{
-        font-size: 20px;
+        font-size: 15px;
     }
 </style>
 <html lang="zh-cn">
@@ -46,7 +46,8 @@
 
 <div class="layout-left">
     <div id="toolbar" align="left" style="background: #F5F5F5;">
-        <span class="proj">所管理项目</span>
+        <span class="proj">管理项目</span>
+        <a id="add-btn" class="waves-effect btn btn-info btn-sm" style="margin-right: 5px;display: none;" href="javascript:roleAdd();"><i class="zmdi zmdi-plus"></i> 添加</a>
         <a id="delete-btn" class="waves-effect btn btn-danger btn-sm" style="margin-right: 5px;display: none;" href="javascript:roleDelete();" ><i class="zmdi zmdi-delete"></i> 删除</a>
     </div>
     <div id="ztree" class="ztree"></div>
@@ -73,7 +74,7 @@
                         var pAward = [];
                         for(var k=0;k<palist.length;k++){
                             if(list[j].sysNo == palist[k].sysNo && list[j].projNo == palist[k].projNo){
-                                pAward .push({"id":palist[k].empNo,"name":palist[k].empName,"pid":palist[k].projNo,"type":"3","sysno":palist[k].sysNo})
+                                pAward .push({"id":palist[k].empNo,"name":palist[k].empName,"pid":palist[k].projNo,"type":"3","sysno":palist[k].sysNo,"projName":palist[k].projName})
                             }
                         }
                         if(list[j].sysNo == sysno[i]) {
@@ -100,7 +101,12 @@
     };
     // 初始化 tree 数据
     treeObj = $.fn.zTree.init($('#ztree'), setting,treeNode);
-    treeObj.expandAll(false);
+    var nodes = treeObj.getNodes();
+    if (nodes.length>0) {
+        for(var i=0;i<nodes.length;i++){
+            treeObj.expandNode(nodes[i], true, false, false);
+        }
+    }
     // 设置样式
     function setFontCss(treeId, treeNode) {
         return treeNode.valid == false ? {color:"red"} : {};
@@ -117,14 +123,17 @@
     function zTreeOnClick(event, treeId, treeNode) {
         if("1" == treeNode.type){
             $("#delete-btn").hide();
+            $("#add-btn").hide();
             var id = treeNode.id;
             $("#content_iframe").attr("src", "${pageContext.request.contextPath}/appraise/peoman/" + id + "/list");
         }else if("2" == treeNode.type){
             $("#delete-btn").hide();
+            $("#add-btn").show();
             var id = treeNode.pid +"," +treeNode.id+","+treeNode.name;
-            $("#content_iframe").attr("src", "${pageContext.request.contextPath}/appraise/peoman/" + id + "/edit");
+            $("#content_iframe").attr("src", "${pageContext.request.contextPath}/appraise/peoman/" + id + "/list");
         }else {
             $("#delete-btn").show();
+            $("#add-btn").show();
             var parent = treeNode.getParentNode();
             var id = parent.pid + "," + parent.id+","+parent.name+","+treeNode.id;
             $("#content_iframe").attr("src", "${pageContext.request.contextPath}/appraise/peoman/" + id + "/edit");
@@ -151,6 +160,7 @@
                                     return;
                                 }
                                 $.alert(data.msg);
+                                location.reload();
                             });
                         }
                     },
@@ -174,6 +184,17 @@
                 }
             });
         }
+    }
+
+    function roleAdd() {
+        var nodes = treeObj.getSelectedNodes();
+        if(nodes[0].type == "2"){
+            var id = nodes[0].pid +"," +nodes[0].id+","+nodes[0].name;
+        }else{
+            var id = nodes[0].sysno+","+nodes[0].pid +","+nodes[0].projName;
+        }
+
+        $("#content_iframe").attr("src", "${pageContext.request.contextPath}/appraise/peoman/" + id + "/edit");
     }
 </script>
 </html>

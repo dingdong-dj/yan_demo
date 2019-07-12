@@ -25,7 +25,7 @@
             </c:if>
             <c:if test="${pAward.sysNo == null || pAward.sysNo == ''}">
                     <button id="save-btn" class="waves-effect btn btn-success btn-sm"
-                            style="margin-left: 10px;" type="button" href="javascript:;"><i class="zmdi zmdi-save"></i>保存
+                            style="margin-left: 10px;" type="button" href="javascript:;"><i class="zmdi zmdi-save"></i>添加人员绩效
             </c:if>
 
         </button>
@@ -206,6 +206,7 @@
                     return;
                 }
                 $.alert(data.msg);
+                parent.location.reload();
             });
         }
 
@@ -228,24 +229,6 @@
             return true;
         }
 
-        // 重置表单
-        function resetForm(){
-            // 清空 form 表单值
-            $('#roleId').val('');
-            $('#rolePid').val('');
-            $('#roleName').val('');
-            $('#roleIndex').val('');
-            $('#roleLevel').val('');
-            $('#roleValid').selectpicker('val', 'true');
-
-            // 验证销毁
-            $("#dataForm").data('bootstrapValidator').destroy();
-            $('#dataForm').data('bootstrapValidator', null);
-
-            // 警告提示框
-            $('#noSelDiv').show();
-        }
-
         // 修改提交
         $('#update-btn').click(function() {
             updatePAward();
@@ -265,6 +248,7 @@
                     return;
                 }
                 $.alert(data.msg);
+                location.reload();
             });
         }
 
