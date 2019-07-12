@@ -1,8 +1,10 @@
 package com.yan.performance.appraise.mapper;
 
 import com.yan.performance.appraise.model.PMain;
+import com.yan.performance.dic.model.PMainEmp;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface PMainMapper {
@@ -30,4 +32,7 @@ public interface PMainMapper {
 
     //根据考核编号和项目编号查询考核项目
     List<PMain> find(@Param("sysno") String sysno, @Param("projNo") String projNo);
+
+    List<PMainEmp> findByEmp(@Param("empNo") String empNo,@Param("empName") String empName);
+
 }

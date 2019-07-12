@@ -51,7 +51,6 @@
                     $("#sysno_find").selectpicker('refresh');
                     //下拉框赋值
                     $("#sysno_find").selectpicker('val',data.sysno);
-                    sysnofind = data.sysno;
                 }
             } else {
                 $.alert(data.msg);

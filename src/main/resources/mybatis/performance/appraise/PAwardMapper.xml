@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan.performance.appraise.mapper.PAwardMapper">
+    <resultMap id="BaseResultMap" type="com.yan.performance.appraise.model.PAward">
+        <result column="sysno" jdbcType="VARCHAR" property="sysNo" />
+        <result column="proj_no" jdbcType="VARCHAR" property="projNo" />
+        <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+        <result column="emp_no" jdbcType="VARCHAR" property="empNo" />
+        <result column="emp_name" jdbcType="VARCHAR" property="empName" />
+        <result column="check_dt" jdbcType="VARCHAR" property="checkDt" />
+        <result column="award" jdbcType="DECIMAL" property="award" />
+        <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+        <result column="dist_dt" jdbcType="VARCHAR" property="distDt" />
+        <result column="dist_emp" jdbcType="VARCHAR" property="distEmp" />
+        <result column="check_flag" jdbcType="VARCHAR" property="checkFlag" />
+    </resultMap>
+
+    <select id="findBySysno" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from  p_award where sysno = #{sysno}
+    </select>
+
+    <select id="allSysno" resultType="java.lang.String">
+        select sysno from p_award group by sysno;
+    </select>
+
+    <select id="isExsit" parameterType="com.yan.performance.appraise.model.PAward" resultType="com.yan.performance.appraise.model.PAward">
+        select p_award.* from
+        p_award where sysno = #{sysNo} and proj_no = #{projNo} and emp_no = #{empNo}
+    </select>
+
+    <insert id="insert" parameterType="com.yan.performance.appraise.model.PAward">
+        insert into p_award( sysno,proj_no,proj_name,emp_no,emp_name,check_dt,award,remarks,dist_dt,dist_emp,check_flag)
+        values (#{sysNo},#{projNo},#{projName},#{empNo},#{empName},#{checkDt},#{award},#{remarks},#{distDt},#{distEmp},#{checkFlag})
+    </insert>
+
+    <select id="sumFee" parameterType="com.yan.performance.appraise.model.PAward" resultType="bigDecimal">
+        select sum(award) from p_award where sysno =#{sysNo} and proj_no = #{projNo}
+    </select>
+
+    <delete id="deletePAward" parameterType="com.yan.performance.appraise.model.PAward">
+        delete from p_award where sysno = #{sysNo} and emp_no = #{empNo} and proj_no = #{projNo}
+    </delete>
+
+    <select id="find" parameterType="com.yan.performance.appraise.model.PAward"  resultMap="BaseResultMap">
+        select * from p_award where sysno = #{sysNo} and proj_no = #{projNo} and emp_no = #{empNo}
+    </select>
+
+    <select id="all" resultMap="BaseResultMap">
+        select * from p_award
+    </select>
+
+    <update id="update" parameterType="com.yan.performance.appraise.model.PAward">
+        update p_award
+        set award = #{award},
+            dist_dt = #{distDt},
+            dist_emp = #{distEmp},
+            check_flag =#{checkFlag},
+            remarks = #{remarks}
+        where sysno = #{sysNo} and proj_no = #{projNo} and emp_no = #{empNo}
+    </update>
+</mapper>

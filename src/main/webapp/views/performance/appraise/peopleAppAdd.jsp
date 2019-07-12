@@ -16,7 +16,7 @@
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>项目绩效管理</title>
+    <title>员工绩效管理</title>
 </head>
 <style>
 
@@ -49,19 +49,51 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <input type="text" id="sysNo" name="sysNo" class="form-control"
-                               value="${PMain.sysNo}"  placeholder="考核编号根据考核时间自动生成" readonly/>
+                        <select class="selectpicker" name="sysNo" id="sysNo" >
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">考核项目:</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <select class="selectpicker" name="projNo" id="projNo" >
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">考核时间：</label>
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">考核员工:</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <select class="selectpicker" name="empNo" id="empNo" >
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">考核周期:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input type="text" id="checkDt" name="checkDt" class="form-control"
+                               value="${pAward.checkDt}"  placeholder="考核周期" readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">分配时间：</label>
                 </div>
                 <div class="col-md-4">
                     <div class="input-group date form_date col-md-16">
-                        <input id="fillDt" name="fillDt" class="form-control" size="16" type="text" value="${PMain.fillDt}"
+                        <input id="distDt" name="distDt" class="form-control" size="16" type="text" value="${pAward.distDt}"
                                placeholder="请选择日期" readonly> <span
                             class="input-group-addon"><span
                             class="glyphicon glyphicon-remove"></span></span> <span
@@ -80,76 +112,54 @@
                         });
                     </script>
                 </div>
-            </div>
-            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">项目:</label>
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">分配人：</label>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <select class="selectpicker" name="projNo" id="projNo" >
+                        <select class="selectpicker" name="distEmp" id="distEmp" >
                         </select>
-                    </div>
-                </div>
-                <div class="col-md-2 text-left"
-                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">客户:</label>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <input type="text" id="customName" name="customName" class="form-control"
-                               value="${PMain.customName}"  placeholder="客户" readonly/>
-                        <input type="hidden" value="${PMain.customId}" id = "customId" name = "customId">
                     </div>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">考核年度:</label>
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">绩效奖金:</label>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <select class="selectpicker" name="checkYear" id="checkYear" >
-                        </select>
+                        <input type="text" id="award" name="award" class="form-control"
+                               value="${pAward.award}"  placeholder="绩效奖金" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">考核周期：</label>
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">审核状态：</label>
                 </div>
                 <div class="col-md-4">
-                    <select id="checkDt" name="checkDt" class="selectpicker">
-                        <option value="Q1">上半年</option>
-                        <option value="Q2">下半年</option>
+                    <select id="checkFlag" name="checkFlag" class="selectpicker">
+                        <option value="INIT">初始状态</option>
+                        <option value="OK">已审核</option>
+                        <option value="PUB">可公布</option>
                     </select>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
-                <div class="col-md-2 text-left"
+                <div class="col-md-4 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">本季回款：</label>
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">备注：</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-7">
                     <div class="form-group">
-                        <input type="text" id="backFee" name="backFee"
-                               value="${PMain.backFee}" class="form-control" placeholder="本季回款金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
-                    </div>
-                </div>
-                <div class="col-md-2 text-left"
-                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">有效金额：</label>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <input type="text" id="validFee" name="validFee"
-                               value="${PMain.validFee}" class="form-control" placeholder="有效考核基准金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                        <textarea type="text" class="form-control" rows="2" id="remarks" name="remarks"
+                                  placeholder="请输入描述">${pAward.remarks}</textarea>
                     </div>
                 </div>
             </div>
             <c:choose>
-                <c:when test="${PMain.sysNo == null || PMain.sysNo == ''}">
+                <c:when test="${pAward.sysNo == null || pAward.sysNo == ''}">
                     <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                         <div class="form-group  col-md-11" style="text-align: center">
                             <div class="form-group" style="text-align: center">
@@ -174,39 +184,26 @@
 </body>
 <script type="text/javascript">
     $(function () {
-        var year = getYear();
-        for (var i = 0; i < year.length; i++) {
-            var yearOption = "";
-            yearOption = "<option value='"+ year[i] + "'>" + year[i] + "</option>";
-            $("#checkYear").append(yearOption);
-        }
-        $("#checkYear").selectpicker('refresh');
-        var data = getNowFormatDate();
-        $("#checkYear").selectpicker('val',data.substr(0, 4));
 
-        //项目状态赋值
-        $("#checkDt").selectpicker('val','${PMain.checkDt}');
-
-
-        //查询所有项目信息做成选项
-        //注意：后期看看需要添加条件码
+        //查询所有考核周期并生成select
         $.ajax({
-            url: "${pageContext.request.contextPath}/dic/proj/find/all",
+            url: "${pageContext.request.contextPath}/appraise/project/find/all",
             async: true,
             data: {},
             success: function (data) {
                 if (data.success) {
-                    $("#projNo").find("option").remove();
-                    var list = data.projList;
+                    $("#sysNo").find("option").remove();
+                    var list = data.list;
                     if (list) {
                         for (var i = 0; i < list.length; i++) {
                             var projOption = "";
-                            projOption = "<option value='"+ list[i].projNo + "'>" + list[i].projName + "</option>";
-                            $("#projNo").append(projOption);
+                            projOption = "<option value='"+ list[i] + "'>" + list[i] + "</option>";
+                            $("#sysNo").append(projOption);
                         }
-                        $("#projNo").selectpicker('refresh');
+                        $("#sysNo").selectpicker('refresh');
                         //下拉框赋值
-                        $("#projNo").selectpicker('val','${PMain.projNo}');
+                        $("#sysNo").selectpicker('val',data.sysno);
+                        $("#sysNo").change();
                     }
                 } else {
                     $.alert(data.msg);
@@ -214,45 +211,71 @@
             }
         });
 
-        <c:if test ="${PMain.sysNo != null && PMain.sysNo != ''}">
-        $("#sysNo").attr("readOnly","true");
-        $("#projNo").attr("disabled",true);
-        $("#checkYear").attr("disabled",true);
-        $("#checkDt").attr("disabled",true);
+        $.ajax({
+            url: "${pageContext.request.contextPath}/dic/emp/find/all",
+            async: true,
+            data: {},
+            success: function (data) {
+                if (data.success) {
+                    $("#empNo").find("option").remove();
+                    $("#distEmp").find("option").remove();
+                    var list = data.empList;
+                    if (list) {
+                        for (var i = 0; i < list.length; i++) {
+                            // var projOption = "";
+                            var projOption = "<option value=''></option>";
+                            projOption = "<option value='"+ list[i].empNo + "'>" + list[i].empName + "</option>";
+                            $("#empNo").append(projOption);
+                            $("#distEmp").append(projOption);
+                        }
+                        $("#empNo").selectpicker('refresh');
+                        $("#distEmp").selectpicker('refresh');
+                    }
+                } else {
+                    $.alert(data.msg);
+                }
+            }
+        });
+
+
+        <c:if test ="${pAward.sysNo != null && pAward.sysNo != ''}">
+            $("#sysNo").attr("disabled",true);
+            $("#projNo").attr("disabled",true);
+            $("#empNo").attr("disabled",true);
         </c:if>
         //必填项检查
         function formCheck() {
             if ($("#sysNo").val() == null || $("#sysNo").val() == ''||$("#sysNo").val() == 'undefined') {
-                $.alert("考核编号不能为空,选择考核周期生成");
-                return false;
-            }
-
-            if ($("#fillDt").val() == "" || $("#fillDt").val() == null || $("#fillDt").val() == "undefined") {
-                $.alert("考核时间不能为空");
+                $.alert("请选择考核编号");
                 return false;
             }
 
             if ($("#projNo").val() == "" || $("#projNo").val() == null || $("#projNo").val() == "undefined") {
-                $.alert("请选择项目");
+                $.alert("请选择考核项目");
                 return false;
             }
 
-            if ($("#checkYear").val() == null || $("#checkYear").val() == "" || $("#checkYear").val() == "undefined") {
-                $.alert("请选择考核年度");
+            if ($("#empNo").val() == null || $("#empNo").val() == "" || $("#empNo").val() == "undefined") {
+                $.alert("请选择考核员工");
                 return false;
             }
 
             if ($("#checkDt").val() == null || $("#checkDt").val() == "" || $("#checkDt").val() == "undefined") {
-                $.alert("请选择考核周期");
+                $.alert("考核周期不能为空");
                 return false;
             }
-            if ($("#backFee").val() == null || $("#backFee").val() == "" || $("#backFee").val() == "undefined") {
-                $.alert("本季回款不能为空");
+            if ($("#award").val() == null || $("#award").val() == "" || $("#award").val() == "undefined") {
+                $.alert("绩效奖金不能为空");
                 return false;
             }
 
-            if ($("#validFee").val() == null || $("#validFee").val() == "" || $("#validFee").val() == "undefined") {
-                $.alert("有效金额不能为空");
+            if ($("#distDt").val() == null || $("#distDt").val() == "" || $("#distDt").val() == "undefined") {
+                $.alert("请选择分配时间");
+                return false;
+            }
+
+            if ($("#distEmp").val() == null || $("#distEmp").val() == "" || $("#distEmp").val() == "undefined") {
+                $.alert("请选择分配人");
                 return false;
             }
             return true;
@@ -265,7 +288,8 @@
             }
             var formData = $("#dataForm").serialize();
             var projName = $("#projNo option:selected").text();
-            $.post('${pageContext.request.contextPath}/appraise/project/save',$.param({'projName':projName})+'&'+formData,function (data) {
+            var empName =  $("#empNo option:selected").text();
+            $.post('${pageContext.request.contextPath}/appraise/people/save',$.param({'projName':projName,'empName':empName})+'&'+formData,function (data) {
                 if("1" == data.status){
                     $.alert(data.msg);
                     return;
@@ -282,11 +306,10 @@
 
         //防止数据重复创建
         $("#projUpdate").click(function () {
+            $("#sysNo").attr("disabled",false);
             $("#projNo").attr("disabled",false);
-            $("#checkYear").attr("disabled",false);
-            $("#checkDt").attr("disabled",false);
-            $("#projNo").val();
-           projUpdate();
+            $("#empNo").attr("disabled",false);
+            projUpdate();
         });
 
         //更新
@@ -296,7 +319,8 @@
             }
             var formData = $("#dataForm").serialize();
             var projName = $("#projNo option:selected").text();
-            $.post('${pageContext.request.contextPath}/appraise/project/update',$.param({'projName':projName})+'&'+formData,function (data) {
+            var empName =  $("#empNo option:selected").text();
+            $.post('${pageContext.request.contextPath}/appraise/people/update',$.param({'projName':projName,'empName':empName})+'&'+formData,function (data) {
                 if("1" == data.status){
                     $.alert(data.msg);
                     return;
@@ -305,7 +329,6 @@
                 $.alert(data.msg);
             })
         }
-
     });
 
     //选择器重绘
@@ -313,67 +336,38 @@
         width: 'auto'
     });
 
-    function getNowFormatDate() {
-        var date = new Date();
-        var seperator1 = "-";
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = year + seperator1 + month + seperator1 + strDate;
-        return currentdate;
-    }
-
-
-
-    $("#projNo").change(function () {
-        var projNo =  $("#projNo").val();
-        $.ajax({
-            url: "${pageContext.request.contextPath}/dic/proj/find/custom",
-            async: true,
-            type: "POST",
-            dataType: "json",
-            data: {"projNo":projNo},
-            success: function (data) {
-                // var projDic = data.projDic;
-                console.log(data);
-                if(data.success){
-                    var custom = data.custom
-                    $("#customName").val(custom.customName);
-                    $("#customId").val(custom.customId);
-                }
-            }
-        })
-    })
-
-    function getYear(){
-        var myDate = new Date();
-        var startYear = myDate.getFullYear()-10;
-        var endYear = myDate.getFullYear();
-        var year = []
-        for(var i = startYear;i<=endYear;i++){
-            year.push(i);
-        }
-        return year;
-    }
-
-    $("#checkYear").change(function () {
-        if($("#checkDt").val() != null && $("#checkDt").val() != ""){
-            var sysNo = $("#checkYear").val()+$("#checkDt").val();
-            $("#sysNo").val(sysNo);
-        }
-    })
 
     $("#checkDt").change(function () {
         if($("#checkYear").val() != null && $("#checkYear").val() != ""){
             var sysNo = $("#checkYear").val()+$("#checkDt").val();
             $("#sysNo").val(sysNo);
         }
+    })
+    //当考核编号变化项目也相应变化
+    $("#sysNo").change(function () {
+        var sysno = $("#sysNo").val();
+        $.ajax({
+            url: "${pageContext.request.contextPath}/appraise/project/find/projects",
+            async: true,
+            data: {sysno:sysno},
+            success: function (data) {
+                if (data.success) {
+                    $("#projNo").find("option").remove();
+                    var list = data.list;
+                    if (list) {
+                        for (var i = 0; i < list.length; i++) {
+                            var projOption = "";
+                            projOption = "<option value='"+ list[i].projNo + "'>" + list[i].projName + "</option>";
+                            $("#projNo").append(projOption);
+                        }
+                        $("#projNo").selectpicker('refresh');
+                        $("#checkDt").val(sysno);
+                    }
+                } else {
+                    $.alert(data.msg);
+                }
+            }
+        });
     })
 </script>
 </html>

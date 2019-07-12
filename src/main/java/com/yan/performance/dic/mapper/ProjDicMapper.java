@@ -1,6 +1,7 @@
 package com.yan.performance.dic.mapper;
 
 import com.yan.performance.dic.model.ProjDic;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface ProjDicMapper {
     ProjDic selectByProjNo(String projNo);
 
     int update(ProjDic projDic);
+
+    List<ProjDic> findByEmp(@Param("empNo") String empNo, @Param("empName") String empName);
 }

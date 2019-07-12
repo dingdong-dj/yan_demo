@@ -16,6 +16,16 @@
         <result column="fill_dt" jdbcType="VARCHAR" property="fillDt" />
     </resultMap>
 
+    <resultMap id="PMainEmpMap" type="com.yan.performance.dic.model.PMainEmp">
+        <result column="sysno" jdbcType="VARCHAR" property="sysNo" />
+        <result column="proj_no" jdbcType="VARCHAR" property="projNo" />
+        <result column="proj_name" jdbcType="VARCHAR" property="projName" />
+        <result column="last_fee" jdbcType="DECIMAL" property="lastFee" />
+        <result column="emp_no" property="empNo" jdbcType="VARCHAR" />
+        <result column="emp_name" property="empName" jdbcType="VARCHAR" />
+        <result column="proj_no" property="projNoee" jdbcType="VARCHAR" />
+    </resultMap>
+
     <select id="isExsit" parameterType="com.yan.performance.appraise.model.PMain" resultType="com.yan.performance.appraise.model.PMain">
         select p_main.* from
         p_main where sysno = #{sysNo} and proj_no = #{projNo}
@@ -68,5 +78,12 @@
     <select id="find" parameterType="com.yan.performance.appraise.model.PMain"  resultMap="BaseResultMap">
         select * from p_main where sysno = #{sysno} and proj_no = #{projNo}
     </select>
+
+    <select id="findByEmp" parameterType="com.yan.performance.dic.model.ProjDic" resultMap="PMainEmpMap">
+        select pm.sysno,pm.proj_no,pm.proj_name,pm.last_fee,dp.emp_no,dp.emp_name,dp.proj_no
+        from p_main pm,dic_proj dp
+        where pm.proj_no = dp.proj_no and dp.emp_no = #{empNo} and dp.emp_Name = #{empName}
+    </select>
+
 
 </mapper>

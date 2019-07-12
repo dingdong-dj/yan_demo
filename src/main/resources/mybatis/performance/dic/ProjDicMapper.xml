@@ -88,7 +88,9 @@
         where proj_no = #{projNo,jdbcType=VARCHAR}
     </select>
 
-
+    <select id="findByEmp" parameterType="com.yan.performance.dic.model.ProjDic" resultMap="BaseResultMap">
+        select * from dic_proj where emp_no = #{empNo} and emp_name = #{empName}
+    </select>
 
 
 </mapper>
