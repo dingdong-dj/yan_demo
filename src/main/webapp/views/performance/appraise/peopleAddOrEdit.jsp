@@ -248,11 +248,8 @@
                     return;
                 }
                 $.alert(data.msg);
-                location.reload();
             });
         }
-
-
     });
 
 </script>

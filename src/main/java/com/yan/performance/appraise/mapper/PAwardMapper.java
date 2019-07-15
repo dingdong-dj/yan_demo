@@ -32,4 +32,6 @@ public interface PAwardMapper {
     int update(PAward pAward);
 
     List<PAward> bysysnoAndProjno(@Param("sysNo") String sysno, @Param("projNo") String projNo);
+
+    List<PAward> personalList(@Param("sysNo") String sysNo,@Param("empNo") String empNo);
 }

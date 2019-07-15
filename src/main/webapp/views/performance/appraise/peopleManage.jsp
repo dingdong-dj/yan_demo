@@ -107,6 +107,10 @@
             treeObj.expandNode(nodes[i], true, false, false);
         }
     }
+
+    var node = treeObj.getNodes()[0];
+    treeObj.selectNode(node);
+    setting.callback.onClick(null, treeObj.setting.treeId, node);
     // 设置样式
     function setFontCss(treeId, treeNode) {
         return treeNode.valid == false ? {color:"red"} : {};

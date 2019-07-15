@@ -62,4 +62,11 @@
     <select id="bysysnoAndProjno" parameterType="com.yan.performance.appraise.model.PAward"  resultMap="BaseResultMap">
           select * from p_award where sysno = #{sysNo} and proj_no = #{projNo}
     </select>
+
+    <select id="personalList" parameterType="com.yan.performance.appraise.model.PAward" resultMap="BaseResultMap">
+        select * from p_award where emp_no = #{empNo} and check_flag = 'PUB'
+        <if test="sysNo !=null and sysNo != ''">
+            and sysno = #{sysNo}
+        </if>
+    </select>
 </mapper>

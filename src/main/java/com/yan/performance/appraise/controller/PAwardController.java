@@ -41,13 +41,8 @@ public class PAwardController extends BaseController {
     @RequestMapping("/init")
     public String init(){
         return "performance/appraise/peopleAppManage";
-//        return "performance/appraise/peopleManage";
     }
 
-    @RequestMapping("/addOrEditPage")
-    public String addOrEditPage() {
-        return "performance/appraise/peopleAppAdd";
-    }
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     @ResponseBody
@@ -78,6 +73,11 @@ public class PAwardController extends BaseController {
             return this.resultMsg("1","保存失败,该考核人员已存在");
         }
         BigDecimal sumFee = sumFee(pAward);
+        if(sumFee != null){
+            sumFee = sumFee.add(pAward.getAward());
+        }else{
+            sumFee = pAward.getAward();
+        }
         List<PMain> list = pMainMapper.find(pAward.getSysNo(),pAward.getProjNo());
         if(list == null || list.size() == 0){
             return this.resultMsg("1","保存失败,该考核编号下项目不存在");
@@ -135,15 +135,28 @@ public class PAwardController extends BaseController {
         return this.resultMsg("0","删除成功");
     }
 
-    @RequestMapping("/find/one")
-    public String findByNo(String sysno, String projNo,String empNo, Model model){
-        List<PAward> list = new ArrayList<>();
-        if(projNo != null && !"".equals(projNo) && sysno != null && !"".equals(sysno) && empNo !=null && !"".equals(empNo)){
-            list = pAwardMapper.find(sysno,projNo,empNo);
-        }
-        model.addAttribute("pAward",list.get(0));
-        return "performance/appraise/peopleAppAdd";
+
+    @RequestMapping("/personal")
+    public String person(){
+        return "performance/appraise/personalManage";
     }
+
+    @RequestMapping(value = "/personal/list",method = RequestMethod.POST)
+    @ResponseBody
+    public PageModel<PAward> personalList(int offset, int limit, String search, String sort, String order, String sysno,String projNo){
+
+        SysUser sysUser = findUser();
+
+        this.offsetPage(offset, limit);
+        List<PAward> list = new ArrayList<PAward>();
+        try{
+            list = pAwardMapper.personalList(sysno,sysUser.getUserId());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return this.resultPage(list);
+    }
+
 
     public String findSysno(){
         String sysNo;
@@ -172,11 +185,6 @@ public class PAwardController extends BaseController {
     public BigDecimal sumFee(PAward pAward){
         BigDecimal sumFee = BigDecimal.ZERO;
         sumFee = pAwardMapper.sumFee(pAward.getSysNo(),pAward.getProjNo());
-        if(sumFee != null){
-            sumFee = sumFee.add(pAward.getAward());
-        }else{
-            sumFee = pAward.getAward();
-        }
         return sumFee;
     }
 }
