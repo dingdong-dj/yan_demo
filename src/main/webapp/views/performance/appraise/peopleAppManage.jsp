@@ -103,7 +103,17 @@
                 {field: 'award', title: '绩效奖金', align: 'center'},
                 {field: 'distDt', title: '分配时间', align: 'center'},
                 {field: 'distEmp', title: '分配人', align: 'center'},
-                {field: 'checkFlag', title: '审核状态', align: 'center'},
+                {field: 'checkFlag', title: '审核状态', align: 'center',
+                    formatter: function(value, row, index) {
+                        if(value == "INIT"){
+                            return '<span class="label label-info">初始状态</span>';
+                        }else if(value == "OK"){
+                            return '<span class="label label-info">已审核</span>';
+                        }else{
+                            return '<span class="label label-info">可公布</span>';
+                        }
+                    }
+                },
                 {field: 'remarks', title: '备注', align: 'center'}
                 // {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
             ]

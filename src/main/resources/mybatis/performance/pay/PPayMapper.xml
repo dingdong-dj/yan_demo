@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan.performance.pay.mapper.PPayMapper">
+    <resultMap id="BaseResultMap" type="com.yan.performance.pay.model.PPay">
+        <result column="pay_no" jdbcType="VARCHAR" property="payNo" />
+        <result column="emp_no" jdbcType="VARCHAR" property="empNo" />
+        <result column="emp_name" jdbcType="VARCHAR" property="empName" />
+        <result column="check_dt" jdbcType="VARCHAR" property="checkDt" />
+        <result column="pay_fee" jdbcType="DECIMAL" property="payFee" />
+        <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+        <result column="pay_dt" jdbcType="VARCHAR" property="payDt" />
+    </resultMap>
+
+    <select id="list" parameterType="com.yan.performance.pay.model.PPay" resultMap="BaseResultMap">
+        select * from p_pay where 1=1
+        <if test="checkDt !=null and checkDt != ''">
+            and check_dt = #{checkDt}
+        </if>
+
+    </select>
+
+    <select id="findByNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from p_pay where pay_no = #{payNo}
+    </select>
+
+    <insert id="insert" parameterType="com.yan.performance.pay.model.PPay">
+        insert into p_pay (pay_no,emp_no,emp_name,check_dt,pay_fee,pay_type,pay_dt)
+        values(#{payNo},#{empNo},#{empName},#{checkDt},#{payFee},#{payType},#{payDt})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from p_pay where pay_no = #{payNo}
+    </delete>
+
+    <update id="update" parameterType="com.yan.performance.pay.model.PPay">
+        update p_pay
+        set pay_fee = #{payFee}
+        where pay_no = #{payNo}
+    </update>
+</mapper>
