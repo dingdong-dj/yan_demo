@@ -4,6 +4,8 @@ import com.yan.core.annotation.MapperInject;
 import com.yan.core.controller.BaseController;
 import com.yan.core.model.MsgModel;
 import com.yan.core.model.PageModel;
+import com.yan.performance.appraise.mapper.PMainMapper;
+import com.yan.performance.appraise.model.PMain;
 import com.yan.performance.dic.mapper.ProjDicMapper;
 import com.yan.performance.dic.model.CustomDic;
 import com.yan.performance.dic.model.ProjDic;
@@ -22,6 +24,9 @@ import java.util.Map;
 public class ProjDicController extends BaseController {
     @MapperInject(ProjDicMapper.class)
     private ProjDicMapper projDicMapper;
+
+    @MapperInject(PMainMapper.class)
+    private PMainMapper pMainMapper;
 
     @RequestMapping("/init")
     public String init(){
@@ -64,6 +69,12 @@ public class ProjDicController extends BaseController {
     @ResponseBody
     @Transactional
     public MsgModel delete(String[] ids){
+        for(String id :ids){
+           List<PMain> list = pMainMapper.findByProj(id);
+           if(list != null && list.size()>0){
+               return this.resultMsg("1","删除失败！项目"+id +"已存在考核项目不能删除,请先删除考核项中项目");
+           }
+        }
         try{
             projDicMapper.deleteProj(ids);
         }catch (Exception e){
@@ -114,6 +125,19 @@ public class ProjDicController extends BaseController {
             return this.resultMsg("1","修改失败");
         }
         return this.resultMsg("0","修改成功");
+    }
+
+    @RequestMapping("isUsed")
+    @ResponseBody
+    @Transactional
+    public MsgModel isUsed(String projNo){
+
+        List<PMain> list = pMainMapper.findByProj(projNo);
+        if(list == null || list.size() == 0){
+            return this.resultMsg("0","可修改");
+        }else{
+            return this.resultMsg("1","SORRY!该项目已存在绩效考核，无法修改！");
+        }
     }
 
 

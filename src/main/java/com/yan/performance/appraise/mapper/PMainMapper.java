@@ -35,4 +35,6 @@ public interface PMainMapper {
 
     List<PMainEmp> findByEmp(@Param("empNo") String empNo,@Param("empName") String empName);
 
+    List<PMain> findByProj(String projNo);
+
 }

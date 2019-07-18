@@ -83,6 +83,7 @@
             toolbar: '#toolbar',
             search:true,
             detailView: false,
+            singleSelect: true,
             pageNumber: 1,
             //初始化加载第一页，默认第一页
             pageSize: 10,
@@ -104,11 +105,11 @@
                 {field: 'customNo', title: '客户编号', align: 'center',visible: false},
                 {field: 'empName', title: '项目经理', align: 'center'},
                 {field: 'empNo', title: '项目经理编号', align: 'center',visible: false},
-                {field: 'ratio1', title: '系数1', align: 'center',visible: false},
-                {field: 'ratio2', title: '系数2', align: 'center',visible: false},
-                {field: 'ratio3', title: '系数3', align: 'center',visible: false},
-                {field: 'ratio4', title: '系数4', align: 'center',visible: false},
-                {field: 'ratio5', title: '系数5', align: 'center',visible: false},
+                {field: 'ratio1', title: '战略意义', align: 'center',visible: false},
+                {field: 'ratio2', title: '实施难度', align: 'center',visible: false},
+                {field: 'ratio3', title: '实施周期', align: 'center',visible: false},
+                {field: 'ratio4', title: '项目收益', align: 'center',visible: false},
+                {field: 'ratio5', title: '维护成本', align: 'center',visible: false},
                 {field: 'remarks', title: '备注', align: 'center',visible: false},
                 {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
             ]
@@ -127,7 +128,23 @@
     }
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-            index_Tab.addTab(row.projName + " - 修改", "dic/proj/find/one?projNo=" + row.projNo);
+            var projNo = row.projNo;
+            $.ajax({
+                url: '${pageContext.request.contextPath}/dic/proj/isUsed',
+                type: "post",
+                data: {
+                    projNo: projNo
+                },
+                traditional: true,//这里设为true就可以了
+                success: function (data) {
+                    if("1" == data.status) {
+                        layer.msg(data.msg);
+                        return;
+                    }else{
+                        index_Tab.addTab(row.projName + " - 修改", "dic/proj/find/one?projNo=" + row.projNo);
+                    }
+                }
+            });
         },
         'click .remove': function (e, value, row, index) {
             $.confirm({
