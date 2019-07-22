@@ -30,7 +30,6 @@
 
         </button>
     </div>
-
     <div class="container col-xs-11"
          style="margin-top: 30px; margin-left: 50px; display: table;">
         <div id="noSelDiv" style="display: none;" class="row">
@@ -40,7 +39,12 @@
                 </div>
             </div>
         </div>
-
+        <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+            <div class="col-xs-8 text-left"
+                 style="background-color: #F5E3C7; line-height: 26px; vertical-align: middle;">
+                <label style="margin-top: 5px; font-size: 14px; color: grey;">当前项目绩效金额为:${lastFee}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp已分配绩效:${sumAward}</label>
+            </div>
+        </div>
         <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
             <div class="col-xs-4 text-left"
                  style="background-color: #E6E6F2; line-height: 26px; vertical-align: middle;">
@@ -65,17 +69,18 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+        <div class="row" style="margin-top: 10px; margin-bottom: 10px;display: none">
             <div class="col-xs-4 text-left"
                  style="background-color: #E6E6F2; line-height: 26px; vertical-align: middle;">
                 <label style="margin-top: 5px; font-size: 14px; color: grey;">审核状态：</label>
             </div>
             <div class="col-xs-7">
-                <select id="checkFlag" name="checkFlag" class="selectpicker">
-                    <option value="INIT">待审核</option>
-                    <option value="OK">已审核</option>
-                    <option value="PUB">可公布</option>
-                </select>
+<%--                <select id="checkFlag" name="checkFlag" class="selectpicker">--%>
+<%--                    <option value="INIT">待审核</option>--%>
+<%--                    <option value="OK">已审核</option>--%>
+<%--                    <option value="PUB">可公布</option>--%>
+<%--                </select>--%>
+                <input id="checkFlag" name="checkFlag" value="INIT">
             </div>
         </div>
         <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
@@ -156,8 +161,15 @@
             }
         });
 
+        <c:if test="${pAward.sysNo == null || pAward.sysNo == ''}">
+            var time = getNowDate();
+            $("#distDt").val(time);
+            $("#distDt").val(time);
+        </c:if>
+
         <c:if test ="${pAward.sysNo != null && pAward.sysNo != ''}">
             $("#empNo").attr("disabled",true);
+            $("#checkFlag").val("${pAward.checkFlag}");
         </c:if>
 
         // 表单效验
@@ -221,8 +233,8 @@
                 return false;
             }
 
-            if ($("#checkFlag").val() == null || $("#checkFlag").val() == "" || $("#checkFlag").val() == "undefined") {
-                $.alert("请选择审核状态");
+            if ($("#checkFlag").val() !="INIT") {
+                $.alert("该人员绩效已审核发布，无法修改");
                 return false;
             }
 
@@ -251,6 +263,17 @@
             });
         }
     });
+
+    function getNowDate(){
+        var myDate = new Date;
+        var year = myDate.getFullYear(); //获取当前年
+        var mon = myDate.getMonth() + 1; //获取当前月
+        var date = myDate.getDate(); //获取当前日
+
+        return year+"-"+mon+"-"+date;
+
+    }
+
 
 </script>
 </html>

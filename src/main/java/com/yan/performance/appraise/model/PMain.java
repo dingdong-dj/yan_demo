@@ -1,11 +1,12 @@
 package com.yan.performance.appraise.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 项目考核
  */
-public class PMain {
+public class PMain implements Serializable {
 
     private String sysNo;//考核编号
 

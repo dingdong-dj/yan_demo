@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,19 +85,23 @@ public class PeopleAppController extends BaseController {
 
     @RequestMapping("/{id}/edit")
     public String edit(@PathVariable String id, Model model) {
-
         String[] strs=id.split(",");
+        List<PMain> pMains = pMainMapper.find(strs[0],strs[1]);
+        List<PAward> pAwardList = pAwardMapper.bysysnoAndProjno(strs[0],strs[1]);
+        BigDecimal sumAward = BigDecimal.ZERO;
+        for(PAward pAward :pAwardList){
+            sumAward = sumAward.add(pAward.getAward());
+        }
+        model.addAttribute("lastFee",pMains.get(0).getLastFee());
+        model.addAttribute("sumAward",sumAward);
+        model.addAttribute("sysno",strs[0]);
+        model.addAttribute("projNo",strs[1]);
+        model.addAttribute("projName",strs[2]);
         if(strs.length  == 3){
-            model.addAttribute("sysno",strs[0]);
-            model.addAttribute("projNo",strs[1]);
-            model.addAttribute("projName",strs[2]);
             return "performance/appraise/peopleAddOrEdit";
         }else{
             String empNo = strs[3];
             List<PAward> list = pAwardMapper.find(strs[0],strs[1],strs[3]);
-            model.addAttribute("sysno",strs[0]);
-            model.addAttribute("projNo",strs[1]);
-            model.addAttribute("projName",strs[2]);
             model.addAttribute("pAward",list.get(0));
             return "performance/appraise/peopleAddOrEdit";
         }

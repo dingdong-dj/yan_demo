@@ -143,14 +143,16 @@ public class PAwardController extends BaseController {
 
     @RequestMapping(value = "/personal/list",method = RequestMethod.POST)
     @ResponseBody
-    public PageModel<PAward> personalList(int offset, int limit, String search, String sort, String order, String sysno,String projNo){
-
+    public PageModel<PAward> personalList(int offset, int limit, String search, String sort, String order, String sysno,String flag){
         SysUser sysUser = findUser();
-
         this.offsetPage(offset, limit);
         List<PAward> list = new ArrayList<PAward>();
         try{
-            list = pAwardMapper.personalList(sysno,sysUser.getUserId());
+            if("0".equals(flag)){
+                list = pAwardMapper.findBySysno(sysno);
+            }else{
+                list = pAwardMapper.personalList(sysno,sysUser.getUserId());
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

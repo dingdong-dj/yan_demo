@@ -199,7 +199,7 @@ $(function() {
 			{field: 'state', checkbox: true},
 			{field: 'userCode', title: '用户名', align: 'center'},
 			{field: 'userName', title: '姓名', align: 'center'},
-			{field: 'userAddress', title: '地址', align: 'center'},
+			{field: 'userAddress', title: '地址', align: 'center',visible: false},
 			{field: 'userEmail', title: '邮箱', align: 'center'},
 			{field: 'userPhone', title: '电话', align: 'center'},
 			{field: 'userBirthday', title: '生日', align: 'center'},

@@ -1,9 +1,11 @@
 package com.yan.performance.pay.model;
 
+import java.io.Serializable;
+
 /**
  * 绩效发放表
  */
-public class PPay {
+public class PPay implements Serializable {
 
     private String payNo;
 

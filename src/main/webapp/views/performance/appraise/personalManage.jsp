@@ -32,8 +32,8 @@
         <select id="sysno_find" name="sysno_find" class="selectpicker">
             <option value="${sysno}">${sysno}</option>
         </select>
-        <a class="waves-effect btn btn-warning btn-sm" href="javascript:findList();"><i class="zmdi zmdi-search"></i> 查询</a>
-
+        <a class="waves-effect btn btn-warning btn-sm" href="javascript:findList();"><i class="zmdi zmdi-search"></i> 查询本人</a>
+        <a class="waves-effect btn btn-info btn-sm" href="javascript:findAll();"><i class="zmdi zmdi-search"></i> 全体查看</a>
     </div>
     <div class="table-responsive">
         <table id="table"></table>
@@ -41,7 +41,7 @@
 </div>
 
 <script type="text/javascript">
-
+    var flag = "1";
     //查询所有考核编号并显示当前时间段或上一个考核时间的考核项目
     $.ajax({
         url: "${pageContext.request.contextPath}/appraise/project/find/all",
@@ -117,16 +117,21 @@
             limit: params.limit,   //页面大小
             offset: params.offset,  //页码
             order: params.order,  //排序
-            sysno:$("#sysno_find").val()
-            // projNo:$("#proj_find").val()
+            sysno:$("#sysno_find").val(),
+            flag:flag
         };
         return temp;
     };
 
     function findList() {
+        flag = "1";
         $table.bootstrapTable('refresh');
     }
 
+    function findAll() {
+        flag = "0";
+        $table.bootstrapTable('refresh');
+    }
 
 
 

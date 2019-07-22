@@ -1,11 +1,12 @@
 package com.yan.performance.appraise.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 人员考核表
  */
-public class PAward {
+public class PAward implements Serializable {
 
     private String sysNo;//考核编号
 

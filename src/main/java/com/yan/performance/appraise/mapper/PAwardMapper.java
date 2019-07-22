@@ -9,7 +9,7 @@ import java.util.List;
 public interface PAwardMapper {
 
     //根据考核编号查询员工绩效
-    List<PAward> findBySysno(String sysno);
+    List<PAward> findBySysno(@Param("sysno") String sysno);
 
     //
     List<String> allSysno();
