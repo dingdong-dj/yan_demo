@@ -92,5 +92,9 @@
         select * from dic_proj where emp_no = #{empNo} and emp_name = #{empName}
     </select>
 
-
+    <update id="modifyFlag" parameterType="com.yan.performance.dic.model.ProjDic" >
+         update dic_proj
+         set status_flag = #{statusFlag}
+         where proj_no = #{projNo}
+    </update>
 </mapper>

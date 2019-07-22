@@ -13,7 +13,7 @@
 <div id="main">
     <div id="toolbar">
         <a class="waves-effect btn btn-info btn-sm" href="javascript:createAction();" ><i class="zmdi zmdi-plus"></i> 新增项目</a>
-        <a class="waves-effect btn btn-warning btn-sm" href="javascript:updateAction();"><i class="zmdi zmdi-edit"></i>编辑记录</a>
+        <a class="waves-effect btn btn-warning btn-sm" href="javascript:updateAction();"><i class="zmdi zmdi-edit"></i>编辑查看</a>
         <a class="waves-effect btn btn-danger btn-sm" href="javascript:deleteAction();" ><i class="zmdi zmdi-delete"></i> 删除项目</a>
     </div>
     <div class="table-responsive">
@@ -97,7 +97,14 @@
                 {field: 'projName', title: '项目名', align: 'center'},
                 {field: 'totalFee', title: '总金额', align: 'center'},
                 {field: 'leftFee', title: '应收尾款', align: 'center'},
-                {field: 'statusFlag', title: '项目状态', align: 'center'},
+                {field: 'statusFlag', title: '项目状态', align: 'center',
+                    editable:{
+                        type:'select',
+                        title:'项目状态',
+                        source:[{value:"立项",text:"立项"},{value:"招标",text:"招标"},{value:"已签合同",text:"已签合同"},
+                            {value:"实施中",text:"实施中"},{value:"已完成",text:"已完成"}],
+                    }
+                },
                 {field: 'contractDt', title: '合同签订时间', align: 'center'},
                 {field: 'projStart', title: '项目开始时间', align: 'center'},
                 {field: 'projEnd', title: '项目结束时间', align: 'center'},
@@ -117,15 +124,28 @@
     });
     function actionFormatter(value, row, index) {
         return [
-            '<a class="ratio ml10" href="javascript:void(0)" data-toggle="tooltip" title="参数查看"><i class="glyphicon glyphicon-zoom-in"></i></a>　',
+            '<a class="ratio ml10" href="javascript:void(0)" data-toggle="tooltip" title="参数查看"><i class="glyphicon glyphicon-eye-open"></i></a>　',
             '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>　 ',
             '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a>'
         ].join('');
     }
 
-    function myFunction(){
-        console.log($("#input1").value);
-    }
+
+    $('#table').on('editable-save.bs.table', function (field, row, oldValue, $el) {
+        var projNo = oldValue.projNo;
+        var statusFlag = oldValue.statusFlag;
+        $.ajax({
+            type: "post",
+            url: "${pageContext.request.contextPath}/dic/proj/edit/flag",
+            data: {projNo:projNo,statusFlag:statusFlag},
+            dataType: 'JSON',
+            success: function (data) {
+                layer.msg(data.msg);
+                $table.bootstrapTable('refresh');
+            }
+        });
+    });
+
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
             var projNo = row.projNo;
@@ -348,7 +368,22 @@
                 }
             });
         }else {
-            index_Tab.addTab(rows[0].projName + " - 修改", "dic/proj/find/one?projNo=" + rows[0].projNo);
+            var projNo = rows[0].projNo;
+            $.ajax({
+                url: '${pageContext.request.contextPath}/dic/proj/isUsed',
+                type: "post",
+                data: {
+                    projNo: projNo
+                },
+                traditional: true,//这里设为true就可以了
+                success: function (data) {
+                    if("1" == data.status) {
+                        index_Tab.addTab(rows[0].projName + " - 查看", "dic/proj/look/one?projNo=" + rows[0].projNo);
+                    }else{
+                        index_Tab.addTab(rows[0].projName + " - 修改", "dic/proj/find/one?projNo=" + rows[0].projNo);
+                    }
+                }
+            });
         }
     }
 </script>

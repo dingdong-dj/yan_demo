@@ -94,6 +94,16 @@ public class ProjDicController extends BaseController {
         return "performance/dic/addOrEdit";
     }
 
+    @RequestMapping("/look/one")
+    public String lookByNo(String projNo,Model model){
+        ProjDic projDic = new ProjDic();
+        if(projNo != null && !"".equals(projNo)){
+            projDic = projDicMapper.selectByProjNo(projNo);
+        }
+        model.addAttribute("projDic",projDic);
+        return "performance/dic/projDetail";
+    }
+
     @RequestMapping("/find/custom")
     @ResponseBody
     public Map<String, Object> findCustom(String projNo){
@@ -140,6 +150,18 @@ public class ProjDicController extends BaseController {
         }
     }
 
+    @RequestMapping("/edit/flag")
+    @ResponseBody
+    @Transactional
+    public MsgModel updateFlag(String projNo, String statusFlag){
+        try{
+            projDicMapper.modifyFlag(projNo,statusFlag);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.resultMsg("1","修改失败");
+        }
+        return this.resultMsg("0","修改完成");
+    }
 
     //注意: 之后可能要加条件
     @RequestMapping("/find/all")

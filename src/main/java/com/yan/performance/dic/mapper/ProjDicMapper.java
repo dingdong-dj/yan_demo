@@ -22,4 +22,6 @@ public interface ProjDicMapper {
     int update(ProjDic projDic);
 
     List<ProjDic> findByEmp(@Param("empNo") String empNo, @Param("empName") String empName);
+
+    int modifyFlag(@Param("projNo") String projNo, @Param("statusFlag") String statusFlag);
 }
