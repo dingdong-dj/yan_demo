@@ -114,7 +114,7 @@
                         }
                     }
                 },
-                {field: 'remarks', title: '备注', align: 'center'}
+                {field: 'remarks', title: '备注', align: 'center',visible: false}
                 // {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
             ]
         });

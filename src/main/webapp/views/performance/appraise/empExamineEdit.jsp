@@ -69,7 +69,14 @@
                 {field: 'award', title: '绩效奖金', align: 'center',
                     editable:{
                         type:'text',
-                        title:'绩效奖金'
+                        title:'绩效奖金',
+                        validate:function (v) {
+                            if(v == "" || v == null){
+                                return "不能为空"
+                            }else if (isNaN(v)){
+                                return "请输入数字"
+                            }
+                        }
                     }
                 },
                 {field: 'distDt', title: '分配时间', align: 'center'},
@@ -81,7 +88,7 @@
                         source:[{value:"INIT",text:"初始状态"},{value:"OK",text:"已审核"},{value:"PUB",text:"可公布"}],
                     }
                 },
-                {field: 'remarks', title: '备注', align: 'center'}
+                {field: 'remarks', title: '备注', align: 'center',visible: false}
                 // {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
             ]
         });

@@ -82,7 +82,18 @@
                 {field: 'empNo', title: '员工编号', align: 'center',visible: false},
                 {field: 'empName', title: '员工姓名', align: 'center'},
                 {field: 'checkDt', title: '考核周期', align: 'center'},
-                {field: 'payFee', title: '发放金额', align: 'center'},
+                {field: 'payFee', title: '发放金额', align: 'center',
+                    editable:{
+                        type:'text',
+                        title:'金额修改',
+                        validate:function (v) {
+                            if(v == "" || v == null){
+                                return "不能为空"
+                            }else if (isNaN(v)){
+                                return "请输入数字"
+                            }
+                        }
+                    }},
                 {field: 'payType', title: '发放类型', align: 'center',
                     formatter: function(value, row, index) {
                         if(value == "01"){
@@ -92,17 +103,10 @@
                         }
                     }
                 },
-                {field: 'payDt', title: '发放时间', align: 'center'},
-                {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
+                {field: 'payDt', title: '发放时间', align: 'center'}
             ]
         });
     });
-    function actionFormatter(value, row, index) {
-        return [
-            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="金额修改"><i class="glyphicon glyphicon-edit"></i></a>　',
-            '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a>'
-        ].join('');
-    }
 
     //得到查询的参数
     function queryParams(params) {
@@ -114,77 +118,26 @@
         };
         return temp;
     };
-    window.actionEvents = {
-        'click .edit': function (e, value, row, index) {
-            console.log(row);
-            $("#payFee").val(row.payFee);
-            layer.open({
-                type:1,
-                area:['300px','300px'],
-                title:"修改金额",
-                content:$('#createDialog'),
-                btn:['确定','取消'],
-                yes:function () {
-                    var payFee = $("#payFee").val();
-                    var payNo = row.payNo;
-                    if(payFee == '' || payFee == "undefined" || payFee == null){
-                        layer.msg('请输入修改金额');
-                        return;
-                    }
-                    $.post('${pageContext.request.contextPath}/pay/roll/update',$.param({'payNo':payNo,'payFee':payFee}),function (data) {
-                        if("1" == data.status){
-                            layer.msg(data.msg);
-                            return;
-                        }
-                        $table.bootstrapTable('refresh');
-                        layer.closeAll();
-                        layer.msg(data.msg);
-                    })
-                },
-                btn2:function () {
-                    layer.close(); //关闭当前窗口
-                }
-            })
-        },
-        //删除
-        'click .remove': function (e, value, row, index) {
-            console.log(row);
-            $.confirm({
-                type: 'red',
-                animationSpeed: 300,
-                title: false,
-                content: '确认删除该考核项目吗？',
-                buttons: {
-                    confirm: {
-                        text: '确认',
-                        btnClass: 'waves-effect waves-button',
-                        action: function () {
-                            $.ajax({
-                                url: '${pageContext.request.contextPath}/pay/roll/deletes',
-                                type: "post",
-                                data: {
-                                    payNo: row.payNo
-                                },
-                                traditional: true,//这里设为true就可以了传参
-                                success: function (data) {
-                                    if("1" == data.status){
-                                        layer.msg(data.msg);
-                                    }else{
-                                        layer.msg(data.msg);
-                                        $table.bootstrapTable('refresh');
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    cancel: {
-                        text: '取消',
-                        btnClass: 'waves-effect waves-button'
-                    }
-                }
-            });
-        }
-    };
+
+    $('#table').on('editable-save.bs.table', function (field, row, oldValue, $el) {
+        $.ajax({
+            type: "post",
+            url: "${pageContext.request.contextPath}/pay/roll/update",
+            data: {payNo:oldValue.payNo,
+                    empNo:oldValue.empNo,
+                    empName:oldValue.empName,
+                    checkDt:oldValue.checkDt,
+                    payFee:oldValue.payFee,
+                    payType:oldValue.payType,
+                    payDt:oldValue.payDt},
+            dataType: 'JSON',
+            success: function (data) {
+                layer.msg(data.msg);
+                $table.bootstrapTable('refresh');
+            }
+        });
+    });
+
     function detailFormatter(index, row) {
         var html = [];
         $.each(row, function (key, value) {
@@ -316,14 +269,5 @@
 
 </script>
 </body>
-<!-- 修改 -->
-<div id="createDialog" class="crudDialog" hidden>
-    <form id="payFrom">
-        <div class="form-group">
-            <label for="payFee">发放金额</label>
-            <input name = "payFee" id="payFee" type="text" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')">
-        </div>
-    </form>
-</div>
 </html>
 </html>
