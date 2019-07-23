@@ -215,10 +215,10 @@
         });
 
         <c:if test ="${PMain.sysNo != null && PMain.sysNo != ''}">
-        $("#sysNo").attr("readOnly","true");
-        $("#projNo").attr("disabled",true);
-        $("#checkYear").attr("disabled",true);
-        $("#checkDt").attr("disabled",true);
+            $("#sysNo").attr("readOnly","true");
+            $("#projNo").attr("disabled",true);
+            $("#checkYear").attr("disabled",true);
+            $("#checkDt").attr("disabled",true);
         </c:if>
         //必填项检查
         function formCheck() {

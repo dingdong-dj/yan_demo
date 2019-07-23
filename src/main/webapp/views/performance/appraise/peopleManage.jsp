@@ -54,7 +54,7 @@
 </div>
 <div class="layout-right">
     <iframe id="content_iframe" class="tab_iframe" frameborder="0"
-            width="840" height="800" scrolling="no"></iframe>
+            width="800" height="500" scrolling="yes"></iframe>
 </div>
 </body>
 <script type="text/javascript">
@@ -125,6 +125,7 @@
     var lastChecked;
     // tree 点击事件
     function zTreeOnClick(event, treeId, treeNode) {
+        console.log(treeNode);
         if("1" == treeNode.type){
             $("#delete-btn").hide();
             $("#add-btn").hide();

@@ -45,6 +45,10 @@ public class PMainController extends BaseController {
     @Transactional
     public MsgModel save(PMain pMain){
         PMain pro = pMainMapper.isExsit(pMain);
+        ProjDic projDic = projDicMapper.selectByProjNo(pMain.getProjNo());
+        BigDecimal leftFee = projDic.getLeftFee();
+        leftFee = leftFee.subtract(pMain.getBackFee());
+        projDic.setLeftFee(leftFee);
         if(pro !=null){
             return this.resultMsg("1","保存失败,该考核项目已存在");
         }
@@ -52,11 +56,12 @@ public class PMainController extends BaseController {
         if(Ksumn == null){
             return this.resultMsg("1","保存失败");
         }
-        Ksumn = Ksumn.multiply(BigDecimal.valueOf(0.1));
+            Ksumn = Ksumn.multiply(BigDecimal.valueOf(0.1));
         pMain.setkSumn(Ksumn.multiply(pMain.getValidFee()));
         try{
             pMainMapper.save(pMain);
             countLastFee(pMain.getSysNo());
+            projDicMapper.update(projDic);
             return this.resultMsg("0","保存成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -135,9 +140,15 @@ public class PMainController extends BaseController {
     @ResponseBody
     @Transactional
     public MsgModel delete(String sysno,String projNo){
+        ProjDic projDic = projDicMapper.selectByProjNo(projNo);
+        BigDecimal lastFee = projDic.getLeftFee();
+        List<PMain> list = pMainMapper.find(sysno,projNo);
+        lastFee = lastFee.add(list.get(0).getBackFee());
+        projDic.setLeftFee(lastFee);
         try{
             pMainMapper.deletePMain(sysno,projNo);
             countLastFee(sysno);
+            projDicMapper.update(projDic);
         }catch (Exception e){
             e.printStackTrace();
             return this.resultMsg("1","删除失败");
@@ -159,6 +170,18 @@ public class PMainController extends BaseController {
     @ResponseBody
     @Transactional
     public MsgModel update(PMain pMain){
+        Boolean needModify = true;
+        List<PMain> list = pMainMapper.find(pMain.getSysNo(),pMain.getProjNo());
+        ProjDic projDic = projDicMapper.selectByProjNo(pMain.getProjNo());
+        BigDecimal leftFee = projDic.getLeftFee();
+        if(pMain.getBackFee().compareTo(list.get(0).getBackFee()) == 0){
+            needModify = false;
+        }
+        if(needModify){
+            leftFee = leftFee.add(list.get(0).getBackFee());
+            leftFee = leftFee.subtract(pMain.getBackFee());
+            projDic.setLeftFee(leftFee);
+        }
         try{
             BigDecimal Ksumn = findKsumn(pMain.getProjNo());
             if(Ksumn == null){
@@ -168,6 +191,7 @@ public class PMainController extends BaseController {
             pMain.setkSumn(Ksumn.multiply(pMain.getValidFee()));
             pMainMapper.update(pMain);
             countLastFee(pMain.getSysNo());
+            projDicMapper.update(projDic);
         }catch (Exception e){
             return this.resultMsg("1","修改失败");
         }

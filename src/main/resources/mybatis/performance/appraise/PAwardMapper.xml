@@ -22,6 +22,13 @@
         </if>
     </select>
 
+    <select id="findBySysnoName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from  p_award where dist_emp = #{distEmp}
+        <if test="sysno !=null and sysno != ''">
+            and sysno = #{sysno}
+        </if>
+    </select>
+
     <select id="allSysno" resultType="java.lang.String">
         select sysno from p_award group by sysno;
     </select>
@@ -66,10 +73,22 @@
           select * from p_award where sysno = #{sysNo} and proj_no = #{projNo}
     </select>
 
+    <select id="bysysnoAndProjnoName" parameterType="com.yan.performance.appraise.model.PAward"  resultMap="BaseResultMap">
+          select * from p_award where sysno = #{sysNo} and proj_no = #{projNo} and dist_emp = #{distEmp}
+    </select>
+
     <select id="personalList" parameterType="com.yan.performance.appraise.model.PAward" resultMap="BaseResultMap">
         select * from p_award where emp_no = #{empNo} and check_flag = 'PUB'
         <if test="sysNo !=null and sysNo != ''">
             and sysno = #{sysNo}
         </if>
     </select>
+
+    <select id="findAllPub" parameterType="com.yan.performance.appraise.model.PAward" resultMap="BaseResultMap">
+        select * from p_award where check_flag = 'PUB'
+        <if test="sysNo !=null and sysNo != ''">
+            and sysno = #{sysNo}
+        </if>
+    </select>
+
 </mapper>

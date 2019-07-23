@@ -43,10 +43,17 @@ public class PAwardController extends BaseController {
         return "performance/appraise/peopleAppManage";
     }
 
+    @RequestMapping("/examine")
+    public String examine(){
+        return "performance/appraise/empExamine";
+    }
+
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     @ResponseBody
     public PageModel<PAward> list(int offset, int limit, String search, String sort, String order, String sysno,String projNo){
+        SysUser sysUser = findUser();
+        String name = sysUser.getUserName();
         if(sysno == null || "".equals(sysno)||"null".equals(sysno)){
             sysno = findSysno();
         }
@@ -54,9 +61,9 @@ public class PAwardController extends BaseController {
         List<PAward> list = new ArrayList<PAward>();
         try{
             if(projNo == null || "".equals(projNo)){
-                list = pAwardMapper.findBySysno(sysno);
+                list = pAwardMapper.findBySysnoName(sysno,name);
             }else {
-                list = pAwardMapper.bysysnoAndProjno(sysno,projNo);
+                list = pAwardMapper.bysysnoAndProjnoName(sysno,projNo,name);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -149,7 +156,7 @@ public class PAwardController extends BaseController {
         List<PAward> list = new ArrayList<PAward>();
         try{
             if("0".equals(flag)){
-                list = pAwardMapper.findBySysno(sysno);
+                list = pAwardMapper.findAllPub(sysno);
             }else{
                 list = pAwardMapper.personalList(sysno,sysUser.getUserId());
             }
