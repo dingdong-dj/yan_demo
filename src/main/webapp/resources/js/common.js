@@ -8,7 +8,7 @@ $(function() {
 	$(window).resize(function() {
 		var height = getHeight()*0.7;
 		$('#sum-table').bootstrapTable('resetView', { height : height });
-		$('#sum-table').bootstrapTable('resetView', { height : height });
+		$('#del-table').bootstrapTable('resetView', { height : height });
 	});
 	// 设置main的div高度
 	$("#main").css("height", getHeight());
