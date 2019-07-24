@@ -65,8 +65,6 @@
             if (data.success) {
                 var list = data.list;
                 var sysno = data.sysno;
-                console.log(list);
-                console.log(sysno);
                 for (var i = 0; i < sysno.length; i++) {
                     var PMain = [];
                     for(var j=0;j<list.length;j++){

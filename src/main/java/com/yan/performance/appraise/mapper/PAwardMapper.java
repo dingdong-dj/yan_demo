@@ -1,6 +1,8 @@
 package com.yan.performance.appraise.mapper;
 
 import com.yan.performance.appraise.model.PAward;
+import com.yan.performance.appraise.model.Report;
+import com.yan.performance.appraise.model.ReportDetail;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -48,5 +50,7 @@ public interface PAwardMapper {
     //查询所有员工可公布绩效
     List<PAward> findAllPub(@Param("sysNo") String sysno);
 
+    List<Report> findReport(@Param("sysno") String sysno);
 
+    List<ReportDetail> reportDetail(@Param("sysno") String sysno,@Param("empNo") String empNo);
 }

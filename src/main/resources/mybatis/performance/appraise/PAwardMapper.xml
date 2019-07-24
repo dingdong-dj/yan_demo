@@ -15,6 +15,39 @@
         <result column="check_flag" jdbcType="VARCHAR" property="checkFlag" />
     </resultMap>
 
+    <resultMap id="ReportMap" type="com.yan.performance.appraise.model.Report">
+        <result column="sysno" jdbcType="VARCHAR" property="sysno"/>
+        <result column="emp_no" jdbcType="VARCHAR" property="empNo"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="sumAward" jdbcType="DECIMAL" property="sumAward"/>
+        <result column="awardPay" jdbcType="DECIMAL" property="awardPay"/>
+    </resultMap>
+
+    <resultMap id="ReportDetailMap" type="com.yan.performance.appraise.model.ReportDetail">
+        <result column="sysno" jdbcType="VARCHAR" property="sysno"/>
+        <result column="emp_no" jdbcType="VARCHAR" property="empNo"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="proj_no" jdbcType="VARCHAR" property="projNo"/>
+        <result column="award" jdbcType="DECIMAL" property="award"/>
+        <result column="proj_name" jdbcType="VARCHAR" property="projName"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="custom_id" jdbcType="VARCHAR" property="customId"/>
+        <result column="custom_name" jdbcType="VARCHAR" property="customName"/>
+    </resultMap>
+
+    <select id="reportDetail" resultMap="ReportDetailMap" parameterType="com.yan.performance.appraise.model.PAward">
+        select pa.sysno,pa.proj_no,pa.proj_name,pa.award,pa.remarks,pm.custom_name,pa.emp_name from p_award pa left join p_main pm
+        on pa.sysno = pm.sysno and pa.proj_no = pm.proj_no
+        where pa.sysno = #{sysno} and pa.emp_no = #{empNo} and pa.check_flag = 'PUB'
+    </select>
+
+    <select id="findReport" resultMap="ReportMap" parameterType="com.yan.performance.appraise.model.PAward">
+        select a.sysno,a.emp_no,a.emp_name,a.sa sumAward,b.sp awardPay
+        from (select sysno,emp_no,emp_name,sum(award)as sa  from p_award where sysno = #{sysno} and check_flag = 'PUB' group by emp_name) a
+        left join (select emp_name,emp_no,sum(pay_fee)as sp from p_pay where check_dt = #{sysno} group by emp_name) b
+        on a.emp_no = b.emp_no and a.emp_name = b.emp_name
+    </select>
+
     <select id="findBySysno" resultMap="BaseResultMap" parameterType="java.lang.String">
         select * from  p_award where 1=1
         <if test="sysno !=null and sysno != ''">

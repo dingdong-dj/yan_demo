@@ -5,13 +5,6 @@
   Time: 9:09
   To change this template use File | Settings | File Templates.
 --%>
-<%--
-  Created by IntelliJ IDEA.
-  User: djson
-  Date: 2019/7/4
-  Time: 20:57
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ include file="/common/global.jsp" %>
@@ -26,8 +19,6 @@
 <body>
 <div id="main">
     <div id="toolbar">
-        <%--        <a class="waves-effect btn btn-info btn-sm" href="javascript:createAction();" ><i class="zmdi zmdi-plus"></i> 新增员工绩效</a>--%>
-        <%--        <a class="waves-effect btn btn-danger btn-sm" href="javascript:deleteAction();" ><i class="zmdi zmdi-delete"></i> 删除员工绩效</a>--%>
         <span>考核编号: </span>
         <select id="sysno_find" name="sysno_find" class="selectpicker">
             <option value="${sysno}">${sysno}</option>

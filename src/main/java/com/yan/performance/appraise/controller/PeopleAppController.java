@@ -11,6 +11,8 @@ import com.yan.performance.appraise.mapper.PAwardMapper;
 import com.yan.performance.appraise.mapper.PMainMapper;
 import com.yan.performance.appraise.model.PAward;
 import com.yan.performance.appraise.model.PMain;
+import com.yan.performance.appraise.model.Report;
+import com.yan.performance.appraise.model.ReportDetail;
 import com.yan.performance.dic.mapper.ProjDicMapper;
 import com.yan.performance.dic.model.PMainEmp;
 import com.yan.performance.dic.model.ProjDic;
@@ -189,6 +191,39 @@ public class PeopleAppController extends BaseController {
             return this.resultMsg("1","修改失败");
         }
         return this.resultMsg("0","修改完成");
+    }
+
+    @RequestMapping("/report")
+    public String report(){
+        return "/performance/appraise/report";
+    }
+
+    @RequestMapping("/report/list")
+    @ResponseBody
+    public PageModel<Report> reportList(int offset, int limit, String search, String sort, String order, String sysno){
+        this.offsetPage(offset, limit);
+        List<Report> list = new ArrayList<Report>();
+        try{
+            list = pAwardMapper.findReport(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        PageModel<Report> pageModel = this.resultPage(list);
+        return pageModel;
+    }
+
+    @RequestMapping("/report/detail")
+    @ResponseBody
+    public PageModel<ReportDetail> reportDetailList(int offset, int limit, String search, String sort, String order, String sysno,String empNo){
+        this.offsetPage(offset, limit);
+        List<ReportDetail> list = new ArrayList<ReportDetail>();
+        try{
+            list = pAwardMapper.reportDetail(sysno,empNo);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        PageModel<ReportDetail> pageModel = this.resultPage(list);
+        return pageModel;
     }
 
 }

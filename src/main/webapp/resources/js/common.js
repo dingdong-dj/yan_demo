@@ -5,6 +5,11 @@ $(function() {
 	$(window).resize(function() {
 		$('#table').bootstrapTable('resetView', { height : getHeight() });
 	});
+	$(window).resize(function() {
+		var height = getHeight()*0.7;
+		$('#sum-table').bootstrapTable('resetView', { height : height });
+		$('#sum-table').bootstrapTable('resetView', { height : height });
+	});
 	// 设置main的div高度
 	$("#main").css("height", getHeight());
 });
@@ -21,10 +26,11 @@ $(function() {
     		toolbar: '#toolbar',
     		idField: 'id',
 			showRefresh: true,//是否显示 刷新按钮
+			showColumns:true,
     		clickToSelect: true,// 点击行时选中
     		singleSelect: false,// 只能单选
     		detailView: true,// 显示详细页面模式
-    		detailFormatter: 'detailFormatter',// 详细页格式化
+			detailFormatter: 'detailFormatter',// 详细页格式化
     		pagination: true,// 显示分页条
     		sidePagination: 'server',// 可选值为 client 或者 server
     		search: false,// 是否启用搜索框
@@ -45,8 +51,8 @@ $(function() {
 					height: settings.height,
 					idField: settings.idField,// 指定主键列
 					striped: true,// 隔行变色效果
-					showRefresh: true,//是否显示 刷新按钮
-					showColumns: true,//是否显示 内容列下拉框
+					showRefresh: settings.showRefresh,//是否显示 刷新按钮
+					showColumns: settings.showColumns,//是否显示 内容列下拉框
 					minimumCountColumns: 2,// 最小显示列数
 					clickToSelect: settings.clickToSelect,// 点击行时选中
 					singleSelect: settings.singleSelect,// 只能单选
@@ -62,6 +68,7 @@ $(function() {
 					searchOnEnterKey: true,// 按回车触发搜索方法
 					classes: settings.classes,// table table-hover table-no-bordered
 					columns: settings.columns,
+					onClickRow:settings.onClickRow,
 					// onDblClickRow: settings.onDblClickRow,	//双击表格时触发
 					// onClickCell: settings.onClickCell,		//单击表格时触发
 					// onEditableSave: settings.onEditableSave //编辑保存时触发
