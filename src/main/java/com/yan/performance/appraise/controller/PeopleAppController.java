@@ -226,4 +226,20 @@ public class PeopleAppController extends BaseController {
         return pageModel;
     }
 
+    @RequestMapping("/examine/allpub")
+    @ResponseBody
+    @Transactional
+    public Map<String, Object> allPub(String sysno) throws Exception{
+        Map<String, Object> result =new HashMap<>();
+        try{
+            pAwardMapper.allPub(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            return result;
+        }
+        result.put("success",true);
+        return result;
+    }
+
 }

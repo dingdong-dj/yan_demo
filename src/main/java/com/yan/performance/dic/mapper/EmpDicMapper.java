@@ -22,5 +22,5 @@ public interface EmpDicMapper {
     //编辑修改员工姓名
     int updateName(EmpDic empDic);
 
-
+    String autoId();
 }

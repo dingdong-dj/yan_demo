@@ -395,4 +395,8 @@
     where USER_ID = #{userId,jdbcType=VARCHAR}
       and USER_CODE = #{userCode,jdbcType=VARCHAR}
   </update>
+
+  <select id="findByCode" parameterType="com.yan.common.user.model.SysUser" resultMap="BaseResultMap">
+    select * from sys_user where user_code = #{userCode}
+  </select>
 </mapper>

@@ -39,4 +39,8 @@
         where emp_no = #{empNo,jdbcType=VARCHAR}
     </update>
 
+    <select id="autoId" resultType="java.lang.String">
+        select max(emp_no)+1 from dic_emp
+    </select>
+
 </mapper>

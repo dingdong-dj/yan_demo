@@ -94,4 +94,6 @@ public interface SysUserMapper {
      * @mbg.generated Thu Sep 14 18:04:32 CST 2017
      */
     int updateByPrimaryKey(SysUser record);
+
+    List<SysUser> findByCode(@Param("userCode") String userCode);
 }

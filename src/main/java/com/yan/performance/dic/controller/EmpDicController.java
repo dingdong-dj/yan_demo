@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 @Controller
 @RequestMapping("/dic/emp")
 public class EmpDicController extends BaseController {
@@ -93,5 +95,17 @@ public class EmpDicController extends BaseController {
             return this.resultMsg("1","修改失败");
         }
         return this.resultMsg("0","修改成功");
+    }
+
+    @RequestMapping("/auto/id")
+    @ResponseBody
+    public Map<String, Object> autpId(){
+        Map<String, Object> result = new HashMap<>();
+        String id = empMapper.autoId();
+        String userId = String.format("%05d",parseInt(id));
+        result.put("userId", userId);
+        result.put("success", true);
+        return result;
+
     }
 }

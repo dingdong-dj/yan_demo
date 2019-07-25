@@ -7,7 +7,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>用户管理</title>
+	<title>	用户管理</title>
 </head>
 <body>
 <div id="main">
@@ -264,26 +264,7 @@ $('#roleSave-btn').click(function(){
 
 // 添加
 function addAction() {
-	$.confirm({
-		type: 'blue',
-		animationSpeed: 300,
-		columnClass: 'col-md-9 col-md-offset-1',
-		title: '添加用户',
-		content: $('#addDialog').html(),
-		buttons: {
-			confirm: {
-				text: '保存',
-				btnClass: 'waves-effect waves-button',
-				action: function () {
-					$.alert('保存');
-				}
-			},
-			cancel: {
-				text: '取消',
-				btnClass: 'waves-effect waves-button'
-			}
-		}
-	});
+	index_Tab.addTab("新增用户", "common/user/addOrEditPage");
 }
 // 删除
 function deleteAction() {
@@ -312,11 +293,20 @@ function deleteAction() {
 					text: '确认',
 					btnClass: 'waves-effect waves-button',
 					action: function () {
-						var ids = new Array();
-						for (var i in rows) {
-							ids.push(rows[i].userId);
-						}
-						$.alert('删除：id=' + ids.join("-"));
+						$.ajax({
+							url: "${pageContext.request.contextPath}/common/user/delete",
+							type: "post",
+							data: {
+								userId: deleteId,
+								userCode: deleteCode,
+							},
+							success: function (data) {
+								if (!data.success) {
+									$.alert("删除失败");
+								}
+							}
+						});
+						$("#table").bootstrapTable('refresh');
 					}
 				},
 				cancel: {
@@ -352,6 +342,68 @@ function roleAction() {
     		$('#roleModalTitle').html('用户[' + row.userName + ']拥有的角色');
     		loadRoleTree();
     	}
+	}
+}
+
+//window.parent慎用
+var top_tabs = $("#tabs", window.parent.document);//window.parent.document.getElementById("");
+
+// 子页面下调用选项卡对象
+var index_Tab = {
+	addTab: function (title, url) {
+		var index = url.replace(/\./g, '_').replace(/\//g, '_').replace(/:/g, '_').replace(/\?/g, '_').replace(/,/g, '_').replace(/=/g, '_').replace(/&/g, '_');
+		// 如果存在选项卡，则激活，否则创建新选项卡
+		if ($('#tab_' + index, window.parent.document).length == 0) {
+			// 添加选项卡
+			$('.content_tab li', window.parent.document).removeClass('cur');
+			var tab = '<li id="tab_' + index + '" data-index="' + index + '" class="cur"><a class="waves-effect waves-light">' + title + '</a></li>';//<i class="zmdi zmdi-close"></i><
+			$('.content_tab>ul', window.parent.document).append(tab);
+			// 添加iframe
+			$('.iframe', window.parent.document).removeClass('cur');
+			var iframe = '<div id="iframe_' + index + '" class="iframe cur"><iframe class="tab_iframe" src="' + url + '" width="100%" frameborder="0" scrolling="auto" onload="changeFrameHeight(this)"></iframe></div>';
+			$('.content_main', window.parent.document).append(iframe);
+			initScrollShow();
+			$('.content_tab>ul', window.parent.document).animate({scrollLeft: window.parent.document.getElementById('tabs').scrollWidth - window.parent.document.getElementById('tabs').clientWidth}, 200, function () {
+				initScrollState();
+			});
+		} else {
+			$('#tab_' + index, window.parent.document).trigger('click');
+		}
+	},
+	closeTab: function ($item) {
+		var closeable = $item.data('closeable');
+		if (closeable != false) {
+			// 如果当前时激活状态则关闭后激活左边选项卡
+			if ($item.hasClass('cur')) {
+				$item.prev().trigger('click');
+			}
+			// 关闭当前选项卡
+			var index = $item.data('index');
+			$('#iframe_' + index).remove();
+			$item.remove();
+		}
+		initScrollShow();
+	}
+}
+
+function initScrollShow() {
+	if (window.parent.document.getElementById('tabs').scrollWidth > window.parent.document.getElementById('tabs').clientWidth) {
+		$('.content_tab', window.parent.document).addClass('scroll');
+	} else {
+		$('.content_tab', window.parent.document).removeClass('scroll');
+	}
+}
+
+function initScrollState() {
+	if ($('.content_tab>ul', window.parent.document).scrollLeft() == 0) {
+		$('.tab_left>a', window.parent.document).removeClass('active');
+	} else {
+		$('.tab_left>a', window.parent.document).addClass('active');
+	}
+	if (($('.content_tab>ul', window.parent.document).scrollLeft() + window.parent.document.getElementById('tabs').clientWidth) >= window.parent.document.getElementById('tabs').scrollWidth) {
+		$('.tab_right>a', window.parent.document).removeClass('active');
+	} else {
+		$('.tab_right>a', window.parent.document).addClass('active');
 	}
 }
 </script>

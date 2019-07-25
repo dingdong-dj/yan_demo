@@ -53,4 +53,7 @@ public interface PAwardMapper {
     List<Report> findReport(@Param("sysno") String sysno);
 
     List<ReportDetail> reportDetail(@Param("sysno") String sysno,@Param("empNo") String empNo);
+
+    //一键发布
+    int allPub(@Param("sysNo") String sysno);
 }

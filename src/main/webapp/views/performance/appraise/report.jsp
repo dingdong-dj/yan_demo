@@ -100,6 +100,7 @@
                 $("#empNo").val(row.empNo);
                 $table1.bootstrapTable('refresh');
                 $("#del-div").show();
+                window.location.hash = "#del-div";
             },
             columns: [
                 // {field: 'state', checkbox: true},

@@ -1,13 +1,19 @@
 package com.yan.common.user.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.yan.common.user.model.SysUserExample;
+import com.yan.performance.dic.mapper.EmpDicMapper;
+import com.yan.performance.dic.model.EmpDic;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +46,9 @@ public class UserController extends BaseController {
 
 	@MapperInject(SysUserMapper.class)
 	private SysUserMapper mapper;
+
+	@MapperInject(EmpDicMapper.class)
+	private EmpDicMapper empDicMapper;
 
 	@RequestMapping("/manage")
 	public String manage() {
@@ -99,6 +108,7 @@ public class UserController extends BaseController {
 		SysUser sysUser = new SysUser();
 		if(null == userID){
 			model.addAttribute("sysUser",sysUser);
+			model.addAttribute("flag","1");
 			return "common/user/addOrEdit";
 		}
 		if(userID.equals("self")){
@@ -116,8 +126,47 @@ public class UserController extends BaseController {
 
 		}
 		model.addAttribute("sysUser",sysUser);
+		model.addAttribute("flag","0");
 		return "common/user/addOrEdit";
 	}
 
-
+	@RequestMapping("/save")
+	@ResponseBody
+	@Transactional
+	public MsgModel save(HttpServletRequest request){
+		String userId = request.getParameter("userId");
+		String userCode = request.getParameter("userCode");
+		SysUser sysUser = new SysUser();
+		List<SysUser> list = mapper.findByCode(userCode);
+		if(list != null && list.size()>0){
+			return this.resultMsg("1","该用账户名已存在");
+		}
+		String userName = request.getParameter("userName");
+		String userEmail = request.getParameter("userEmail");
+		String userPhone = request.getParameter("userPhone");
+		String userJoindate = request.getParameter("userJoindate");
+		String userType = request.getParameter("userType");
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+		try{
+			Date date=simpleDateFormat.parse(userJoindate);
+			sysUser.setUserId(userId);
+			sysUser.setUserCode(userCode);
+			sysUser.setUserName(userName);
+			sysUser.setUserEmail(userEmail);
+			sysUser.setUserPhone(userPhone);
+			sysUser.setUserJoindate(date);
+			sysUser.setUserType(userType);
+			sysUser.setUserValid(true);
+			sysUser.setUserPassword("123456");
+			mapper.insert(sysUser);
+			EmpDic empDic = new EmpDic();
+			empDic.setEmpNo(userId);
+			empDic.setEmpName(userName);
+			empDicMapper.insert(empDic);
+			return this.resultMsg("0","保存成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			return this.resultMsg("1","保存失败");
+		}
+	}
 }

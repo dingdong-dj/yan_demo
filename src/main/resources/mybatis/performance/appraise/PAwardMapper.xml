@@ -124,4 +124,10 @@
         </if>
     </select>
 
+    <update id="allPub" parameterType="com.yan.performance.appraise.model.PAward">
+        update p_award
+        set check_flag = 'PUB'
+        where sysno = #{sysNo}
+    </update>
+
 </mapper>

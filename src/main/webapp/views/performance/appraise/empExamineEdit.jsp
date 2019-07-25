@@ -19,7 +19,7 @@
 <body>
 <div id="main">
     <div id="toolbar">
-        <span>考核编号: </span>
+        <span>考核周期: </span>
         <select id="sysno_find" name="sysno_find" class="selectpicker">
             <option value="${sysno}">${sysno}</option>
         </select>
@@ -29,6 +29,7 @@
                 <option value="${projNo}">${projName}</option>
             </select>
         </span>
+        <a class="waves-effect btn btn-warning btn-sm" id="all-pub" href="javascript:allPub();"><i class="zmdi zmdi-search"></i> 一键审核发布</a>
 
     </div>
     <div class="table-responsive">
@@ -40,6 +41,10 @@
 
     <c:if test ="${projNo == null || projNo == ''}">
         $("#proj_div").hide();
+    </c:if>
+
+    <c:if test ="${projNo != null && projNo != ''}">
+        $("#all-pub").hide();
     </c:if>
 
     var $table = $('#table');
@@ -128,6 +133,43 @@
             }
         });
     });
+    
+    function allPub() {
+        var sysno = $("#sysno_find").val();
+        $.confirm({
+            type: 'red',
+            animationSpeed: 300,
+            title: false,
+            content: '确认一键审核发布吗？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'waves-effect waves-button',
+                    action: function () {
+                        $.ajax({
+                            url: "${pageContext.request.contextPath}/appraise/peoman/examine/allpub",
+                            type: "post",
+                            data: {
+                                sysno: sysno,
+                            },
+                            success: function (data) {
+                                if (!data.success) {
+                                    $.alert("发布失败");
+                                }else{
+                                    $.alert("发布成功");
+                                }
+                            }
+                        });
+                        $table.bootstrapTable('refresh');
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
+            }
+        });
+    }
 
 </script>
 </body>

@@ -63,7 +63,7 @@
         async: false,
         success: function (data) {
             if (data.success) {
-                var list = data.list;
+                 var list = data.list;
                 var sysno = data.sysno;
                 for (var i = 0; i < sysno.length; i++) {
                     var PMain = [];
@@ -72,7 +72,8 @@
                             PMain.push({"id":list[j].projNo,"name":list[j].projName,"pid":list[j].sysNo,"lastFee":list[j].lastFee,"type":"2"});
                         }
                     }
-                    treeNode.push({"id":sysno[i],"name":sysno[i],"children":PMain,"type":"1"});
+                   treeNode.push({"id":sysno[i],"name":sysno[i],"children":PMain,"type":"1"});
+                    //treeNode.push({"id":sysno[i],"name":sysno[i],"type":"1"});
                 }
             } else {
                 $.alert(data.msg);
