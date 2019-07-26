@@ -147,12 +147,6 @@
 						<li>
 							<a class="waves-effect" href="javascript:changePass();"><i class="zmdi zmdi-turning-sign"></i> 密码修改</a>
 						</li>
-<%--						<li>--%>
-<%--							<a class="waves-effect" href="javascript:Tab.addTab('模板查看', '${pageContext.request.contextPath}/common/personal/manage');"><i class="zmdi zmdi-account"></i> 个人资料</a>--%>
-<%--						</li>--%>
-<%--						<li>--%>
-<%--							<a class="waves-effect" href="javascript:Tab.addTab('模板查看', '${pageContext.request.contextPath}/common/setting/manage');"><i class="zmdi zmdi-settings"></i> 系统设置</a>--%>
-<%--						</li>--%>
 						<li>
 							<a class="waves-effect" href="javascript:logout();"><i class="zmdi zmdi-run"></i> 退出登录</a>
 						</li>
@@ -178,7 +172,7 @@
 			</a>
 			<ul class="main-menu">
 				<li>
-					<a class="waves-effect" href="javascript:Tab.addTab('修改密码', '${pageContext.request.contextPath}/common/setting/password');"><i class="zmdi zmdi-settings"></i> 密码修改</a>
+					<a class="waves-effect" href="javascript:Tab.addTab('修改密码', '${pageContext.request.contextPath}/common/user/password');"><i class="zmdi zmdi-settings"></i> 密码修改</a>
 				</li>
 				<li>
 					<a class="waves-effect" href="javascript:logout();"><i class="zmdi zmdi-run"></i> 退出登录</a>
@@ -263,7 +257,7 @@
 	}
 
 	function changePass() {
-		index_Tab.addTab("密码修改", "common/user/addOrEditPage?userID=self");
+		index_Tab.addTab("密码修改", "common/user/password");
 	}
 	
 	function loadMenu(roleId){

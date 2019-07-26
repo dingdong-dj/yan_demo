@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.yan.common.user.model.SysUserExample;
+import com.yan.common.user.model.*;
 import com.yan.performance.dic.mapper.EmpDicMapper;
 import com.yan.performance.dic.model.EmpDic;
 import org.apache.shiro.SecurityUtils;
@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yan.common.user.mapper.SysUserMapper;
 import com.yan.common.user.mapper.UserRoleRelMapper;
-import com.yan.common.user.model.SysUser;
-import com.yan.common.user.model.UserRoleRel;
-import com.yan.common.user.model.UserRoleRelExample;
 import com.yan.core.annotation.MapperInject;
 import com.yan.core.controller.BaseController;
 import com.yan.core.model.MsgModel;
@@ -53,6 +50,11 @@ public class UserController extends BaseController {
 	@RequestMapping("/manage")
 	public String manage() {
 		return "common/user/manage";
+	}
+
+	@RequestMapping("/password")
+	public String password() {
+		return "common/user/passwordChange";
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -123,10 +125,10 @@ public class UserController extends BaseController {
 			SysUserExample.Criteria criteria = example.createCriteria();
 			criteria.andUserIdEqualTo(userID);
 			sysUser = mapper.selectByExample(example).get(0);
-
 		}
 		model.addAttribute("sysUser",sysUser);
 		model.addAttribute("flag","0");
+
 		return "common/user/addOrEdit";
 	}
 
@@ -167,6 +169,54 @@ public class UserController extends BaseController {
 		}catch (Exception e){
 			e.printStackTrace();
 			return this.resultMsg("1","保存失败");
+		}
+	}
+
+
+	@RequestMapping("/password/change")
+	@ResponseBody
+	@Transactional
+	public MsgModel passwordChange(HttpServletRequest request){
+		SysUser sysUser = new SysUser();
+		//获取当前用户
+		String userCode = SecurityUtils.getSubject().getPrincipals().toString();
+		SysUserExample sysUserExample = new SysUserExample();
+		SysUserExample.Criteria criteriaSysUser = sysUserExample.createCriteria();
+		criteriaSysUser.andUserCodeEqualTo(userCode);
+		sysUser = mapper.selectByExample(sysUserExample).get(0);
+		String oldPd = request.getParameter("oldPd");
+		if(oldPd ==null || !oldPd.equals(sysUser.getUserPassword())){
+			return this.resultMsg("1","密码不正确");
+		}
+		sysUser.setUserPassword(request.getParameter("newPd"));
+		try{
+			mapper.updateByPrimaryKey(sysUser);
+		}catch (Exception e){
+			e.printStackTrace();
+			return this.resultMsg("1","修改失败");
+		}
+		return this.resultMsg("0","修改成功");
+	}
+
+
+	@RequestMapping("/update")
+	@ResponseBody
+	@Transactional
+	public MsgModel update(HttpServletRequest request){
+		SysUserKey sysUserKey = new SysUserKey();
+		sysUserKey.setUserId(request.getParameter("userId"));
+		sysUserKey.setUserCode(request.getParameter("userCode"));
+		SysUser sysUser = mapper.selectByPrimaryKey(sysUserKey);
+		sysUser.setUserName(request.getParameter("userName"));
+		sysUser.setUserEmail(request.getParameter("userEmail"));
+		sysUser.setUserPhone(request.getParameter("userPhone"));
+
+		try{
+			mapper.updateByPrimaryKey(sysUser);
+			return this.resultMsg("0","修改成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			return this.resultMsg("1","修改失败");
 		}
 	}
 }

@@ -317,6 +317,27 @@ function deleteAction() {
 		});
 	}
 }
+
+// 编辑
+function editAction() {
+	var rows = $table.bootstrapTable('getSelections');
+	if (rows.length == 0) {
+		$.confirm({
+			title: false,
+			content: '请至少选择一条记录！',
+			autoClose: 'cancel|3000',
+			backgroundDismiss: true,
+			buttons: {
+				cancel: {
+					text: '取消',
+					btnClass: 'waves-effect waves-button'
+				}
+			}
+		});
+	} else {
+		index_Tab.addTab(rows[0].userName + " - 用户资料", "common/user/addOrEditPage?userID=" + rows[0].userId);
+	}
+}
 // 用户角色
 function roleAction() {
 	var rows = $table.bootstrapTable('getSelections');

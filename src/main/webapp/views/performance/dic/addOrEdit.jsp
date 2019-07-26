@@ -228,13 +228,13 @@
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
-                <div class="col-md-4 text-left"
+                <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
                     <label style="margin-top: 5px; font-size: 14px; color: grey;">备注：</label>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                     <div class="form-group">
-                        <textarea type="text" class="form-control" rows="2" id="remarks" name="remarks"
+                        <textarea type="text" class="form-control" rows="4" id="remarks" name="remarks"
                                   placeholder="请输入描述">${proDic.remarks}</textarea>
                     </div>
                 </div>

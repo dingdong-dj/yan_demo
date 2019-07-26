@@ -146,6 +146,10 @@
             });
         </c:if>
 
+        <c:if test="${flag == '0'}">
+            $("#userCode").attr("readOnly","true");
+        </c:if>
+
         //必填项检查
         function formCheck() {
             if ($("#userId").val() == "" || $("#userId").val() == null) {
@@ -194,7 +198,26 @@
                     }
                 });
             }else{
-
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/common/user/update",
+                    type: "post",
+                    data: {
+                        userId: $("#userId").val(),
+                        userCode: $("#userCode").val(),
+                        userName: $("#userName").val(),
+                        userJoindate:$("#userJoindate").val(),
+                        userEmail:$("#userEmail").val(),
+                        userPhone:$("#userPhone").val()
+                    },
+                    success: function (data) {
+                        if('1' == data.status){
+                            $.alert(data.msg);
+                            return;
+                        }
+                        $.alert(data.msg);
+                        location.reload();
+                    }
+                });
             }
         }
 
