@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan.performance.week.mapper.WeekLogDetMapper">
+    <resultMap id="BaseResultMap" type="com.yan.performance.week.model.WeekLogDet">
+        <result column="sysno" jdbcType="VARCHAR" property="sysno"/>
+        <result column="lineid" jdbcType="INTEGER" property="lineId" />
+        <result column="log_type" jdbcType="VARCHAR" property="logType" />
+        <result column="log_dt" jdbcType="DATE" property="logDt" />
+        <result column="log_desc" jdbcType="VARCHAR" property="logDesc" />
+        <result column="work_type" jdbcType="VARCHAR" property="workType" />
+        <result column="deal_emp" jdbcType="VARCHAR" property="dealEmp" />
+        <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+        <result column="result" jdbcType="VARCHAR" property="result" />
+    </resultMap>
+
+    <insert id="create" parameterType="com.yan.performance.week.model.WeekLogDet">
+        insert into wk_log_det values( #{sysno},#{lineId},#{logType}, #{logDt},#{logDesc},#{workType},#{dealEmp},#{remarks},#{result})
+    </insert>
+
+    <delete id="delete" parameterType="com.yan.performance.week.model.WeekLogDet">
+        delete from wk_log_det where sysno = #{sysno}
+    </delete>
+</mapper>

@@ -36,6 +36,13 @@
         height: initial;
     }
 
+
+    .colStyle {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
 </style>
 <body>
 <div id="main" style=";background: #fff;left: 15%;">
@@ -46,22 +53,11 @@
                 <div class="col-md-7">
                     <div class="form-group">
                         <input type="text" id="sysno" name="sysno"
-                               value="${vaBooking.sysno}" class="form-control"/>
+                               value="${wkLog.sysno}" class="form-control"/>
                     </div>
                 </div>
             </div>
             <div class="row" style="margin-top: 5px; margin-bottom: 5px;">
-                <div class="col-md-2"
-                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">员工：</label>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <input type="text" id="empNo" name="empNo"
-                               value="${vaBooking.cardNo}" class="form-control"
-                               placeholder="选择员工"/>
-                    </div>
-                </div>
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
                     <label style="margin-top: 5px; font-size: 14px; color: grey;">周号：</label>
@@ -69,7 +65,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="weekNo" name="weekNo"
-                               value="${vaBooking.cardNo}" class="form-control"
+                               value="${wkLog.weekNo}" class="form-control" readonly
                                placeholder="周号"/>
                     </div>
                 </div>
@@ -82,59 +78,57 @@
                 <div class="col-md-10">
                     <div class="form-group">
                         <textarea type="text" class="form-control" rows="1" id="titleName" name="titleName"
-                                  placeholder="可以写医院名或研发中心">${pAward.remarks}</textarea>
+                                  placeholder="可以写医院名或研发中心">${wkLog.titleName}</textarea>
                     </div>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">周报主题：</label>
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">本周总结：</label>
                 </div>
                 <div class="col-md-10">
                     <div class="form-group">
                         <textarea type="text" class="form-control" rows="3" id="sumText" name="sumText"
-                                  placeholder="可以写医院名或研发中心">${pAward.remarks}</textarea>
+                                  placeholder="本周总结">${wkLog.sumText}</textarea>
                     </div>
                 </div>
             </div>
+            <input hidden id="fillEmp" name="fillEmp" value="${wkLog.fillEmp}">
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="form-group  col-md-11" style="text-align: center">
                     <div style="margin:10px 0px 10px 5px">
-                        <label style="margin-top: 5px; font-size: 1.5rem;">接种计划</label>
+                        <label style="margin-top: 5px; font-size: 1.5rem;">周报详情</label>
+                        <button type="button" class="btn btn-default" style="float:right;margin:0 0 0 0"
+                                id="tableRemoveData">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button type="button" class="btn btn-default" style="float:right;margin:0 0 0 0"
+                                id="tableAddData">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
                     </div>
                     <table id="formTable" class="table"></table>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="form-group  col-md-11" style="text-align: center">
-                    <c:if test="${vaBooking.vaCode == 'hdcv'}">
-                        <div class="form-group" style="text-align: center">
-                            <button class="btn btn-info btn-lg" type="button" id="registerFormPrint">狂犬病预防处理记录打印预览</button>
-                        </div>
-                    </c:if>
+                    <div class="form-group" style="text-align: center">
+                        <button class="btn btn-success btn-lg" type="button" id="registerFormSubmit">提交</button>
+                    </div>
                 </div>
             </div>
         </form>
-
-
     </div>
 </div>
 </body>
 <script type="text/javascript">
     var $registerTable = $('#formTable');
     $(function () {
-
-
-        <c:if test="${vaBooking.sysno == null || vaBooking.sysno == ''}">
-        //随机字符串（30位）
-        var randomString = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
-        //ID前台生成
-        $("#sysno").val(randomString);
-        </c:if>
-
-        // 生产厂家数据缓存
-        var manufCache;
+        var data = new Date();
+        var year = data.getFullYear();
+        var week = getweek();
+        $("#weekNo").val(year.toString()+week.toString());
 
         //绘制表格
         $registerTable.bsTable({
@@ -142,7 +136,6 @@
             singleSelect: true,
             search: true,
             height: 0,
-            idField: 'lineNo',
             clickToSelect: true,
             detailView: false,
             pagination: false,
@@ -154,7 +147,6 @@
             sidePagination: "client",
             //分页方式：client客户端分页，server服务端分页（*）
             columns: [
-                /*{field: 'state', checkbox: true},*/
                 {
                     field: 'state',
                     checkbox: true
@@ -166,555 +158,283 @@
                     visible: false
                 },
                 {
-                    field: 'lineNo',
+                    field: 'lineId',
                     title: '行号',
                     align: 'center',
                     visible: false
                 },
                 {
-                    field: 'vaName',
-                    title: '疫苗名称',
+                    field: 'logType',
+                    title: '明细类别',
                     align: 'center',
                     editable: {
                         type: 'select',
-                        title: '疫苗名称',
-                        disabled: true,
-                        mode: 'inline',
-                        source: function () {
-                            var result = [];
-                            $.ajax({
-                                url: "${pageContext.request.contextPath}/vaccine/register/getEnum?type=vaName",
-                                async: false,
-                                type: "post",
-                                data: {},
-                                success: function (data) {
-                                    if (data.success) {
-                                        var list = data.enumList;
-                                        if (list) {
-                                            $.each(list,
-                                                function (key, value) {
-                                                    result.push({
-                                                        value: value.ecode,
-                                                        text: value.ename
-                                                    });
-                                                });
-                                        }
-                                    } else {
-                                        $.alert(data.msg);
-                                    }
-                                }
-                            });
-                            return result;
-                        }
+                        showbuttons: false,
+                        mode: 'popup',
+                        source: [{value: "log", text: "本周工作"}, {value: "plan", text: "下周工作"}]
                     }
                 },
                 {
-                    field: 'planDt',
-                    title: '计划日期',
+                    field: 'logDt',
+                    title: '日志日期',
                     align: 'center',
                     editable: {
                         type: 'date',
-                        disabled: true,
-                        title: '接种日期'
-                    }
-                },
-                {
-                    field: 'execDt',
-                    title: '接种日期',
-                    align: 'center',
-                    editable: {
-                        type: 'date',
-                        disabled: true,
-                        title: '接种日期'
-                    }
-                },
-                {
-                    field: 'batchNo',
-                    title: '疫苗批次',
-                    align: 'center',
-                    editable: {
-                        type: 'text',
-                        clear: false,
-                        //onblur:'ignore',
                         showbuttons: false,
-                        disabled: true,
-
-                        mode: 'inline'
                     }
                 },
                 {
-                    field: "manufNo",
-                    title: "生产厂家",
+                    field: 'workType',
+                    title: '工作内容类别',
                     align: 'center',
                     editable: {
                         type: 'select',
-                        title: '生产厂家',
-                        disabled: true,
-                        mode: 'inline',
-                        source: function () {
-                            var result = [];
-                            $.ajax({
-                                url: "${pageContext.request.contextPath}/vaccine/register/getEnum?type=factory",
-                                async: false,
-                                type: "post",
-                                data: {},
-                                success: function (data) {
-                                    if (data.success) {
-                                        var list = data.enumList;
-                                        if (list) {
-                                            $.each(list,
-                                                function (key, value) {
-                                                    result.push({
-                                                        value: value.ecode,
-                                                        text: value.ename
-                                                    });
-                                                });
-                                        }
-                                    } else {
-                                        $.alert(data.msg);
-                                    }
-                                }
-                            });
-                            return result;
-                        }
+                        mode: 'popup',
+                        showbuttons: false,
+                        source: [{value: "requ", text: "需求"}, {value: "bug", text: "错误"},
+                            {value: "stat", text: "统计"}, {value: "other", text: "其他"}]
                     }
                 },
                 {
-                    field: 'manufName',
-                    title: '生产厂家名称',
-                    visible: false,
+                    field: 'logDesc',
+                    title: '工作记录或内容',
+                    align: 'center',
+                    editable: {
+                        type: 'textarea',
+                        onblur: 'submit',
+                        showbuttons: false
+                    }
+                },
+                {
+                    field: 'dealEmp',
+                    title: '处理人',
                     align: 'center',
                     editable: {
                         type: 'text',
-                        clear: false,
-                        //onblur:'ignore',
-                        disabled: true,
-                        showbuttons: false,
-
-                        mode: 'inline'
+                        onblur: 'submit',
+                        showbuttons: false
                     }
                 },
                 {
-                    field: 'vaHosp',
-                    title: '接种医院编号',
-                    align: 'center',
-                    visible: false,
-                    editable: {
-                        type: 'text',
-                        clear: false,
-                        //onblur:'ignore',
-                        disabled: true,
-                        showbuttons: false,
-
-                        mode: 'inline'
-                    }
-                },
-                {
-                    field: 'vaHospname',
-                    title: '接种医院名称',
-                    align: 'center',
-                    visible: false,
-                    editable: {
-                        type: 'text',
-                        clear: false,
-                        //onblur:'ignore',
-                        disabled: true,
-                        showbuttons: false,
-
-                        mode: 'inline'
-                    }
-                },
-                {
-                    field: 'vaOper',
-                    title: '接种人',
+                    field: 'result',
+                    title: '完成情况',
                     align: 'center',
                     editable: {
                         type: 'text',
-                        clear: false,
-                        //onblur:'ignore',
-                        disabled: true,
-                        showbuttons: false,
-
-                        mode: 'inline'
-                    }
-                },
-                {
-                    field: 'drugBarcode',
-                    title: '药品监管码',
-                    align: 'center',
-                    editable: {
-                        type: 'text',
-                        clear: false,
-                        //onblur:'ignore',
-                        disabled: true,
-                        showbuttons: false,
-
-                        mode: 'inline'
-                    }
-                },
-                {
-                    field: "vaLeft",
-                    title: "存苗",
-                    align: 'center',
-                    editable: {
-                        type: 'text',
-                        clear: false,
-                        //onblur:'ignore',
-                        disabled: true,
-                        showbuttons: false,
-
-                        mode: 'inline'
-                    }
-                },
-                {
-                    field: "statusFlag",
-                    title: "状态",
-                    align: 'center',
-                    editable: {
-                        type: 'select',
-                        title: '状态',
-                        disabled: true,
-                        source: [{
-                            value: "init",
-                            text: "初始"
-                        },
-                            {
-                                value: "done",
-                                text: "完成接种"
-                            },
-                            {
-                                value: "cancel",
-                                text: "终止接种"
-                            }]
-                    }
-                },
-                {
-                    field: "feedback",
-                    title: "异常反应",
-                    align: 'center',
-                    editable: {
-                        type: 'select',
-                        title: '异常反应',
-                        mode: 'inline',
-                        disabled: true,
-                        source: function () {
-                            var result = [];
-                            $.ajax({
-                                url: "${pageContext.request.contextPath}/vaccine/register/getEnum?type=show",
-                                async: false,
-                                type: "post",
-                                data: {},
-                                success: function (data) {
-                                    if (data.success) {
-                                        var list = data.enumList;
-                                        if (list) {
-                                            $.each(list,
-                                                function (key, value) {
-                                                    result.push({
-                                                        value: value.ecode,
-                                                        text: value.ename
-                                                    });
-                                                });
-                                        }
-                                    } else {
-                                        $.alert(data.msg);
-                                    }
-                                }
-                            });
-                            return result;
-                        }
+                        onblur: 'submit',
+                        showbuttons: false
                     }
                 },
                 {
                     field: 'remarks',
                     title: '备注',
                     align: 'center',
+                    class:'colStyle',
                     editable: {
                         type: 'textarea',
-                        title: '备注',
                         onblur: 'submit',
                         showbuttons: false
-                    }
+                    },
                 },
             ]
         });
-
-        //表格列联动（载入接种人，更改状态值）
-        function vaOperChange(index) {
-            $registerTable.bootstrapTable('updateCell', {
-                index : index,
-                field: 'vaOper',
-                value: '${sysUser.userName}'
-            });
-
-            $registerTable.bootstrapTable('updateCell', {
-                index : index,
-                field: 'statusFlag',
-                value: 'done'
-            });
-        }
-
-        //表格列联动（与生产厂家编号关联）
-        function manufNoChange(value, index) {
-            var manufNameChange;
-            for(var i = 0; i < manufCache.length; i++){
-                if(manufCache[i].ecode == value){
-                    manufNameChange = manufCache[i].ename;
-                }
+        //表格添加数据
+        $('#tableAddData').click(function () {
+            if(!tableCheck()){
+                return;
             }
-            $registerTable.bootstrapTable('updateCell', {
-                index : index,
-                field: 'manufName',
-                value: manufNameChange
-            });
-        }
+            var nowData = $registerTable.bootstrapTable('getData');
+            var addLineNo = 1;
+            if (0 < nowData.length) {
+                addLineNo = parseInt(nowData[nowData.length - 1].lineNo) + 1 || 1;
+            }
 
-        $('#username').on('save', function(e, params) {
-            alert('Saved value: ' + params.newValue);
+            var data = {
+                sysno: $("#sysno").val(),
+                lineId: addLineNo,
+                logType: '',
+                logDt: '',
+                workType: '',
+                logDesc:'',
+                dealEmp:'',
+                result:'',
+                remarks: '',
+            };
+            $registerTable.bootstrapTable('append', data);
+        });
+
+        $("#registerFormSubmit").click(function () {
+            createOrUpdate();
         });
 
 
 
-        <c:if test="${vaBooking.vaCode == 'hdcv'}">
-        loadSecondary();
-        </c:if>
-
-        // 性别下拉框赋值
-        $('#patSex').selectpicker('val', '${vaBooking.patSex}');
-
-        //接种计划表单验证通过标志
-        var validateCheck = true;
-
-
-
-
-
-        //施治记录更新
-        $('#planUpdate').click(function () {
-            var jsonPlanList = $registerTable.bootstrapTable('getData');
-            var jsonPlanListData = JSON.stringify(jsonPlanList);
-            var checkmsg = "请填报关键项数据：";
-            //接种计划表单验证
-            for(var i = 0; i < jsonPlanList.length; i++){
-                //只对更改过接种日期的数据进行验证
-                if(jsonPlanList[i].execDt != ''){
-                    if(jsonPlanList[i].vaName == ''){
-                        validateCheck = false;
-                        checkmsg += "疫苗名称、";
-                    }
-                    if(jsonPlanList[i].manufNo == ''){
-                        validateCheck = false;
-                        checkmsg += "生产厂家、";
-                    }
-                    if(jsonPlanList[i].batchNo == ''){
-                        validateCheck = false;
-                        checkmsg += "疫苗批次、";
-                    }
-                    if(jsonPlanList[i].vaOper == ''){
-                        validateCheck = false;
-                        checkmsg += "接种人、";
-                    }
-                    if(jsonPlanList[i].statusFlag == ''){
-                        validateCheck = false;
-                        checkmsg += "接种状态";
-                    }
-                }
-                if(!validateCheck){
-                    $.alert(checkmsg);
-                    validateCheck = true;
-                    return;
-                }
+        function createOrUpdate() {
+            if (!formCheck()) {
+                return;
             }
-
+            if(!tableCheck()){
+                return;
+            }
+            console.log($registerTable.bootstrapTable('getData'));
+            var jsonLogDet = JSON.stringify($registerTable.bootstrapTable('getData'));
             $.ajax({
-                url: "${pageContext.request.contextPath}/vaccine/register/updateplan",
+                url: "${pageContext.request.contextPath}/week/log/create",
                 type: "post",
                 data: {
-                    planData: jsonPlanListData,
+                    sysno:$("#sysno").val(),
+                    weekNo:$("#weekNo").val(),
+                    titleName:$("#titleName").val(),
+                    sumText:$("#sumText").val(),
+                    fillEmp:$("#fillEmp").val(),
+                    wkLogDet:jsonLogDet
                 },
                 success: function (data) {
                     if (!data.success) {
                         $.alert(data.msg);
                     } else {
                         $.alert(data.msg);
-                    }
-                }
-            });
-        })
-
-
-        //如果有接种计划则载入，如无则载入预设值
-        $.ajax({
-            url: "${pageContext.request.contextPath}/vaccine/register/registerConfirm",
-            type: "post",
-            data: {
-                sysno: $("#sysno").val()
-            },
-            success: function (data) {
-                if (!data.success) {
-                    $.alert(data.msg);
-
-                } else {
-                    $.ajax({
-                        url: "${pageContext.request.contextPath}/vaccine/plan/getSpecial",
-                        type: "post",
-                        data: {
-                            sysno: $("#sysno").val()
-                        },
-                        success: function (data) {
-                            if (!data.success) {
-                                $.alert("该患者免疫接种计划获取失败，请检查");
-                            } else {
-                                $registerTable.bootstrapTable('load', data.planList);
-
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-
-        //网页打开时疫苗列表选项动态加载
-        $.ajax({
-            url: "${pageContext.request.contextPath}/vaccine/register/getVaCode",
-            async: true,
-            data: {},
-            success: function (data) {
-                if (data.success) {
-                    $("#vaCode").find("option").remove();
-                    var list = data.vaCodeTypeList;
-                    if (list) {
-                        for (var i = 0; i < list.length; i++) {
-                            var optionString = "";
-                            optionString = "<option value=\""
-                                + list[i].vaCode + "\">"
-                                + list[i].vaName + "</option>";
-                            $("#vaCode").append(optionString);
-
-                        }
-                        $("#vaCode").selectpicker('refresh');
-                        //疫苗下拉框赋值
-                        $("#vaCode").selectpicker('val', '${vaBooking.vaCode}');
-                    }
-                } else {
-                    $.alert(data.msg);
-                }
-            }
-        });
-
-
-
-        //打印处理函数
-        $("#registerFormPrint").click(function () {
-            $.ajax({
-                url: "${pageContext.request.contextPath}/vaccine/register/registerConfirm",
-                type: "post",
-                data: {
-                    sysno: $("#sysno").val()
-                },
-                success: function (data) {
-                    if (!data.success) {
-                        $.alert(data.msg);
-                    } else {
-                        index_Tab.addTab("狂犬病预防处理记录打印预览", "vaccine/register/printVaVpHdForm?sysno=" + $("#sysno").val());
+                        $("#registerFormSubmit").hide()
                     }
                 }
             });
 
-        });
+
+        }
 
 
-        //window.parent慎用
-        var top_tabs = $("#tabs", window.parent.document);//window.parent.document.getElementById("");
-
-        // 子页面下调用选项卡对象
-        var index_Tab = {
-            addTab: function (title, url) {
-                var index = url.replace(/\./g, '_').replace(/\//g, '_').replace(/:/g, '_').replace(/\?/g, '_').replace(/,/g, '_').replace(/=/g, '_').replace(/&/g, '_');
-                // 如果存在选项卡，则激活，否则创建新选项卡
-                if ($('#tab_' + index, window.parent.document).length == 0) {
-                    // 添加选项卡
-                    $('.content_tab li', window.parent.document).removeClass('cur');
-                    var tab = '<li id="tab_' + index + '" data-index="' + index + '" class="cur"><a class="waves-effect waves-light">' + title + '</a></li>';//<i class="zmdi zmdi-close"></i><
-                    $('.content_tab>ul', window.parent.document).append(tab);
-                    // 添加iframe
-                    $('.iframe', window.parent.document).removeClass('cur');
-                    var iframe = '<div id="iframe_' + index + '" class="iframe cur"><iframe class="tab_iframe" src="' + url + '" width="100%" frameborder="0" scrolling="auto" onload="changeFrameHeight(this)"></iframe></div>';
-                    $('.content_main', window.parent.document).append(iframe);
-                    initScrollShow();
-                    $('.content_tab>ul', window.parent.document).animate({scrollLeft: window.parent.document.getElementById('tabs').scrollWidth - window.parent.document.getElementById('tabs').clientWidth}, 200, function () {
-                        initScrollState();
-                    });
-                } else {
-                    $('#tab_' + index, window.parent.document).trigger('click');
-                }
-            },
-            closeTab: function ($item) {
-                var closeable = $item.data('closeable');
-                if (closeable != false) {
-                    // 如果当前时激活状态则关闭后激活左边选项卡
-                    if ($item.hasClass('cur')) {
-                        $item.prev().trigger('click');
+        //table项检查
+        function tableCheck(){
+            var nowData = $registerTable.bootstrapTable('getData');
+            var length = nowData.length;
+            if(length == 0){
+                return true;
+            }
+            try{
+                nowData.forEach(function (item,index,arr) {
+                    var l = index+1;
+                    if(item.logType == '' || item.logType == null){
+                        $.alert("请选择第"+l +"行 明细类别!");
+                        throw new Error('找到目标');
                     }
-                    // 关闭当前选项卡
-                    var index = $item.data('index');
-                    $('#iframe_' + index).remove();
-                    $item.remove();
-                }
-                initScrollShow();
+                    if(item.logDt == '' || item.logDt == null){
+                        $.alert("请选择第"+length +"行 日志日期!");
+                        throw new Error('找到目标');
+                    }
+                    if(item.workType == '' || item.workType == null){
+                        $.alert("请选择第"+l +"行 工作内容类别!");
+                        throw new Error('找到目标');
+                    }
+
+                    if(item.logDesc == '' || item.logDesc == null){
+                        $.alert("请输入第"+ l+"行 工作记录或内容!");
+                        throw new Error('找到目标');
+                    }
+
+                    if(item.dealEmp == '' || item.dealEmp == null){
+                        $.alert("请输入第"+l +"行 处理人!");
+                        throw new Error('找到目标');
+                    }
+                })
+                return true;
+            }catch(e){
+                return false;
             }
         }
-
-        function initScrollShow() {
-            if (window.parent.document.getElementById('tabs').scrollWidth > window.parent.document.getElementById('tabs').clientWidth) {
-                $('.content_tab', window.parent.document).addClass('scroll');
-            } else {
-                $('.content_tab', window.parent.document).removeClass('scroll');
+        //必填项检查
+        function formCheck() {
+            if ($("#weekNo").val() == "") {
+                $.alert("周号不能为空");
+                return false;
             }
-        }
 
-        function initScrollState() {
-            if ($('.content_tab>ul', window.parent.document).scrollLeft() == 0) {
-                $('.tab_left>a', window.parent.document).removeClass('active');
-            } else {
-                $('.tab_left>a', window.parent.document).addClass('active');
+            if ($("#titleName").val() == "") {
+                $.alert("周报主题不能为空");
+                return false;
             }
-            if (($('.content_tab>ul', window.parent.document).scrollLeft() + window.parent.document.getElementById('tabs').clientWidth) >= window.parent.document.getElementById('tabs').scrollWidth) {
-                $('.tab_right>a', window.parent.document).removeClass('active');
-            } else {
-                $('.tab_right>a', window.parent.document).addClass('active');
-            }
-        }
-
-        //加载后回调
-        function getCallback(data, show) {
-            $("#tryLoad").html(data);
-            show();
-        }
-
-        //显示附表
-        function secondaryShow() {
-            $("#tryLoad").show("normal", "swing");
-            $("#openSecondery").show("normal", "swing");
-        }
-
-        //隐藏附表
-        function secondaryhide() {
-            $("#tryLoad").hide("normal", "swing");
-            $("#openSecondery").hide("normal", "swing");
-        }
-
-        //加载附表数据并显示
-        function loadSecondary() {
-            $.get('${pageContext.request.contextPath}/vaccine/register/secondaryAddOrEditPage2N?sysno=' + $("#sysno").val(), function (data) {
-                getCallback(data, secondaryShow);
-            });
+            return true;
         }
 
     });
 
-
+    function getweek(dateString){
+        var da='';
+        if(dateString==undefined){
+            var now=new Date();
+            var now_m=now.getMonth()+1;
+            now_m=(now_m<10)?'0'+now_m:now_m;
+            var now_d=now.getDate();
+            now_d=(now_d<10)?'0'+now_d:now_d;
+            da=now.getFullYear()+'-'+now_m+'-'+now_d;
+        }else{
+            da=dateString;//日期格式2015-12-30
+        }
+        var date1 = new Date(da.substring(0,4), parseInt(da.substring(5,7)) - 1, da.substring(8,10));//当前日期
+        var date2 = new Date(da.substring(0,4), 0, 1); //1月1号
+        //获取1月1号星期（以周一为第一天，0周一~6周日）
+        var dateWeekNum=date2.getDay()-1;
+        if(dateWeekNum<0){dateWeekNum=6;}
+        if(dateWeekNum<4){
+            //前移日期
+            date2.setDate(date2.getDate()-dateWeekNum);
+        }else{
+            //后移日期
+            date2.setDate(date2.getDate()+7-dateWeekNum);
+        }
+        var d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000);
+        if(d<0){
+            var date3 = (date1.getFullYear()-1)+"-12-31";
+            return getYearWeek(date3);
+        }else{
+            //得到年数周数
+            var year=date1.getFullYear();
+            var week=Math.ceil((d+1 )/ 7);
+            return  week;
+        }
+    };
+    //表格移除数据
+    $('#tableRemoveData').click(function () {
+        var rows = $registerTable.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            $.confirm({
+                title: false,
+                content: '请选择一条记录！',
+                autoClose: 'cancel|3000',
+                backgroundDismiss: true,
+                buttons: {
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
+                    }
+                }
+            });
+        } else {
+            $.confirm({
+                type: 'red',
+                animationSpeed: 300,
+                title: false,
+                content: '确认删除数据吗？',
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        btnClass: 'waves-effect waves-button',
+                        action: function () {
+                            for (var i = 0; i < rows.length; i++) {
+                                $registerTable.bootstrapTable('remove', {
+                                    field: 'lineNo',
+                                    values: [rows[i].lineNo]
+                                });
+                            }
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
+                    }
+                }
+            });
+        }
+    });
     //选择器重绘
     $(".selectpicker").selectpicker({
         width: 'auto'

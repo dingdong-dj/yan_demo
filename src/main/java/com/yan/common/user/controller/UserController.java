@@ -219,4 +219,24 @@ public class UserController extends BaseController {
 			return this.resultMsg("1","修改失败");
 		}
 	}
+
+	@RequestMapping("/delete")
+	@ResponseBody
+	@Transactional
+	public MsgModel delete(HttpServletRequest request){
+		SysUserKey sysUserKey = new SysUserKey();
+		String userId = request.getParameter("userId");
+		String userCode = request.getParameter("userCode");
+		sysUserKey.setUserId(userId);
+		sysUserKey.setUserCode(userCode);
+		String[] empNos = new String[]{userId};
+		try{
+			empDicMapper.deleteEmpNos(empNos);
+			mapper.deleteByPrimaryKey(sysUserKey);
+			return this.resultMsg("0","删除成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			return this.resultMsg("1","删除失败");
+		}
+	}
 }

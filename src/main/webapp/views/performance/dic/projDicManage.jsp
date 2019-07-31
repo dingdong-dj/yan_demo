@@ -158,8 +158,7 @@
                 traditional: true,//这里设为true就可以了
                 success: function (data) {
                     if("1" == data.status) {
-                        layer.msg(data.msg);
-                        return;
+                        index_Tab.addTab(row.projName + " - 查看", "dic/proj/look/one?projNo=" + row.projNo);
                     }else{
                         index_Tab.addTab(row.projName + " - 修改", "dic/proj/find/one?projNo=" + row.projNo);
                     }

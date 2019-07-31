@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan.performance.week.mapper.WeekLogMapper">
+    <resultMap id="BaseResultMap" type="com.yan.performance.week.model.WeekLog">
+        <id column="sysno" jdbcType="VARCHAR" property="sysno"/>
+        <result column="week_no" jdbcType="VARCHAR" property="weekNo" />
+        <result column="fill_dt" jdbcType="DATE" property="fillDt" />
+        <result column="fill_emp" jdbcType="VARCHAR" property="fillEmp" />
+        <result column="title_name" jdbcType="VARCHAR" property="titleName" />
+        <result column="sum_text" jdbcType="VARCHAR" property="sumText" />
+    </resultMap>
+
+    <insert id="create" parameterType="com.yan.performance.week.model.WeekLog">
+        insert into wk_log
+        values (#{sysno},#{weekNo},#{fillDt},#{fillEmp},#{titleName},#{sumText})
+    </insert>
+    
+    <select id="findById" parameterType="com.yan.performance.week.model.WeekLog" resultMap="BaseResultMap">
+        select * from wk_log where sysno = #{sysno}
+    </select>
+
+    <update id="update" parameterType="com.yan.performance.week.model.WeekLog">
+        update wk_log
+        set title_name = #{titleName}
+            sum_text = #{sumText}
+        where sysno = #{sysno}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap">
+        select * from wk_log order by fill_dt desc
+    </select>
+
+    <delete id="delete" parameterType="com.yan.performance.week.model.WeekLog">
+        delete from wk_log where sysno = #{sysno}
+    </delete>
+</mapper>

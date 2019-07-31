@@ -197,14 +197,12 @@ $(function() {
 		search: true,
 		columns: [
 			{field: 'state', checkbox: true},
+			{field: 'userId',title: 'ID',align:'center',visible: false},
 			{field: 'userCode', title: '用户名', align: 'center'},
 			{field: 'userName', title: '姓名', align: 'center'},
-			{field: 'userAddress', title: '地址', align: 'center',visible: false},
 			{field: 'userEmail', title: '邮箱', align: 'center'},
 			{field: 'userPhone', title: '电话', align: 'center'},
-			{field: 'userBirthday', title: '生日', align: 'center'},
 			{field: 'userJoindate', title: '注册时间', align: 'center'},
-			{field: 'userPhoto', title: '照片', align: 'center'},
 			{field: 'userType', title: '用户类型', align: 'center'},
 			{field: 'userValid', title: '是否有效', align: 'center', formatter: function(value, row, index){
 				if(value){
@@ -283,6 +281,8 @@ function deleteAction() {
 			}
 		});
 	} else {
+		var deleteId = rows[0].userId;
+		var deleteCode = rows[0].userCode;
 		$.confirm({
 			type: 'red',
 			animationSpeed: 300,
@@ -298,15 +298,18 @@ function deleteAction() {
 							type: "post",
 							data: {
 								userId: deleteId,
-								userCode: deleteCode,
+								userCode: deleteCode
 							},
 							success: function (data) {
-								if (!data.success) {
-									$.alert("删除失败");
+								if("1" == data.status){
+									$.alert(data.msg);
+									return;
 								}
+								$.alert(data.msg);
+								$("#table").bootstrapTable('refresh');
 							}
 						});
-						$("#table").bootstrapTable('refresh');
+
 					}
 				},
 				cancel: {
