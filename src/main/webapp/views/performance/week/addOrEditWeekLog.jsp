@@ -108,7 +108,7 @@
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                     </div>
-                    <table id="formTable" class="table"></table>
+                    <table id="formTable" class="table" style="word-break:break-all; word-wrap:break-all;"></table>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
@@ -209,7 +209,8 @@
                         type: 'textarea',
                         onblur: 'submit',
                         showbuttons: false
-                    }
+                    },
+                    width:'20%'
                 },
                 {
                     field: 'dealEmp',
@@ -241,6 +242,7 @@
                         onblur: 'submit',
                         showbuttons: false
                     },
+                    width:'25%'
                 },
             ]
         });

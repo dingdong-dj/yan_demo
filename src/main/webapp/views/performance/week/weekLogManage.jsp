@@ -84,7 +84,7 @@
     });
     function actionFormatter(value, row, index) {
         return [
-            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="金额修改"><span style="color:#1285ff">详情>><span></a>　'
+            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="周报详情"><span style="color:#1285ff">详情>><span></a>　'
         ].join('');
     }
 

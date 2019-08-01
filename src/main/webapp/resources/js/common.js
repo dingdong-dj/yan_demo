@@ -5,11 +5,11 @@ $(function() {
 	$(window).resize(function() {
 		$('#table').bootstrapTable('resetView', { height : getHeight() });
 	});
-	$(window).resize(function() {
-		var height = getHeight()*0.7;
-		$('#sum-table').bootstrapTable('resetView', { height : height });
-		$('#del-table').bootstrapTable('resetView', { height : height });
-	});
+	// $(window).resize(function() {
+	// 	var height = getHeight()*0.7;
+	// 	$('#sum-table').bootstrapTable('resetView', { height : height });
+	// 	$('#del-table').bootstrapTable('resetView', { height : height });
+	// });
 	// 设置main的div高度
 	$("#main").css("height", getHeight());
 });

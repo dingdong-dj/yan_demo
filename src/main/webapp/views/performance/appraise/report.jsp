@@ -53,6 +53,12 @@
 </div>
 
 <script type="text/javascript">
+
+    $(window).resize(function() {
+        var height = getHeight()*0.7;
+        $('#sum-table').bootstrapTable('resetView', { height : height });
+        $('#del-table').bootstrapTable('resetView', { height : height });
+    });
     //查询所有考核编号并显示当前时间段或上一个考核时间的考核项目
     $.ajax({
         url: "${pageContext.request.contextPath}/appraise/project/find/all",
