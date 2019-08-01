@@ -11,7 +11,7 @@ public class WeekLogDet implements Serializable {
 
     private String logType;//明细类别 log本周工作 plan下周计划
 
-    private Date logDt;//日志日期
+    private String logDt;//日志日期
 
     private String logDesc;//工作记录或内容
 
@@ -47,11 +47,11 @@ public class WeekLogDet implements Serializable {
         this.logType = logType;
     }
 
-    public Date getLogDt() {
+    public String getLogDt() {
         return logDt;
     }
 
-    public void setLogDt(Date logDt) {
+    public void setLogDt(String logDt) {
         this.logDt = logDt;
     }
 

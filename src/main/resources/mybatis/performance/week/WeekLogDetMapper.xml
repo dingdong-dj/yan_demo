@@ -5,7 +5,7 @@
         <result column="sysno" jdbcType="VARCHAR" property="sysno"/>
         <result column="lineid" jdbcType="INTEGER" property="lineId" />
         <result column="log_type" jdbcType="VARCHAR" property="logType" />
-        <result column="log_dt" jdbcType="DATE" property="logDt" />
+        <result column="log_dt" jdbcType="VARCHAR" property="logDt" />
         <result column="log_desc" jdbcType="VARCHAR" property="logDesc" />
         <result column="work_type" jdbcType="VARCHAR" property="workType" />
         <result column="deal_emp" jdbcType="VARCHAR" property="dealEmp" />
@@ -20,4 +20,8 @@
     <delete id="delete" parameterType="com.yan.performance.week.model.WeekLogDet">
         delete from wk_log_det where sysno = #{sysno}
     </delete>
+
+    <select id="findById" parameterType="com.yan.performance.week.model.WeekLogDet" resultMap="BaseResultMap">
+        select * from wk_log_det where sysno = #{sysno}
+    </select>
 </mapper>

@@ -125,10 +125,12 @@
 <script type="text/javascript">
     var $registerTable = $('#formTable');
     $(function () {
-        var data = new Date();
-        var year = data.getFullYear();
-        var week = getweek();
-        $("#weekNo").val(year.toString()+week.toString());
+        <c:if test="${wkLog.weekNo == null || wkLog.weekNo == ''}">
+            var data = new Date();
+            var year = data.getFullYear();
+            var week = getweek();
+            $("#weekNo").val(year.toString()+week.toString());
+        </c:if>
 
         //绘制表格
         $registerTable.bsTable({
@@ -181,6 +183,10 @@
                     editable: {
                         type: 'date',
                         showbuttons: false,
+                        validate: function (v) {
+                            if (!v) return '计划日期不能为空';
+
+                        }
                     }
                 },
                 {
@@ -246,9 +252,8 @@
             var nowData = $registerTable.bootstrapTable('getData');
             var addLineNo = 1;
             if (0 < nowData.length) {
-                addLineNo = parseInt(nowData[nowData.length - 1].lineNo) + 1 || 1;
+                addLineNo = parseInt(nowData[nowData.length - 1].lineId) + 1 || 1;
             }
-
             var data = {
                 sysno: $("#sysno").val(),
                 lineId: addLineNo,
@@ -267,7 +272,22 @@
             createOrUpdate();
         });
 
+    $.ajax({
+        url: "${pageContext.request.contextPath}/week/log/detail/list",
+        type: "post",
+        data: {
+            sysno: $("#sysno").val()
+        },
+        success: function (data) {
+            if (!data.success) {
+                $.alert("周报详情获取失败，请检查");
+            }else{
+                console.log(data.detList);
+                $registerTable.bootstrapTable('load', data.detList);
+            }
 
+        }
+    });
 
         function createOrUpdate() {
             if (!formCheck()) {

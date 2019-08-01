@@ -100,8 +100,7 @@
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
             var sysno = row.sysno;
-            index_Tab.addTab("周报详情", "week/log/delPage?sysno="+sysno);
-            console.log(row);
+            index_Tab.addTab("周报编辑", "week/log/delPage?sysno="+sysno);
         }
     };
     function detailFormatter(index, row) {
@@ -151,18 +150,18 @@
                 type: 'red',
                 animationSpeed: 300,
                 title: false,
-                content: '确认删除该考核项目吗？',
+                content: '确认删除该周报及明细吗？',
                 buttons: {
                     confirm: {
                         text: '确认',
                         btnClass: 'waves-effect waves-button',
                         action: function () {
-                            var pMain = rows[0];
+                            var wklog = rows[0];
                             $.ajax({
-                                url: '${pageContext.request.contextPath}/pay/roll/deletes',
+                                url: '${pageContext.request.contextPath}/week/log/delete',
                                 type: "post",
                                 data: {
-                                    payNo:pMain.payNo
+                                    sysno:wklog.sysno
                                 },
                                 traditional: true,//这里设为true就可以了
                                 success: function (data) {

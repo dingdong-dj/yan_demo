@@ -8,6 +8,7 @@ import com.yan.common.user.model.SysUser;
 import com.yan.common.user.model.SysUserExample;
 import com.yan.core.annotation.MapperInject;
 import com.yan.core.controller.BaseController;
+import com.yan.core.model.MsgModel;
 import com.yan.core.model.PageModel;
 import com.yan.performance.week.mapper.WeekLogDetMapper;
 import com.yan.performance.week.mapper.WeekLogMapper;
@@ -62,7 +63,7 @@ public class WeekLogController extends BaseController {
         return "performance/week/addOrEditWeekLog";
     }
 
-    //增/改疫苗登记记录
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
@@ -123,6 +124,37 @@ public class WeekLogController extends BaseController {
             e.printStackTrace();
         }
         return this.resultPage(list);
+    }
+
+    @RequestMapping("/detail/list")
+    @ResponseBody
+    public Map<String ,Object> detailList(String sysno){
+        Map<String, Object> mapE = new HashMap<>();
+        List<WeekLogDet> weekLogDetList = new ArrayList<WeekLogDet>();
+        try{
+            weekLogDetList = weekLogDetMapper.findById(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+            mapE.put("success",false);
+            mapE.put("msg","查询失败");
+        }
+        mapE.put("success",true);
+        mapE.put("detList",weekLogDetList);
+        return mapE;
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    @Transactional
+    public MsgModel delete(String sysno){
+        try{
+            weekLogMapper.delete(sysno);
+            weekLogDetMapper.delete(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.resultMsg("1","删除失败");
+        }
+        return this.resultMsg("0","删除成功");
     }
 
     public SysUser findUser(){

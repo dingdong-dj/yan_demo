@@ -27,7 +27,7 @@
     </update>
 
     <select id="list" resultMap="BaseResultMap">
-        select * from wk_log order by fill_dt desc
+        select * from wk_log order by week_no desc ,fill_dt desc
     </select>
 
     <delete id="delete" parameterType="com.yan.performance.week.model.WeekLog">
