@@ -21,6 +21,7 @@
     <div id="toolbar">
         <a class="waves-effect btn btn-info btn-sm" href="javascript:createAction();" ><i class="zmdi zmdi-plus"></i> 新增考核项目</a>
         <a class="waves-effect btn btn-danger btn-sm" href="javascript:deleteAction();" ><i class="zmdi zmdi-delete"></i> 删除考核项目</a>
+        <a class="waves-effect btn btn-warning btn-sm" href="javascript:updateAction();" ><i class="zmdi zmdi-refresh"></i> 考核刷新</a>
         <spa>考核编号: </spa>
         <select id="sysno_find" name="sysno_find" class="selectpicker">
         </select>
@@ -32,11 +33,12 @@
 </div>
 
 <script type="text/javascript">
+    var sumFee = [];
 
     //查询所有考核编号并显示当前时间段或上一个考核时间的考核项目
     $.ajax({
         url: "${pageContext.request.contextPath}/appraise/project/find/all",
-        async: true,
+        async: false,
         data: {},
         success: function (data) {
             if (data.success) {
@@ -58,6 +60,18 @@
         }
     });
 
+    $.ajax({
+        url: '${pageContext.request.contextPath}/appraise/project/content',
+        type: "post",
+        data: {
+            sysno: $("#sysno_find").val()
+        },
+        success: function (data) {
+            sumFee = data;
+            console.log(sumFee);
+        }
+    })
+
 
     var $table = $('#table');
     $(function() {
@@ -75,22 +89,41 @@
             pageList: [10, 15, 20],
             //可供选择的每页的行数（*）
             url: '${pageContext.request.contextPath}/appraise/project/list',	// 请求后台的URL
+            showFooter:true,
             queryParams :queryParams,
             columns: [
                 {field: 'state', checkbox: true},
-                {field: 'sysNo', title: '考核编号', align: 'center'},
+                {field: 'sysNo', title: '考核编号', align: 'center',
+                    footerFormatter:function(value){
+                        return '<span class="label label-info">总计</span>';
+                    }
+                },
                 {field: 'projNo', title: '项目编号', align: 'center',visible: false},
                 {field: 'projName', title: '项目名称', align: 'center'},
                 {field: 'customId', title: '客户编号', align: 'center',visible: false},
                 {field: 'customName', title: '客户名称', align: 'center'},
                 {field: 'checkYear', title: '考核年度', align: 'center'},
                 {field: 'checkDt', title: '考核周期', align: 'center'},
-                {field: 'backFee', title: '本季回款', align: 'center'},
-                {field: 'validFee', title: '有效金额', align: 'center'},
-                {field: 'kSumn', title: '绩效值', align: 'center'},
-                {field: 'lastFee', title: '最终金额', align: 'center'},
+                {field: 'backFee', title: '本季回款', align: 'center',
+                footerFormatter:function(value){
+                    return '<span class="label label-info">'+sumFee.sumBackFee+'</span>';
+                }},
+                {field: 'validFee', title: '有效金额', align: 'center',
+                footerFormatter:function(value){
+                    return '<span class="label label-info">'+sumFee.sumVaildFee+'</span>';
+                }},
+                {field: 'kSumn', title: '绩效值', align: 'center',
+                    footerFormatter:function(value){
+                        return '<span class="label label-info">'+sumFee.sumKsum+'</span>';
+                    }
+                },
+                {field: 'lastFee', title: '最终金额', align: 'center',
+                    footerFormatter:function(value){
+                        return '<span class="label label-info">'+sumFee.sumLastFee+'</span>';
+                    }
+                },
                 {field: 'fillDt', title: '考核时间', align: 'center'},
-                {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
+                {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false,width:'60px'}
             ]
         });
     });
@@ -168,6 +201,26 @@
 
     function findList() {
         $table.bootstrapTable('refresh');
+    }
+
+    function updateAction(){
+        var sysno = $("#sysno_find").val();
+        $.ajax({
+            url: '${pageContext.request.contextPath}/appraise/project/refresh',
+            type: "post",
+            data: {
+                sysno: sysno
+            },
+            traditional: true,//这里设为true就可以了传参
+            success: function (data) {
+                if("1" == data.status){
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg);
+                    $table.bootstrapTable('refresh');
+                }
+            }
+        });
     }
     // 删除
     function deleteAction() {

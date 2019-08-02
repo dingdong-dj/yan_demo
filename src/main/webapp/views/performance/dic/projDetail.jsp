@@ -188,7 +188,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio1" name="ratio1"
-                               value="${projDic.ratio1}" class="form-control" readonly/>
+                               value="${projDic.ratio1}" class="form-control"/>
                     </div>
                 </div>
                 <div class="col-md-2 text-left"
@@ -198,7 +198,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio2" name="ratio2"
-                               value="${projDic.ratio2}" class="form-control" readonly/>
+                               value="${projDic.ratio2}" class="form-control"/>
                     </div>
                 </div>
             </div>
@@ -210,7 +210,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio3" name="ratio3"
-                               value="${projDic.ratio3}" class="form-control" readonly/>
+                               value="${projDic.ratio3}" class="form-control"/>
                     </div>
                 </div>
                 <div class="col-md-2 text-left"
@@ -220,7 +220,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio4" name="ratio4"
-                               value="${projDic.ratio4}" class="form-control" readonly/>
+                               value="${projDic.ratio4}" class="form-control"/>
                     </div>
                 </div>
             </div>
@@ -232,7 +232,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio5" name="ratio5"
-                               value="${projDic.ratio5}" class="form-control" readonly/>
+                               value="${projDic.ratio5}" class="form-control"/>
                     </div>
                 </div>
             </div>

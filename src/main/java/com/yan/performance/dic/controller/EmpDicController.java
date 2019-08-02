@@ -8,6 +8,7 @@ import com.yan.performance.dic.mapper.EmpDicMapper;
 import com.yan.performance.dic.model.EmpDic;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,6 +28,12 @@ public class EmpDicController extends BaseController {
     @RequestMapping("/init")
     public String init(){
         return "performance/dic/empDicManage";
+    }
+
+    @RequestMapping("/add/page")
+    public String addPage(Model model){
+        model.addAttribute("flag","1");
+        return "common/user/addOrEdit";
     }
 
     @RequestMapping("/list")
@@ -99,10 +106,15 @@ public class EmpDicController extends BaseController {
 
     @RequestMapping("/auto/id")
     @ResponseBody
-    public Map<String, Object> autpId(){
+    public Map<String, Object> autoId(){
         Map<String, Object> result = new HashMap<>();
         String id = empMapper.autoId();
-        String userId = String.format("%05d",parseInt(id));
+        String userId;
+        if(id == null || "".equals(id)){
+            userId = "00001";
+        }else{
+            userId = String.format("%05d",parseInt(id));
+        }
         result.put("userId", userId);
         result.put("success", true);
         return result;

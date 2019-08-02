@@ -87,8 +87,8 @@
 			</div>
 		</li>
 		<li id="logo" class="hidden-xs">
-			<!-- <img src="${pageContext.request.contextPath}/resources/images/logo.png"/> -->
-			<span id="system_title"> 绍兴华卫众邦</span>
+<%--			<img src="${pageContext.request.contextPath}/resources/images/hwzb_logo.png"/>--%>
+			<span id="system_title"> 华卫众邦</span>
 		</li>
 		<li class="pull-right">
 			<ul class="hi-menu">

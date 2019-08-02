@@ -34,6 +34,7 @@ $(function() {
     		pagination: true,// 显示分页条
     		sidePagination: 'server',// 可选值为 client 或者 server
     		search: false,// 是否启用搜索框
+			showFooter:false,
 			height: getHeight(),
     		classes: 'table table-hover',// table table-hover table-no-bordered
     		columns: []
@@ -53,6 +54,7 @@ $(function() {
 					striped: true,// 隔行变色效果
 					showRefresh: settings.showRefresh,//是否显示 刷新按钮
 					showColumns: settings.showColumns,//是否显示 内容列下拉框
+					showFooter:settings.showFooter,
 					minimumCountColumns: 2,// 最小显示列数
 					clickToSelect: settings.clickToSelect,// 点击行时选中
 					singleSelect: settings.singleSelect,// 只能单选
@@ -102,6 +104,7 @@ $(function() {
 					smartDisplay: true,// 是否自动隐藏分页条
 					escape: true,// 转义HTML字符串
 					search: settings.search,// 是否启用搜索框
+					showFooter:settings.showFooter,
 					searchOnEnterKey: true,// 按回车触发搜索方法
 					classes: settings.classes,// table table-hover table-no-bordered
 					columns: settings.columns

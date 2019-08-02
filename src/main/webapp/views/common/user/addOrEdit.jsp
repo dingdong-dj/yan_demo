@@ -132,7 +132,7 @@
 <script type="text/javascript">
     $(function () {
         var flag = ${flag};
-        <c:if test="${flag =='1'}">
+        <c:if test="${flag =='1' || flag == '' || flag == null}">
             //网页打开时根据员工表自动生成员工id
             $.ajax({
                 url: "${pageContext.request.contextPath}/dic/emp/auto/id",
@@ -164,6 +164,10 @@
 
             if ($("#userName").val() == "" || $("#userName").val() == null) {
                 $.alert("员工姓名不能为空");
+                return false;
+            }
+            if ($("#userJoindate").val() == "" || $("#userJoindate").val() == null) {
+                $.alert("加入时间不能为空");
                 return false;
             }
             return true;

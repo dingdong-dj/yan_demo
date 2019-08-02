@@ -93,7 +93,7 @@
             url: '${pageContext.request.contextPath}/dic/proj/list',	// 请求后台的URL
             columns: [
                 {field: 'state', checkbox: true},
-                {field: 'projNo', title: '项目编号', align: 'center'},
+                {field: 'projNo', title: '项目编号', align: 'center',visible: false},
                 {field: 'projName', title: '项目名', align: 'center'},
                 {field: 'totalFee', title: '总金额', align: 'center'},
                 {field: 'leftFee', title: '应收尾款', align: 'center'},
@@ -106,8 +106,8 @@
                     }
                 },
                 {field: 'contractDt', title: '合同签订时间', align: 'center'},
-                {field: 'projStart', title: '项目开始时间', align: 'center'},
-                {field: 'projEnd', title: '项目结束时间', align: 'center'},
+                {field: 'projStart', title: '项目开始时间', align: 'center',visible: false},
+                {field: 'projEnd', title: '项目结束时间', align: 'center',visible: false},
                 {field: 'customName', title: '客户', align: 'center'},
                 {field: 'customNo', title: '客户编号', align: 'center',visible: false},
                 {field: 'empName', title: '项目经理', align: 'center'},
@@ -117,8 +117,8 @@
                 {field: 'ratio3', title: '实施周期', align: 'center',visible: false},
                 {field: 'ratio4', title: '项目收益', align: 'center',visible: false},
                 {field: 'ratio5', title: '维护成本', align: 'center',visible: false},
-                {field: 'remarks', title: '备注', align: 'center',visible: false},
-                {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
+                {field: 'remarks', title: '备注', align: 'center'},
+                {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false,width:'90px'}
             ]
         });
     });

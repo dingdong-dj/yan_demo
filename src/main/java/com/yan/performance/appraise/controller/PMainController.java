@@ -56,7 +56,7 @@ public class PMainController extends BaseController {
         if(Ksumn == null){
             return this.resultMsg("1","保存失败");
         }
-            Ksumn = Ksumn.multiply(BigDecimal.valueOf(0.1));
+        Ksumn = Ksumn.multiply(BigDecimal.valueOf(0.1));
         pMain.setkSumn(Ksumn.multiply(pMain.getValidFee()));
         try{
             pMainMapper.save(pMain);
@@ -71,7 +71,7 @@ public class PMainController extends BaseController {
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     @ResponseBody
-    public PageModel<PMain> list(int offset, int limit, String search, String sort, String order,String sysno){
+    public PageModel<PMain> list(int offset, int limit, String search, String sort, String order,String sysno,Model model){
         if(sysno == null || "".equals(sysno)||"null".equals(sysno)){
             sysno = findSysno();
         }
@@ -82,6 +82,7 @@ public class PMainController extends BaseController {
         }catch (Exception e){
             e.printStackTrace();
         }
+        model.addAttribute("sumAll","assas");
         return this.resultPage(list);
     }
 
@@ -105,7 +106,7 @@ public class PMainController extends BaseController {
            result.put("sysno",findSysno());
            return result;
        }else {
-           result.put("msg", "考核编号获取失败");
+           result.put("msg", "暂无考核编号");
            result.put("success", false);
            return result;
        }
@@ -166,7 +167,30 @@ public class PMainController extends BaseController {
         return "performance/appraise/projectAppAdd";
     }
 
-    @RequestMapping("update")
+    @RequestMapping("/content")
+    @ResponseBody
+    public Map<String ,Object> content(String sysno){
+        List<PMain> pMains = pMainMapper.findBySysno(sysno);
+        BigDecimal sumBackFee = BigDecimal.ZERO;
+        BigDecimal sumVaildFee = BigDecimal.ZERO;
+        BigDecimal sumLastFee = BigDecimal.ZERO;
+        BigDecimal sumKsum = BigDecimal.ZERO;
+        for(PMain pMain :pMains){
+            sumBackFee = sumBackFee.add(pMain.getBackFee());
+            sumVaildFee = sumVaildFee.add(pMain.getValidFee());
+            sumLastFee =sumLastFee.add(pMain.getLastFee());
+            sumKsum = sumKsum.add(pMain.getkSumn());
+        }
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("success",true);
+        map.put("sumBackFee",sumBackFee);
+        map.put("sumVaildFee",sumVaildFee);
+        map.put("sumLastFee",sumLastFee);
+        map.put("sumKsum",sumKsum);
+        return map;
+    }
+
+    @RequestMapping("/update")
     @ResponseBody
     @Transactional
     public MsgModel update(PMain pMain){
@@ -198,6 +222,26 @@ public class PMainController extends BaseController {
         return this.resultMsg("0","修改成功");
     }
 
+
+    @RequestMapping("/refresh")
+    @ResponseBody
+    @Transactional
+    public MsgModel refresh(String sysno){
+        try{
+            List<PMain> list = pMainMapper.findBySysno(sysno);
+            for(PMain pMain :list){
+                BigDecimal Ksumn = findKsumn(pMain.getProjNo());
+                Ksumn = Ksumn.multiply(BigDecimal.valueOf(0.1));
+                pMain.setkSumn(Ksumn.multiply(pMain.getValidFee()));
+                pMainMapper.update(pMain);
+            }
+            countLastFee(sysno);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.resultMsg("1","修改失败");
+        }
+        return this.resultMsg("0","刷新成功");
+    }
 
     public BigDecimal findKsumn(String projNo){
         ProjDic projDic;
