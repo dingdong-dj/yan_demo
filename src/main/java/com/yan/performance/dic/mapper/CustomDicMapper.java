@@ -20,4 +20,6 @@ public interface CustomDicMapper {
 
     //编辑修改客户名称姓名
     int updateName(CustomDic customDic);
+
+    List<CustomDic> listBysearch(String searchCode);
 }

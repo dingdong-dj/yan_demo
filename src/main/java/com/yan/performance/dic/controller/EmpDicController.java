@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
 
@@ -40,7 +42,13 @@ public class EmpDicController extends BaseController {
     @ResponseBody
     public PageModel<EmpDic> list(int offset, int limit, String search, String sort, String order){
         this.offsetPage(offset, limit);
-        List<EmpDic> list = empMapper.list();
+        List<EmpDic> list;
+        if(search !=null && !"".equals(search)){
+            String searchCode = "%"+search+"%";
+            list = empMapper.listBysearch(searchCode);
+        }else{
+            list = empMapper.list();
+        }
         return this.resultPage(list);
     }
 

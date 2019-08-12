@@ -49,6 +49,11 @@ public class PMainController extends BaseController {
         BigDecimal leftFee = projDic.getLeftFee();
         leftFee = leftFee.subtract(pMain.getBackFee());
         projDic.setLeftFee(leftFee);
+        if(leftFee.compareTo(BigDecimal.ZERO)  == 1){
+            projDic.setBackFlag("paying");
+        }else{
+            projDic.setBackFlag("payed");
+        }
         if(pro !=null){
             return this.resultMsg("1","保存失败,该考核项目已存在");
         }
@@ -205,6 +210,11 @@ public class PMainController extends BaseController {
             leftFee = leftFee.add(list.get(0).getBackFee());
             leftFee = leftFee.subtract(pMain.getBackFee());
             projDic.setLeftFee(leftFee);
+            if(leftFee.compareTo(BigDecimal.ZERO) == 1){
+                projDic.setBackFlag("paying");
+            }else{
+                projDic.setBackFlag("payed");
+            }
         }
         try{
             BigDecimal Ksumn = findKsumn(pMain.getProjNo());

@@ -23,4 +23,7 @@ public interface EmpDicMapper {
     int updateName(EmpDic empDic);
 
     String autoId();
+
+    //模糊查询
+    List<EmpDic> listBysearch(String searchCode);
 }

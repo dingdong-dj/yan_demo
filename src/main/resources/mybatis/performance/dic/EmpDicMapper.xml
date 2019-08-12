@@ -43,4 +43,7 @@
         select max(emp_no)+1 from dic_emp
     </select>
 
+    <select id="listBysearch" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from dic_emp where emp_no like #{searchCode} or emp_name like #{searchCode}
+    </select>
 </mapper>

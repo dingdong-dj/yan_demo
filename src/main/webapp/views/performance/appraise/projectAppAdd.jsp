@@ -80,6 +80,31 @@
                         });
                     </script>
                 </div>
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">回款时间：</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group date form_date col-md-16">
+                        <input id="backDt" name="backDt" class="form-control" size="16" type="text" value="${PMain.backDt}"
+                               placeholder="请选择日期" readonly> <span
+                            class="input-group-addon"><span
+                            class="glyphicon glyphicon-remove"></span></span> <span
+                            class="input-group-addon"><span
+                            class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    <script type="text/javascript">
+                        //	日历组件选择
+                        $(".form_date").datetimepicker({
+                            language: 'zh-CN',
+                            minView: "month",//设置只显示到月份
+                            format: "yyyy-mm-dd",
+                            autoclose: true,
+                            todayBtn: true,
+                            minuteStep: 5
+                        });
+                    </script>
+                </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"

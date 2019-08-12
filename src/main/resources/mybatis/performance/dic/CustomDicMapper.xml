@@ -38,5 +38,9 @@
         where custom_id = #{customId,jdbcType=VARCHAR}
     </update>
 
+    <select id="listBysearch" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from dic_custom where custom_name like #{searchCode}
+    </select>
+
 
 </mapper>

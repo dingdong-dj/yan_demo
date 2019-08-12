@@ -32,6 +32,8 @@ public class PMain implements Serializable {
 
     private String fillDt;//考核时间
 
+    private String backDt;//回款时间
+
     public String getSysNo() {
         return sysNo;
     }
@@ -128,6 +130,14 @@ public class PMain implements Serializable {
         this.fillDt = fillDt;
     }
 
+    public String getBackDt() {
+        return backDt;
+    }
+
+    public void setBackDt(String backDt) {
+        this.backDt = backDt;
+    }
+
     @Override
     public String toString() {
         return "PMain{" +
@@ -143,6 +153,7 @@ public class PMain implements Serializable {
                 ", kSumn=" + kSumn +
                 ", lastFee=" + lastFee +
                 ", fillDt='" + fillDt + '\'' +
+                ", backDt='" + backDt + '\'' +
                 '}';
     }
 }

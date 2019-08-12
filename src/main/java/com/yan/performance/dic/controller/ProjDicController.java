@@ -37,7 +37,13 @@ public class ProjDicController extends BaseController {
     @ResponseBody
     public PageModel<ProjDic> list(int offset, int limit, String search, String sort, String order){
         this.offsetPage(offset, limit);
-        List<ProjDic> list = projDicMapper.list();
+        List<ProjDic> list;
+        if(search !=null && !"".equals(search)){
+            String searchCode = "%"+search+"%";
+            list = projDicMapper.listBysearch(searchCode);
+        }else{
+            list = projDicMapper.list();
+        }
         return this.resultPage(list);
     }
 

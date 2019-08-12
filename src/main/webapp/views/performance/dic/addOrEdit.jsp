@@ -136,17 +136,6 @@
                             class="input-group-addon"><span
                             class="glyphicon glyphicon-calendar"></span></span>
                     </div>
-                    <script type="text/javascript">
-                        //	日历组件选择
-                        $(".form_date").datetimepicker({
-                            language: 'zh-CN',
-                            minView: "month",//设置只显示到月份
-                            format: "yyyy-mm-dd",
-                            autoclose: true,
-                            todayBtn: true,
-                            minuteStep: 5
-                        });
-                    </script>
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
@@ -168,6 +157,68 @@
                     <div class="form-group">
                         <select class="selectpicker" name="empNo" id="empNo" >
                         </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">回款标记:</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <select class="selectpicker" name="backFlag" id="backFlag" >
+                            <option value="nopay">未付款</option>
+                            <option value="paying">部分回款</option>
+                            <option value="payed">回款完成</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">付款方式：</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="payInfo" name="payInfo"
+                               value="${projDic.payInfo}" class="form-control" placeholder="付款方式"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">下次回款日期:</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group date form_date col-md-16">
+                        <input id="nextBackDt" name="nextBackDt" class="form-control" size="16" type="text" value="${projDic.nextBackDt}"
+                               placeholder="请选择日期" readonly> <span
+                            class="input-group-addon"><span
+                            class="glyphicon glyphicon-remove"></span></span> <span
+                            class="input-group-addon"><span
+                            class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    <script type="text/javascript">
+                        //	日历组件选择
+                        $(".form_date").datetimepicker({
+                            language: 'zh-CN',
+                            minView: "month",//设置只显示到月份
+                            format: "yyyy-mm-dd",
+                            autoclose: true,
+                            todayBtn: true,
+                            minuteStep: 5
+                        });
+                    </script>
+                </div>
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">下次回款金额:</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="nextBackFee" name="nextBackFee"
+                               value="${projDic.nextBackFee}" class="form-control" placeholder="下次回款金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
             </div>
@@ -227,6 +278,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
@@ -273,6 +325,8 @@
         </c:if>
         //项目状态赋值
         $("#statusFlag").selectpicker('val','${projDic.statusFlag}');
+        //回款状态
+        $("#backFlag").selectpicker('val','${projDic.backFlag}');
 
         //查询员工信息做成选项
         $.ajax({

@@ -14,6 +14,7 @@
         <result column="k_sumn" jdbcType="DECIMAL" property="kSumn" />
         <result column="last_fee" jdbcType="DECIMAL" property="lastFee" />
         <result column="fill_dt" jdbcType="VARCHAR" property="fillDt" />
+        <result column="back_dt" jdbcType="VARCHAR" property="backDt"/>
     </resultMap>
 
     <resultMap id="PMainEmpMap" type="com.yan.performance.dic.model.PMainEmp">
@@ -33,10 +34,10 @@
 
     <insert id="save" parameterType="com.yan.performance.appraise.model.PMain">
         insert into p_main (sysno,proj_no,proj_name,custom_id,custom_name,check_year,check_dt,
-        back_fee,valid_fee,k_sumn,last_fee,fill_dt)
+        back_fee,valid_fee,k_sumn,last_fee,fill_dt,back_dt)
         values (#{sysNo,jdbcType=VARCHAR},#{projNo,jdbcType=VARCHAR},#{projName,jdbcType=VARCHAR},#{customId,jdbcType=VARCHAR},
         #{customName,jdbcType=VARCHAR},#{checkYear,jdbcType=VARCHAR},#{checkDt,jdbcType=VARCHAR},#{backFee,jdbcType=DECIMAL},
-        #{validFee,jdbcType=DECIMAL},#{kSumn,jdbcType=VARCHAR},#{lastFee,jdbcType=DECIMAL},#{fillDt,jdbcType=VARCHAR})
+        #{validFee,jdbcType=DECIMAL},#{kSumn,jdbcType=VARCHAR},#{lastFee,jdbcType=DECIMAL},#{fillDt,jdbcType=VARCHAR},#{backDt,jdbcType=VARCHAR})
     </insert>
 
     <select id="list"  resultMap="BaseResultMap">
@@ -57,7 +58,8 @@
             back_fee = #{backFee},
             valid_fee = #{validFee},
             k_sumn = #{kSumn},
-            fill_dt = #{fillDt}
+            fill_dt = #{fillDt},
+            back_dt = #{backDt}
         where sysno = #{sysNo} and proj_no = #{projNo}
     </update>
 
@@ -67,7 +69,8 @@
             back_fee = #{backFee},
             valid_fee = #{validFee},
             k_sumn = #{kSumn},
-            fill_dt = #{fillDt}
+            fill_dt = #{fillDt},
+             back_dt = #{backDt}
         where sysno = #{sysNo} and proj_no = #{projNo}
     </update>
 

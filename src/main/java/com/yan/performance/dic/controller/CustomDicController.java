@@ -30,7 +30,13 @@ public class CustomDicController extends BaseController {
     @ResponseBody
     public PageModel<CustomDic> list(int offset, int limit, String search, String sort, String order){
         this.offsetPage(offset, limit);
-        List<CustomDic> list = customDicMapper.list();
+        List<CustomDic> list;
+        if(search !=null && !"".equals(search)){
+            String searchCode = "%"+search+"%";
+            list = customDicMapper.listBysearch(searchCode);
+        }else{
+            list = customDicMapper.list();
+        }
         return this.resultPage(list);
     }
 

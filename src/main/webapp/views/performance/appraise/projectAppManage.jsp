@@ -93,13 +93,12 @@
             queryParams :queryParams,
             columns: [
                 {field: 'state', checkbox: true},
-                {field: 'sysNo', title: '考核编号', align: 'center',
+                {field: 'sysNo', title: '考核编号', align: 'center',visible: false},
+                {field: 'projNo', title: '项目编号', align: 'center',visible: false},
+                {field: 'projName', title: '项目名称', align: 'center',
                     footerFormatter:function(value){
                         return '<span class="label label-info">总计</span>';
-                    }
-                },
-                {field: 'projNo', title: '项目编号', align: 'center',visible: false},
-                {field: 'projName', title: '项目名称', align: 'center'},
+                    }},
                 {field: 'customId', title: '客户编号', align: 'center',visible: false},
                 {field: 'customName', title: '客户名称', align: 'center'},
                 {field: 'checkYear', title: '考核年度', align: 'center'},
@@ -123,6 +122,7 @@
                     }
                 },
                 {field: 'fillDt', title: '考核时间', align: 'center'},
+                {field: 'backDt', title: '回款时间', align: 'center'},
                 {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false,width:'60px'}
             ]
         });

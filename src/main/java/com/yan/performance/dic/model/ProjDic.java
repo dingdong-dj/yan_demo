@@ -44,6 +44,14 @@ public class ProjDic implements Serializable {
 
     private BigDecimal ratio5;//系数5
 
+    private String payInfo;//付款方式
+
+    private String backFlag;//回款标记  未回款 部分回款  回款完成
+
+    private String nextBackDt;//下次回款日期
+
+    private String nextBackFee;//下次回款金额
+
     public String getProjNo() {
         return projNo;
     }
@@ -188,6 +196,38 @@ public class ProjDic implements Serializable {
         this.ratio5 = ratio5;
     }
 
+    public String getPayInfo() {
+        return payInfo;
+    }
+
+    public void setPayInfo(String payInfo) {
+        this.payInfo = payInfo;
+    }
+
+    public String getBackFlag() {
+        return backFlag;
+    }
+
+    public void setBackFlag(String backFlag) {
+        this.backFlag = backFlag;
+    }
+
+    public String getNextBackDt() {
+        return nextBackDt;
+    }
+
+    public void setNextBackDt(String nextBackDt) {
+        this.nextBackDt = nextBackDt;
+    }
+
+    public String getNextBackFee() {
+        return nextBackFee;
+    }
+
+    public void setNextBackFee(String nextBackFee) {
+        this.nextBackFee = nextBackFee;
+    }
+
     @Override
     public String toString() {
         return "ProjDic{" +
@@ -209,6 +249,10 @@ public class ProjDic implements Serializable {
                 ", ratio3=" + ratio3 +
                 ", ratio4=" + ratio4 +
                 ", ratio5=" + ratio5 +
+                ", payInfo='" + payInfo + '\'' +
+                ", backFlag='" + backFlag + '\'' +
+                ", nextBackDt='" + nextBackDt + '\'' +
+                ", nextBackFee='" + nextBackFee + '\'' +
                 '}';
     }
 }

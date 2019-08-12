@@ -25,7 +25,7 @@
             </c:if>
             <c:if test="${pAward.sysNo == null || pAward.sysNo == ''}">
                     <button id="save-btn" class="waves-effect btn btn-success btn-sm"
-                            style="margin-left: 10px;" type="button" href="javascript:;"><i class="zmdi zmdi-save"></i>添加人员绩效
+                            style="margin-left: 10px;" type="button" href="javascript:;"><i class="zmdi zmdi-save"></i>保存
             </c:if>
 
         </button>
