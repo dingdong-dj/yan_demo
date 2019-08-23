@@ -52,6 +52,10 @@ public class ProjDic implements Serializable {
 
     private String nextBackFee;//下次回款金额
 
+    private String receptInfo;//开票信息
+
+    private Integer projPer;//项目进度
+
     public String getProjNo() {
         return projNo;
     }
@@ -228,6 +232,22 @@ public class ProjDic implements Serializable {
         this.nextBackFee = nextBackFee;
     }
 
+    public String getReceptInfo() {
+        return receptInfo;
+    }
+
+    public void setReceptInfo(String receptInfo) {
+        this.receptInfo = receptInfo;
+    }
+
+    public Integer getProjPer() {
+        return projPer;
+    }
+
+    public void setProjPer(Integer projPer) {
+        this.projPer = projPer;
+    }
+
     @Override
     public String toString() {
         return "ProjDic{" +
@@ -253,6 +273,8 @@ public class ProjDic implements Serializable {
                 ", backFlag='" + backFlag + '\'' +
                 ", nextBackDt='" + nextBackDt + '\'' +
                 ", nextBackFee='" + nextBackFee + '\'' +
+                ", receptInfo='" + receptInfo + '\'' +
+                ", projPer=" + projPer +
                 '}';
     }
 }

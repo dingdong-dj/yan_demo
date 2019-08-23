@@ -102,9 +102,10 @@
                         type:'select',
                         title:'项目状态',
                         source:[{value:"立项",text:"立项"},{value:"招标",text:"招标"},{value:"已签合同",text:"已签合同"},
-                            {value:"实施中",text:"实施中"},{value:"已完成",text:"已完成"}],
+                            {value:"实施中",text:"实施中"},{value:"已完成",text:"已完成"},{value:"白干",text:"白干"}],
                     }
                 },
+                {field:'projPer',title:'项目进度',align:'center'},
                 {field: 'backFlag', title: '回款标记', align: 'center',
                     formatter: function(value, row, index) {
                         if(value == "unpay"){
@@ -132,7 +133,8 @@
                 {field: 'payInfo', title: '付款方式', align: 'center',visible: false},
                 {field: 'nextBackDt', title: '下次日期', align: 'center',visible: false},
                 {field: 'nextBackFee', title: '下次金额', align: 'center',visible: false},
-                {field: 'remarks', title: '备注', align: 'center'},
+                {field: 'receptInfo ', title: '开票信息', align: 'center',visible: false},
+                {field: 'remarks', title: '备注', align: 'center',visible: false},
                 {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false,width:'90px'}
             ]
         });

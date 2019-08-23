@@ -24,6 +24,8 @@
         <result column="back_flag" property="backFlag" jdbcType="VARCHAR" />
         <result column="next_back_dt" property="nextBackDt" jdbcType="VARCHAR" />
         <result column="next_back_fee" property="nextBackFee" jdbcType="VARCHAR" />
+        <result column="recept_info" property="receptInfo" jdbcType="VARCHAR"/>
+        <result column="proj_per" property="projPer" jdbcType="INTEGER"/>
     </resultMap>
     <select id="list"  resultMap="BaseResultMap">
         select dic_proj.*
@@ -38,13 +40,15 @@
 
     <insert id="insert" parameterType="com.yan.performance.dic.model.ProjDic">
         insert into dic_proj (proj_no, proj_name,total_fee,left_fee,status_flag,contract_dt,proj_start,proj_end,remarks,
-        custom_id,custom_name,emp_no,emp_name,ratio_1,ratio_2,ratio_3,ratio_4,ratio_5,pay_info,back_flag,next_back_dt,next_back_fee)
+        custom_id,custom_name,emp_no,emp_name,ratio_1,ratio_2,ratio_3,ratio_4,ratio_5,pay_info,back_flag,next_back_dt,next_back_fee,
+        recept_info,proj_per)
         values (#{projNo,jdbcType=VARCHAR}, #{projName,jdbcType=VARCHAR}, #{totalFee,jdbcType=DECIMAL}, #{leftFee,jdbcType=DECIMAL},
          #{statusFlag,jdbcType=VARCHAR}, #{contractDt,jdbcType=VARCHAR}, #{projStart,jdbcType=VARCHAR}, #{projEnd,jdbcType=VARCHAR},
          #{remarks,jdbcType=VARCHAR},  #{customId,jdbcType=VARCHAR}, #{customName,jdbcType=VARCHAR},
           #{empNo,jdbcType=VARCHAR}, #{empName,jdbcType=VARCHAR}, #{ratio1,jdbcType=DECIMAL}, #{ratio2,jdbcType=DECIMAL},
           #{ratio3,jdbcType=DECIMAL}, #{ratio4,jdbcType=DECIMAL}, #{ratio5,jdbcType=DECIMAL},#{payInfo,jdbcType=VARCHAR},
-          #{backFlag,jdbcType=VARCHAR},#{nextBackDt,jdbcType=VARCHAR},#{nextBackFee,jdbcType=VARCHAR})
+          #{backFlag,jdbcType=VARCHAR},#{nextBackDt,jdbcType=VARCHAR},#{nextBackFee,jdbcType=VARCHAR},
+          #{receptInfo,jdbcType=VARCHAR},#{projPer,jdbcType=INTEGER})
     </insert>
 
     <update id="update" parameterType="com.yan.performance.dic.model.ProjDic">
@@ -69,7 +73,9 @@
             pay_info = #{payInfo,jdbcType=VARCHAR},
             back_flag =  #{backFlag,jdbcType=VARCHAR},
             next_back_dt = #{nextBackDt,jdbcType=VARCHAR},
-            next_back_fee = #{nextBackFee,jdbcType=VARCHAR}
+            next_back_fee = #{nextBackFee,jdbcType=VARCHAR},
+            recept_info = #{receptInfo,jdbcType=VARCHAR},
+            proj_per = #{projPer,jdbcType=INTEGER}
         where proj_no = #{projNo,jdbcType = VARCHAR}
     </update>
 
@@ -82,7 +88,8 @@
 
     <sql id="Base_Column_List">
         proj_no, proj_name,total_fee,left_fee,status_flag,contract_dt,proj_start,proj_end,remarks,
-        custom_id,custom_name,emp_no,emp_name,ratio_1,ratio_2,ratio_3,ratio_4,ratio_5,pay_info,back_flag,next_back_dt,next_back_fee
+        custom_id,custom_name,emp_no,emp_name,ratio_1,ratio_2,ratio_3,ratio_4,ratio_5,pay_info,back_flag,
+        next_back_dt,next_back_fee,recept_info,proj_per
     </sql>
 
     <select id="selectByProjNo" parameterType="java.lang.String" resultMap="BaseResultMap">

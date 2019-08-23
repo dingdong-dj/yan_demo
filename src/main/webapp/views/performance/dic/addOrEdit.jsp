@@ -81,9 +81,9 @@
             </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
-                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
-                    <label style="margin-top: 5px; font-size: 14px; color: grey;">项目状态：</label>
-                </div>
+                           style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                <label style="margin-top: 5px; font-size: 14px; color: grey;">项目状态：</label>
+            </div>
                 <div class="col-md-4">
                     <select id="statusFlag" name="statusFlag" class="selectpicker">
                         <option value="立项">立项</option>
@@ -91,8 +91,21 @@
                         <option value="已签合同">已签合同</option>
                         <option value="实施中">实施中</option>
                         <option value="已完成">已完成</option>
+                        <option value="白干">白干</option>
                     </select>
                 </div>
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">项目进度：</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="projPer" name="projPer"
+                               value="${projDic.projPer}" class="form-control" placeholder="项目进度" onkeyup="value=value.replace(/[^\d.]/g,'')" readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
                     <label style="margin-top: 5px; font-size: 14px; color: grey;">合同签订时间：</label>
@@ -278,7 +291,18 @@
                     </div>
                 </div>
             </div>
-
+            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">开票信息：</label>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <textarea type="text" class="form-control" rows="2" id="receptInfo" name="receptInfo"
+                                  placeholder="请输入开票信息">${projDic.receptInfo}</textarea>
+                    </div>
+                </div>
+            </div>
             <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
@@ -287,7 +311,7 @@
                 <div class="col-md-9">
                     <div class="form-group">
                         <textarea type="text" class="form-control" rows="4" id="remarks" name="remarks"
-                                  placeholder="请输入描述">${proDic.remarks}</textarea>
+                                  placeholder="请输入描述">${projDic.remarks}</textarea>
                     </div>
                 </div>
             </div>
@@ -519,5 +543,13 @@
         width: 'auto'
     });
 
+    $("#statusFlag").change(function(){
+        var statusFlag = $("#statusFlag").val();
+        if(statusFlag == "实施中"){
+            $("#projPer").attr("readOnly",false);
+        }else{
+            $("#projPer").attr("readOnly","true");
+        }
+    })
 </script>
 </html>

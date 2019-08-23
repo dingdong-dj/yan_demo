@@ -98,8 +98,21 @@
                         <option value="已签合同">已签合同</option>
                         <option value="实施中">实施中</option>
                         <option value="已完成">已完成</option>
+                        <option value="白干">白干</option>
                     </select>
                 </div>
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">项目进度：</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="projPer" name="projPer"
+                               value="${projDic.projPer}" class="form-control" placeholder="项目进度" onkeyup="value=value.replace(/[^\d.]/g,'')" readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                 <div class="col-md-2 text-left"
                      style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
                     <label style="margin-top: 5px; font-size: 14px; color: grey;">合同签订时间：</label>
@@ -107,7 +120,7 @@
                 <div class="col-md-4">
                     <div class="input-group date form_date col-md-16">
                         <input id="contractDt" name="contractDt" class="form-control" size="16" type="text" value="${projDic.contractDt}"
-                               placeholder="请选择日期" > <span
+                               placeholder="请选择日期" readonly> <span
                             class="input-group-addon"><span
                             class="glyphicon glyphicon-remove"></span></span> <span
                             class="input-group-addon"><span
@@ -284,6 +297,18 @@
                     <div class="form-group">
                         <input type="text" id="ratio5" name="ratio5"
                                value="${projDic.ratio5}" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-md-2 text-left"
+                     style="background-color: #FFEEDD; line-height: 26px; vertical-align: middle;">
+                    <label style="margin-top: 5px; font-size: 14px; color: grey;">开票信息：</label>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <textarea type="text" class="form-control" rows="2" id="receptInfo" name="receptInfo"
+                                  placeholder="请输入开票信息">${projDic.receptInfo}</textarea>
                     </div>
                 </div>
             </div>
