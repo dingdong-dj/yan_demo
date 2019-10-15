@@ -351,7 +351,7 @@
         $("#statusFlag").selectpicker('val','${projDic.statusFlag}');
         //回款状态
         $("#backFlag").selectpicker('val','${projDic.backFlag}');
-
+        $("#statusFlag").change();
         //查询员工信息做成选项
         $.ajax({
             url: "${pageContext.request.contextPath}/dic/emp/find/all",
@@ -548,6 +548,7 @@
         if(statusFlag == "实施中"){
             $("#projPer").attr("readOnly",false);
         }else{
+            $("#projPer").val("");
             $("#projPer").attr("readOnly","true");
         }
     })

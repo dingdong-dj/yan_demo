@@ -343,6 +343,8 @@
         //回款状态
         $("#backFlag").selectpicker('val','${projDic.backFlag}');
 
+        $("#statusFlag").change();
+
         //必填项检查
         function formCheck() {
             if ($("#projNo").val() == null || $("#projNo").val() == ''||$("#projNo").val() == 'undefined') {
@@ -455,7 +457,16 @@
     $(".selectpicker").selectpicker({
         width: 'auto'
     });
+    $("#statusFlag").change(function(){
+        var statusFlag = $("#statusFlag").val();
+        if(statusFlag == "实施中"){
+            $("#projPer").attr("readOnly",false);
+        }else{
+            $("#projPer").val("");
+            $("#projPer").attr("readOnly","true");
 
+        }
+    })
 
 </script>
 </html>
