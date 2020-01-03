@@ -7,7 +7,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>绩效管理平台</title>
+	<title>华卫众邦</title>
 	<style>
 	/** skins **/
 	#header {
@@ -271,7 +271,8 @@
 				});
 				menuHtml += "</ul></li>";
 			});
-			menuHtml += "<li><div class='upms-version'>&copy; 绩效管理平台1.0</div></li>";
+			// menuHtml += "<li><div class='upms-version'>&copy; 绩效管理平台1.0</div></li>";
+			menuHtml += "<li><div class='upms-version'>&copy; 华为众邦</div></li>";
 			$('#main-menu').html(menuHtml);
 		});
 	}

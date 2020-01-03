@@ -35,6 +35,7 @@
             <option value="${sysno}">${sysno}</option>
         </select>
         <a class="waves-effect btn btn-warning btn-sm" href="javascript:findList();"><i class="zmdi zmdi-search"></i> 查询</a>
+        <a class="waves-effect btn btn-warning btn-sm" href="javascript:exportExcel();"><i class="zmdi zmdi-save"></i> 导出</a>
     </div>
     <div class="table-responsive">
         <table id="sum-table"></table>
@@ -186,6 +187,96 @@
         };
         return temp;
     };
+
+
+    function exportExcel(){
+        var sysno = $("#sysno_find").val();
+        console.log(sysno);
+        if(sysno == null || sysno == ''||sysno == 'undefined'){
+            $.alert("请选择考核编号");
+            return false;
+        }
+
+        $.confirm({
+            type: 'grey',
+            animationSpeed: 300,
+            title: false,
+            content: '导出Excel表格？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'waves-effect waves-button',
+                    action: function () {
+                        index_Tab.addTab("导出Excel", "appraise/peoman/expertExcel?sysno="+sysno);
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
+            }
+        });
+    }
+
+
+    // 子页面下调用选项卡对象
+    var index_Tab = {
+        addTab: function (title, url) {
+            var index = url.replace(/\./g, '_').replace(/\//g, '_').replace(/:/g, '_').replace(/\?/g, '_').replace(/,/g, '_').replace(/=/g, '_').replace(/&/g, '_');
+            // 如果存在选项卡，则激活，否则创建新选项卡
+            if ($('#tab_' + index, window.parent.document).length == 0) {
+                // 添加选项卡
+                $('.content_tab li', window.parent.document).removeClass('cur');
+                var tab = '<li id="tab_' + index + '" data-index="' + index + '" class="cur"><a class="waves-effect waves-light">' + title + '</a></li>';//<i class="zmdi zmdi-close"></i><
+                $('.content_tab>ul', window.parent.document).append(tab);
+                // 添加iframe
+                $('.iframe', window.parent.document).removeClass('cur');
+                var iframe = '<div id="iframe_' + index + '" class="iframe cur"><iframe class="tab_iframe" src="' + url + '" width="100%" frameborder="0" scrolling="auto" onload="changeFrameHeight(this)"></iframe></div>';
+                $('.content_main', window.parent.document).append(iframe);
+                initScrollShow();
+                $('.content_tab>ul', window.parent.document).animate({scrollLeft: window.parent.document.getElementById('tabs').scrollWidth - window.parent.document.getElementById('tabs').clientWidth}, 200, function () {
+                    initScrollState();
+                });
+            } else {
+                $('#tab_' + index, window.parent.document).trigger('click');
+            }
+        },
+        closeTab: function ($item) {
+            var closeable = $item.data('closeable');
+            if (closeable != false) {
+                // 如果当前时激活状态则关闭后激活左边选项卡
+                if ($item.hasClass('cur')) {
+                    $item.prev().trigger('click');
+                }
+                // 关闭当前选项卡
+                var index = $item.data('index');
+                $('#iframe_' + index).remove();
+                $item.remove();
+            }
+            initScrollShow();
+        }
+    }
+
+    function initScrollShow() {
+        if (window.parent.document.getElementById('tabs').scrollWidth > window.parent.document.getElementById('tabs').clientWidth) {
+            $('.content_tab', window.parent.document).addClass('scroll');
+        } else {
+            $('.content_tab', window.parent.document).removeClass('scroll');
+        }
+    }
+
+    function initScrollState() {
+        if ($('.content_tab>ul', window.parent.document).scrollLeft() == 0) {
+            $('.tab_left>a', window.parent.document).removeClass('active');
+        } else {
+            $('.tab_left>a', window.parent.document).addClass('active');
+        }
+        if (($('.content_tab>ul', window.parent.document).scrollLeft() + window.parent.document.getElementById('tabs').clientWidth) >= window.parent.document.getElementById('tabs').scrollWidth) {
+            $('.tab_right>a', window.parent.document).removeClass('active');
+        } else {
+            $('.tab_right>a', window.parent.document).addClass('active');
+        }
+    }
 
 </script>
 </body>

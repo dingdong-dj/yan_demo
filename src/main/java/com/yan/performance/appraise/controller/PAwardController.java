@@ -166,6 +166,16 @@ public class PAwardController extends BaseController {
         return this.resultPage(list);
     }
 
+    @RequestMapping("/find/proj")
+    @ResponseBody
+    public MsgModel findByProj(String projNo){
+        List<PAward> list = pAwardMapper.findByProjNo(projNo);
+        if(list.size() == 0){
+            return this.resultMsg("0","可以修改");
+        }
+        return this.resultMsg("1","该项目已经分配,无法修改项目经理");
+    }
+
 
     public String findSysno(){
         String sysNo;
@@ -196,4 +206,5 @@ public class PAwardController extends BaseController {
         sumFee = pAwardMapper.sumFee(pAward.getSysNo(),pAward.getProjNo());
         return sumFee;
     }
+
 }

@@ -80,7 +80,9 @@
                         var loginCookie = $('#username').val() + ',' + $('#password').val() + ',' + $('#remember').is(":checked");
                         $.cookie('loginCookie', loginCookie, {expires: 7});
                     }else{
-                        $.cookie('loginCookie', null);
+                        // $.cookie('loginCookie', null);
+                        var loginCookie = $('#username').val() + ',' + $('#password').val() + ',' + $('#remember').is(":checked");
+                        $.cookie('loginCookie', loginCookie, {expires: 7});
                     }
                     location.href = '${pageContext.request.contextPath}'+ data.url;
                 }

@@ -130,4 +130,9 @@
         where sysno = #{sysNo}
     </update>
 
+    <select id="findByProjNo" parameterType="com.yan.performance.appraise.model.PAward" resultMap="BaseResultMap">
+        select * from p_award where proj_no = #{projNo}
+
+    </select>
+
 </mapper>

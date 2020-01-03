@@ -56,4 +56,7 @@ public interface PAwardMapper {
 
     //一键发布
     int allPub(@Param("sysNo") String sysno);
+
+    //查询项目是否已分配；
+    List<PAward> findByProjNo(@Param("projNo")String projNo);
 }

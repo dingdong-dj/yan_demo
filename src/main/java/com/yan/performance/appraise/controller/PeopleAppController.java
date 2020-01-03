@@ -24,8 +24,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.poi.hssf.usermodel.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -240,6 +245,101 @@ public class PeopleAppController extends BaseController {
         }
         result.put("success",true);
         return result;
+    }
+
+    @RequestMapping("/expertExcel")
+    @ResponseBody
+    @Transactional
+    public void exprotExcel(String sysno, HttpServletRequest request, HttpServletResponse resp)throws Exception{
+        try {
+            if (null == request || null == resp) {
+                return;
+            }
+            List<Report> list = new ArrayList<Report>();
+            list = pAwardMapper.findReport(sysno);
+            exportExcel(list,sysno,request, resp);
+//            List<RabiesCodeFormDoc> listContent;
+//            Map<String, Object> condition = new HashMap<>();
+//            listContent = statisticsMapper.rabiesCodeD(condition);
+//            //生成Excel文件
+//            rabiesCodeExportExcel(request, resp, listContent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", false);
+            result.put("msg", "导出 EXCEL 文件异常，请重试");
+        }
+    }
+
+    public void exportExcel(List<Report> reports,String sysno,HttpServletRequest request, HttpServletResponse resp) throws Exception{
+
+        request.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/x-download");
+
+        String fileName = sysno+ "华为众邦绩效.xls";
+        fileName = URLEncoder.encode(fileName, "UTF-8");
+        resp.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+        List<Report> list = reports;
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet(sysno+"业绩考核");
+        sheet.setDefaultRowHeight((short) (256));
+        sheet.setColumnWidth(0, 20 * 160);
+        sheet.setColumnWidth(1, 30 * 160);
+        sheet.setColumnWidth(2, 20 * 160);
+        sheet.setColumnWidth(3, 20 * 160);
+        HSSFFont font = wb.createFont();
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 11);
+
+        HSSFRow row = sheet.createRow(0);
+        sheet.createRow(1);
+        sheet.createRow(2);
+
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);//居中
+        style.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
+        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
+        style.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
+        style.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+        style.setWrapText(true);//设置自动换行
+
+        HSSFCell cell = row.createCell(0);
+        cell.setCellValue("序号");
+        cell.setCellStyle(style);
+        cell = row.createCell(1);
+        cell.setCellValue("员工姓名");
+        cell.setCellStyle(style);
+        cell = row.createCell(2);
+        cell.setCellValue("绩效奖金");
+        cell.setCellStyle(style);
+        cell = row.createCell(3);
+        cell.setCellValue("已发放金额");
+        cell.setCellStyle(style);
+
+        for(int i = 0; i<list.size();i++){
+            HSSFRow rowSub = sheet.createRow(i + 1);
+            HSSFCell cellSub = rowSub.createCell(0);
+            cellSub.setCellValue(i+1);
+            cellSub.setCellStyle(style);
+            cellSub = rowSub.createCell(1);
+            cellSub.setCellValue(list.get(i).getEmpName());
+            cellSub.setCellStyle(style);
+            cellSub = rowSub.createCell(2);
+            cellSub.setCellValue(list.get(i).getSumAward());
+            cell.setCellStyle(style);
+            cellSub = rowSub.createCell(3);
+            cellSub.setCellValue(list.get(i).getAwardPay() == null?"0":list.get(i).getAwardPay());
+            cell.setCellStyle(style);
+        }
+        try{
+            OutputStream out = resp.getOutputStream();
+            wb.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 }

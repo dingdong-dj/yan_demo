@@ -252,7 +252,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio1" name="ratio1"
-                               value="${projDic.ratio1}" class="form-control"/>
+                               value="${projDic.ratio1}" class="form-control" readonly/>
                     </div>
                 </div>
                 <div class="col-md-2 text-left"
@@ -262,7 +262,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio2" name="ratio2"
-                               value="${projDic.ratio2}" class="form-control"/>
+                               value="${projDic.ratio2}" class="form-control" readonly/>
                     </div>
                 </div>
             </div>
@@ -274,7 +274,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio3" name="ratio3"
-                               value="${projDic.ratio3}" class="form-control"/>
+                               value="${projDic.ratio3}" class="form-control" readonly/>
                     </div>
                 </div>
                 <div class="col-md-2 text-left"
@@ -284,7 +284,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio4" name="ratio4"
-                               value="${projDic.ratio4}" class="form-control"/>
+                               value="${projDic.ratio4}" class="form-control" readonly/>
                     </div>
                 </div>
             </div>
@@ -296,7 +296,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" id="ratio5" name="ratio5"
-                               value="${projDic.ratio5}" class="form-control"/>
+                               value="${projDic.ratio5}" class="form-control" readonly/>
                     </div>
                 </div>
             </div>
@@ -344,6 +344,46 @@
         $("#backFlag").selectpicker('val','${projDic.backFlag}');
 
         $("#statusFlag").change();
+
+        //查询员工信息做成选项
+        $.ajax({
+            <%--url: "${pageContext.request.contextPath}/dic/emp/find/all",--%>
+            url: "${pageContext.request.contextPath}/appraise/people/find/proj",
+            async: true,
+            data: {projNo:"${projDic.projNo}"},
+            success: function (data) {
+                if (data.status == "0") {
+                    chooseEmp();
+                }
+            }
+        });
+
+        function chooseEmp(){
+            //查询员工信息做成选项
+            $.ajax({
+                url: "${pageContext.request.contextPath}/dic/emp/find/all",
+                async: true,
+                data: {},
+                success: function (data) {
+                    if (data.success) {
+                        $("#empNo").find("option").remove();
+                        var list = data.empList;
+                        if (list) {
+                            for (var i = 0; i < list.length; i++) {
+                                var optionString = "";
+                                optionString = "<option value='"+ list[i].empNo + "'>" + list[i].empName + "</option>";
+                                $("#empNo").append(optionString);
+                            }
+                            $("#empNo").selectpicker('refresh');
+                            //项目经理下拉框赋值
+                            $("#empNo").selectpicker('val', '${projDic.empNo}');
+                        }
+                    } else {
+                        $.alert(data.msg);
+                    }
+                }
+            });
+        }
 
         //必填项检查
         function formCheck() {
@@ -467,6 +507,23 @@
 
         }
     })
+
+    <%--$("#empNo").change(function(){--%>
+    <%--    $.ajax({--%>
+    <%--        url: "${pageContext.request.contextPath}/appraise/people/find/proj",--%>
+    <%--        async: true,--%>
+    <%--        data: {projNo:"${projDic.projNo}"},--%>
+    <%--        success: function (data) {--%>
+    <%--            if(data.status == "1"){--%>
+    <%--                $("#empNo").selectpicker('val', '${projDic.empNo}');--%>
+    <%--                $.alert(data.msg);--%>
+    <%--                //项目经理下拉框赋值--%>
+
+    <%--            }--%>
+    <%--        }--%>
+    <%--    });--%>
+    <%--})--%>
+
 
 </script>
 </html>

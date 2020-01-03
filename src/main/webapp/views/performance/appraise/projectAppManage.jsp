@@ -34,7 +34,20 @@
 
 <script type="text/javascript">
     var sumFee = [];
-
+    function setSumFee(){
+        $.ajax({
+            url: '${pageContext.request.contextPath}/appraise/project/content',
+            type: "post",
+            async: false, //更改为同步
+            data: {
+                sysno: $("#sysno_find").val()
+            },
+            success: function (data) {
+                sumFee = data;
+                console.log(sumFee);
+            }
+        })
+    }
     //查询所有考核编号并显示当前时间段或上一个考核时间的考核项目
     $.ajax({
         url: "${pageContext.request.contextPath}/appraise/project/find/all",
@@ -68,7 +81,6 @@
         },
         success: function (data) {
             sumFee = data;
-            console.log(sumFee);
         }
     })
 
@@ -173,6 +185,7 @@
                                         layer.msg(data.msg);
                                     }else{
                                         layer.msg(data.msg);
+                                        setSumFee();
                                         $table.bootstrapTable('refresh');
                                     }
                                 }
@@ -200,6 +213,7 @@
     }
 
     function findList() {
+        setSumFee();
         $table.bootstrapTable('refresh');
     }
 
@@ -217,6 +231,7 @@
                     layer.msg(data.msg);
                 }else{
                     layer.msg(data.msg);
+                    setSumFee();
                     $table.bootstrapTable('refresh');
                 }
             }
@@ -264,6 +279,7 @@
                                         layer.msg(data.msg);
                                     }else{
                                         layer.msg(data.msg);
+                                        setSumFee();
                                         $table.bootstrapTable('refresh');
                                     }
                                 }

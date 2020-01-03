@@ -70,12 +70,13 @@ public class LoginController extends BaseController {
 
         try{
             Subject subject = SecurityUtils.getSubject();
-            if(!subject.isAuthenticated()) { // 当前用户是否已通过身份验证
+            Boolean as = subject.isAuthenticated();
+//            if(!subject.isAuthenticated()) { // 当前用户是否已通过身份验证
                 UsernamePasswordToken token = new UsernamePasswordToken(username, password, remember);
-                // 使用 shiro 来验证
+                // 使用 shi   ro 来验证
                 subject.login(token);//验证角色和权限
                 this.getSession().setAttribute("user", loginUser);
-            }
+//            }
             return new LoginModel(1, "/", remember);
         }catch(AuthenticationException e){
             e.printStackTrace();

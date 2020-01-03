@@ -84,7 +84,7 @@ public class PageModel<T> implements Serializable {
 
 	/**
 	 * 构造方法（根据参数 List 创建 PageModel）<br>
-	 * 
+	 *
 	 * @param list 分页查询出的 Page 集合
 	 */
 	public PageModel(List<T> list) {
